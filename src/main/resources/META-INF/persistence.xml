@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<persistence
+	version="2.1"
+	xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+
+	<persistence-unit transaction-type="JTA" name="postg">
+		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+		<jta-data-source>jdbc/car_app</jta-data-source>
+		<class>org.diego.tutorial.car.model.Car</class>
+		<properties>
+			<property name="javax.persistence.schema-generation.database.action"
+				value="drop-and-create" />
+
+			<property name="hibernate.dialect"
+				value="org.hibernate.dialect.PostgreSQLDialect" />
+
+			<property name="hibernate.transaction.jta.platform"
+				value="org.hibernate.service.jta.platform.internal.SunOneJtaPlatform" />
+			 
+			<property name="hibernate.default_schema" value="cars"/>
+			
+			<property name="hibernate.show_sql" value="true" /> <!-- Show SQL in console -->
+			<property name="hibernate.format_sql" value="true" /> <!-- Show SQL formatted -->
+		</properties>
+	</persistence-unit>
+</persistence>
