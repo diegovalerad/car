@@ -6,7 +6,6 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 import org.diego.tutorial.car.databases.jpa.JPAImplCar;
-import org.diego.tutorial.car.exceptions.DAOException;
 import org.diego.tutorial.car.exceptions.DataNotFoundException;
 import org.diego.tutorial.car.model.Car;
 
@@ -32,11 +31,7 @@ public class CarService {
 	
 	public Car getCar(long id) {
 		Car car = null;
-		try {
-			car = jpaImpl.get(Car.class, id);
-		} catch (DAOException e) {
-			return null;
-		}
+		car = jpaImpl.get(Car.class, id);
 		
 		return car;
 	}
@@ -48,15 +43,12 @@ public class CarService {
 	}
 	
 	public Car addCar(Car car) {
-		Car carAdded = null;
-		try {
-			car.setCreatedAt(new Date());
-			car.setLastUpdated(new Date());
-			car.setRegistration(new Date());
-			carAdded = jpaImpl.add(car);
-		} catch (DAOException e) {
-			return null;
-		}
+		car.setCreatedAt(new Date());
+		car.setLastUpdated(new Date());
+		car.setRegistration(new Date());
+		
+		Car carAdded = jpaImpl.add(car);
+		
 		return carAdded;
 	}
 	
@@ -84,7 +76,7 @@ public class CarService {
 		try {
 			jpaImpl.get(Car.class, id);
 			return true;
-		} catch (DAOException e) {
+		} catch (DataNotFoundException e) {
 			return false;
 		}
 	}

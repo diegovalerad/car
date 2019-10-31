@@ -14,7 +14,7 @@ public class DataNotFoundExceptionMapper implements ExceptionMapper<DataNotFound
 	public Response toResponse(DataNotFoundException exception) {
 		String errorMessage = exception.getMessage();
 		int errorCode = Status.NOT_FOUND.getStatusCode();
-		String documentation = "everis";
+		String documentation = "Contact to Everis if this error persists.";
 		ErrorMessage error = new ErrorMessage(errorMessage, errorCode, documentation);
 		
 		return Response.status(errorCode)

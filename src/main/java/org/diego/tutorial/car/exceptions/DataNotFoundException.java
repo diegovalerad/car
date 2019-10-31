@@ -1,5 +1,8 @@
 package org.diego.tutorial.car.exceptions;
 
+import javax.ejb.ApplicationException;
+
+@ApplicationException
 public class DataNotFoundException extends RuntimeException {
 
 	/**
