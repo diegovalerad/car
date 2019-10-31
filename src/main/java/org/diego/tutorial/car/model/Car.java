@@ -123,4 +123,10 @@ public class Car implements Serializable {
 	public void removeLinks() {
 		links.clear();
 	}
+	
+	@Override
+	public String toString() {
+		return "Car [id: " + id + ", brand: " + brand + ", country: " + country + ", registration: " + registration
+				+ ", createdAt: " + createdAt + ", lastUpdated: " + lastUpdated + "]";
+	}
 }

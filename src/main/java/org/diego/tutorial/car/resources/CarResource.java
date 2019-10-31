@@ -36,7 +36,7 @@ public class CarResource {
 	public Response getCars(@QueryParam("country") String country){
 		List<Car> cars = null;
 		if (country != null && !country.isEmpty()) { // If "country" in the query
-			cars = carService.getAllCarsForCountry(country);
+			cars = carService.getAllCarsFromCountry(country);
 		}else{
 			cars = carService.getAllCars();
 		}
