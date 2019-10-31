@@ -1,0 +1,10 @@
+-------------------------------------------------------------------------------
+Test set: org.diego.tutorial.car.resources.CarResourceTest
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.002 s <<< FAILURE! - in org.diego.tutorial.car.resources.CarResourceTest
+testGetCars(org.diego.tutorial.car.resources.CarResourceTest)  Time elapsed: 0.001 s  <<< ERROR!
+java.lang.RuntimeException: java.lang.ClassNotFoundException: org.glassfish.jersey.internal.RuntimeDelegateImpl
+	at org.diego.tutorial.car.resources.CarResourceTest.testGetCars(CarResourceTest.java:45)
+Caused by: java.lang.ClassNotFoundException: org.glassfish.jersey.internal.RuntimeDelegateImpl
+	at org.diego.tutorial.car.resources.CarResourceTest.testGetCars(CarResourceTest.java:45)
+

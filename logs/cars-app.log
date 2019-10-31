@@ -1,0 +1,274 @@
+2019-10-31 13:31:02 INFO  CarService:31 - Getting all the cars from the database.
+2019-10-31 13:31:02 INFO  CarService:33 - All the cars retrieved from the database.
+2019-10-31 13:31:02 INFO  CarService:38 - Getting the car with ID 1 from the database.
+2019-10-31 13:31:02 INFO  CarService:41 - The car with ID 1 was retrieved from the database.
+2019-10-31 13:33:14 INFO  CarService:68 - Updating the car: Car [id: 1, brand: brand, country: country, registration: Thu Oct 31 13:33:14 CET 2019, createdAt: Thu Oct 31 13:33:14 CET 2019, lastUpdated: Thu Oct 31 13:33:14 CET 2019]
+2019-10-31 13:33:14 INFO  CarService:95 - Checking if the car with ID: 1 exists.
+2019-10-31 13:33:14 INFO  CarService:98 - The car with ID: 1 exists.
+2019-10-31 13:33:14 INFO  CarService:38 - Getting the car with ID 1 from the database.
+2019-10-31 13:33:14 INFO  CarService:41 - The car with ID 1 was retrieved from the database.
+2019-10-31 13:33:14 INFO  CarService:31 - Getting all the cars from the database.
+2019-10-31 13:33:14 INFO  CarService:33 - All the cars retrieved from the database.
+2019-10-31 13:33:14 INFO  CarService:47 - Getting all the cars from the country 'spain'.
+2019-10-31 13:33:14 INFO  CarService:49 - All the cars from country 'spain' retrieved from the database.
+2019-10-31 13:33:14 INFO  CarService:58 - Adding the car: Car [id: 1, brand: brand, country: country, registration: Thu Oct 31 13:33:14 CET 2019, createdAt: Thu Oct 31 13:33:14 CET 2019, lastUpdated: Thu Oct 31 13:33:14 CET 2019]
+2019-10-31 13:33:14 INFO  CarService:62 - Car Car [id: 1, brand: brand, country: country, registration: Thu Oct 31 13:33:14 CET 2019, createdAt: Thu Oct 31 13:33:14 CET 2019, lastUpdated: Thu Oct 31 13:33:14 CET 2019] added to the database.
+2019-10-31 13:33:14 INFO  CarService:38 - Getting the car with ID 1 from the database.
+2019-10-31 13:33:14 INFO  CarService:41 - The car with ID 1 was retrieved from the database.
+2019-10-31 13:33:14 INFO  CarService:83 - Removing the car with ID: 1
+2019-10-31 13:33:14 INFO  CarService:95 - Checking if the car with ID: 1 exists.
+2019-10-31 13:33:14 INFO  CarService:98 - The car with ID: 1 exists.
+2019-10-31 13:33:14 INFO  CarService:38 - Getting the car with ID 1 from the database.
+2019-10-31 13:33:14 INFO  CarService:41 - The car with ID 1 was retrieved from the database.
+2019-10-31 13:33:14 INFO  CarService:90 - The car with ID: 1 was removed from the database
+2019-10-31 13:34:11 INFO  CarService:68 - Updating the car: Car [id: 1, brand: brand, country: country, registration: Thu Oct 31 13:34:11 CET 2019, createdAt: Thu Oct 31 13:34:11 CET 2019, lastUpdated: Thu Oct 31 13:34:11 CET 2019]
+2019-10-31 13:34:11 INFO  CarService:95 - Checking if the car with ID: 1 exists.
+2019-10-31 13:34:11 INFO  CarService:98 - The car with ID: 1 exists.
+2019-10-31 13:34:11 INFO  CarService:38 - Getting the car with ID 1 from the database.
+2019-10-31 13:34:11 INFO  CarService:41 - The car with ID 1 was retrieved from the database.
+2019-10-31 13:35:33 INFO  CarService:68 - Updating the car: Car [id: 1, brand: brand, country: country, registration: Thu Oct 31 13:35:33 CET 2019, createdAt: Thu Oct 31 13:35:33 CET 2019, lastUpdated: Thu Oct 31 13:35:33 CET 2019]
+2019-10-31 13:35:33 INFO  CarService:95 - Checking if the car with ID: 1 exists.
+2019-10-31 13:35:33 INFO  CarService:98 - The car with ID: 1 exists.
+2019-10-31 13:35:33 INFO  CarService:38 - Getting the car with ID 1 from the database.
+2019-10-31 13:35:33 INFO  CarService:41 - The car with ID 1 was retrieved from the database.
+2019-10-31 13:35:33 INFO  CarService:78 - Car Car [id: 1, brand: brand, country: country, registration: Thu Oct 31 13:35:33 CET 2019, createdAt: Thu Oct 31 13:35:33 CET 2019, lastUpdated: Thu Oct 31 13:35:33 CET 2019] updated
+2019-10-31 13:35:43 INFO  CarService:68 - Updating the car: Car [id: 1, brand: brand, country: country, registration: Thu Oct 31 13:35:43 CET 2019, createdAt: Thu Oct 31 13:35:43 CET 2019, lastUpdated: Thu Oct 31 13:35:43 CET 2019]
+2019-10-31 13:35:43 INFO  CarService:95 - Checking if the car with ID: 1 exists.
+2019-10-31 13:35:43 INFO  CarService:98 - The car with ID: 1 exists.
+2019-10-31 13:35:43 INFO  CarService:38 - Getting the car with ID 1 from the database.
+2019-10-31 13:35:43 INFO  CarService:41 - The car with ID 1 was retrieved from the database.
+2019-10-31 13:35:43 INFO  CarService:78 - Car Car [id: 1, brand: brand, country: country, registration: Thu Oct 31 13:35:43 CET 2019, createdAt: Thu Oct 31 13:35:43 CET 2019, lastUpdated: Thu Oct 31 13:35:43 CET 2019] updated
+2019-10-31 13:35:43 INFO  CarService:31 - Getting all the cars from the database.
+2019-10-31 13:35:43 INFO  CarService:33 - All the cars retrieved from the database.
+2019-10-31 13:35:43 INFO  CarService:47 - Getting all the cars from the country 'spain'.
+2019-10-31 13:35:43 INFO  CarService:49 - All the cars from country 'spain' retrieved from the database.
+2019-10-31 13:35:43 INFO  CarService:58 - Adding the car: Car [id: 1, brand: brand, country: country, registration: Thu Oct 31 13:35:43 CET 2019, createdAt: Thu Oct 31 13:35:43 CET 2019, lastUpdated: Thu Oct 31 13:35:43 CET 2019]
+2019-10-31 13:35:43 INFO  CarService:62 - Car Car [id: 1, brand: brand, country: country, registration: Thu Oct 31 13:35:43 CET 2019, createdAt: Thu Oct 31 13:35:43 CET 2019, lastUpdated: Thu Oct 31 13:35:43 CET 2019] added to the database.
+2019-10-31 13:35:43 INFO  CarService:38 - Getting the car with ID 1 from the database.
+2019-10-31 13:35:43 INFO  CarService:41 - The car with ID 1 was retrieved from the database.
+2019-10-31 13:35:43 INFO  CarService:83 - Removing the car with ID: 1
+2019-10-31 13:35:43 INFO  CarService:95 - Checking if the car with ID: 1 exists.
+2019-10-31 13:35:43 INFO  CarService:98 - The car with ID: 1 exists.
+2019-10-31 13:35:43 INFO  CarService:38 - Getting the car with ID 1 from the database.
+2019-10-31 13:35:43 INFO  CarService:41 - The car with ID 1 was retrieved from the database.
+2019-10-31 13:35:43 INFO  CarService:90 - The car with ID: 1 was removed from the database
+2019-10-31 13:37:03 INFO  CarService:68 - Updating the car: Car [id: 1, brand: brand, country: country, registration: Thu Oct 31 13:37:03 CET 2019, createdAt: Thu Oct 31 13:37:03 CET 2019, lastUpdated: Thu Oct 31 13:37:03 CET 2019]
+2019-10-31 13:37:03 INFO  CarService:95 - Checking if the car with ID: 1 exists.
+2019-10-31 13:37:03 INFO  CarService:98 - The car with ID: 1 exists.
+2019-10-31 13:37:03 INFO  CarService:38 - Getting the car with ID 1 from the database.
+2019-10-31 13:37:03 INFO  CarService:41 - The car with ID 1 was retrieved from the database.
+2019-10-31 13:37:03 INFO  CarService:78 - Car Car [id: 1, brand: brand, country: country, registration: Thu Oct 31 13:37:03 CET 2019, createdAt: Thu Oct 31 13:37:03 CET 2019, lastUpdated: Thu Oct 31 13:37:03 CET 2019] updated
+2019-10-31 13:37:03 INFO  CarService:31 - Getting all the cars from the database.
+2019-10-31 13:37:03 INFO  CarService:33 - All the cars retrieved from the database.
+2019-10-31 13:37:03 INFO  CarService:47 - Getting all the cars from the country 'spain'.
+2019-10-31 13:37:03 INFO  CarService:49 - All the cars from country 'spain' retrieved from the database.
+2019-10-31 13:37:03 INFO  CarService:58 - Adding the car: Car [id: 1, brand: brand, country: country, registration: Thu Oct 31 13:37:03 CET 2019, createdAt: Thu Oct 31 13:37:03 CET 2019, lastUpdated: Thu Oct 31 13:37:03 CET 2019]
+2019-10-31 13:37:03 INFO  CarService:62 - Car Car [id: 1, brand: brand, country: country, registration: Thu Oct 31 13:37:03 CET 2019, createdAt: Thu Oct 31 13:37:03 CET 2019, lastUpdated: Thu Oct 31 13:37:03 CET 2019] added to the database.
+2019-10-31 13:37:03 INFO  CarService:38 - Getting the car with ID 1 from the database.
+2019-10-31 13:37:03 INFO  CarService:41 - The car with ID 1 was retrieved from the database.
+2019-10-31 13:37:03 INFO  CarService:83 - Removing the car with ID: 1
+2019-10-31 13:37:03 INFO  CarService:95 - Checking if the car with ID: 1 exists.
+2019-10-31 13:37:03 INFO  CarService:98 - The car with ID: 1 exists.
+2019-10-31 13:37:03 INFO  CarService:38 - Getting the car with ID 1 from the database.
+2019-10-31 13:37:03 INFO  CarService:41 - The car with ID 1 was retrieved from the database.
+2019-10-31 13:37:03 INFO  CarService:90 - The car with ID: 1 was removed from the database
+2019-10-31 13:56:33 INFO  CarService:68 - Updating the car: Car [id: 1, brand: brand, country: country, registration: Thu Oct 31 13:56:33 CET 2019, createdAt: Thu Oct 31 13:56:33 CET 2019, lastUpdated: Thu Oct 31 13:56:33 CET 2019]
+2019-10-31 13:56:33 INFO  CarService:95 - Checking if the car with ID: 1 exists.
+2019-10-31 13:56:33 INFO  CarService:98 - The car with ID: 1 exists.
+2019-10-31 13:56:33 INFO  CarService:38 - Getting the car with ID 1 from the database.
+2019-10-31 13:56:33 INFO  CarService:41 - The car with ID 1 was retrieved from the database.
+2019-10-31 13:56:33 INFO  CarService:78 - Car Car [id: 1, brand: brand, country: country, registration: Thu Oct 31 13:56:33 CET 2019, createdAt: Thu Oct 31 13:56:33 CET 2019, lastUpdated: Thu Oct 31 13:56:33 CET 2019] updated
+2019-10-31 13:56:33 INFO  CarService:31 - Getting all the cars from the database.
+2019-10-31 13:56:33 INFO  CarService:33 - All the cars retrieved from the database.
+2019-10-31 13:56:33 INFO  CarService:47 - Getting all the cars from the country 'spain'.
+2019-10-31 13:56:33 INFO  CarService:49 - All the cars from country 'spain' retrieved from the database.
+2019-10-31 13:56:33 INFO  CarService:58 - Adding the car: Car [id: 1, brand: brand, country: country, registration: Thu Oct 31 13:56:33 CET 2019, createdAt: Thu Oct 31 13:56:33 CET 2019, lastUpdated: Thu Oct 31 13:56:33 CET 2019]
+2019-10-31 13:56:33 INFO  CarService:62 - Car Car [id: 1, brand: brand, country: country, registration: Thu Oct 31 13:56:33 CET 2019, createdAt: Thu Oct 31 13:56:33 CET 2019, lastUpdated: Thu Oct 31 13:56:33 CET 2019] added to the database.
+2019-10-31 13:56:33 INFO  CarService:38 - Getting the car with ID 1 from the database.
+2019-10-31 13:56:33 INFO  CarService:41 - The car with ID 1 was retrieved from the database.
+2019-10-31 13:56:33 INFO  CarService:83 - Removing the car with ID: 1
+2019-10-31 13:56:33 INFO  CarService:95 - Checking if the car with ID: 1 exists.
+2019-10-31 13:56:33 INFO  CarService:98 - The car with ID: 1 exists.
+2019-10-31 13:56:33 INFO  CarService:38 - Getting the car with ID 1 from the database.
+2019-10-31 13:56:33 INFO  CarService:41 - The car with ID 1 was retrieved from the database.
+2019-10-31 13:56:33 INFO  CarService:90 - The car with ID: 1 was removed from the database
+2019-10-31 15:35:48 INFO  CarService:68 - Updating the car: Car [id: 1, brand: brand, country: country, registration: Thu Oct 31 15:35:48 CET 2019, createdAt: Thu Oct 31 15:35:48 CET 2019, lastUpdated: Thu Oct 31 15:35:48 CET 2019]
+2019-10-31 15:35:48 INFO  CarService:95 - Checking if the car with ID: 1 exists.
+2019-10-31 15:35:48 INFO  CarService:98 - The car with ID: 1 exists.
+2019-10-31 15:35:48 INFO  CarService:38 - Getting the car with ID 1 from the database.
+2019-10-31 15:35:48 INFO  CarService:41 - The car with ID 1 was retrieved from the database.
+2019-10-31 15:35:48 INFO  CarService:78 - Car Car [id: 1, brand: brand, country: country, registration: Thu Oct 31 15:35:48 CET 2019, createdAt: Thu Oct 31 15:35:48 CET 2019, lastUpdated: Thu Oct 31 15:35:48 CET 2019] updated
+2019-10-31 15:35:48 INFO  CarService:31 - Getting all the cars from the database.
+2019-10-31 15:35:48 INFO  CarService:33 - All the cars retrieved from the database.
+2019-10-31 15:35:48 INFO  CarService:47 - Getting all the cars from the country 'spain'.
+2019-10-31 15:35:48 INFO  CarService:49 - All the cars from country 'spain' retrieved from the database.
+2019-10-31 15:35:48 INFO  CarService:58 - Adding the car: Car [id: 1, brand: brand, country: country, registration: Thu Oct 31 15:35:48 CET 2019, createdAt: Thu Oct 31 15:35:48 CET 2019, lastUpdated: Thu Oct 31 15:35:48 CET 2019]
+2019-10-31 15:35:48 INFO  CarService:62 - Car Car [id: 1, brand: brand, country: country, registration: Thu Oct 31 15:35:48 CET 2019, createdAt: Thu Oct 31 15:35:48 CET 2019, lastUpdated: Thu Oct 31 15:35:48 CET 2019] added to the database.
+2019-10-31 15:35:48 INFO  CarService:38 - Getting the car with ID 1 from the database.
+2019-10-31 15:35:48 INFO  CarService:41 - The car with ID 1 was retrieved from the database.
+2019-10-31 15:35:48 INFO  CarService:83 - Removing the car with ID: 1
+2019-10-31 15:35:48 INFO  CarService:95 - Checking if the car with ID: 1 exists.
+2019-10-31 15:35:48 INFO  CarService:98 - The car with ID: 1 exists.
+2019-10-31 15:35:48 INFO  CarService:38 - Getting the car with ID 1 from the database.
+2019-10-31 15:35:48 INFO  CarService:41 - The car with ID 1 was retrieved from the database.
+2019-10-31 15:35:48 INFO  CarService:90 - The car with ID: 1 was removed from the database
+2019-10-31 16:33:46 INFO  CarService:68 - Updating the car: Car [id: 1, brand: brand, country: country, registration: Thu Oct 31 16:33:46 CET 2019, createdAt: Thu Oct 31 16:33:46 CET 2019, lastUpdated: Thu Oct 31 16:33:46 CET 2019]
+2019-10-31 16:33:46 INFO  CarService:95 - Checking if the car with ID: 1 exists.
+2019-10-31 16:33:46 INFO  CarService:98 - The car with ID: 1 exists.
+2019-10-31 16:33:46 INFO  CarService:38 - Getting the car with ID 1 from the database.
+2019-10-31 16:33:46 INFO  CarService:41 - The car with ID 1 was retrieved from the database.
+2019-10-31 16:33:46 INFO  CarService:78 - Car Car [id: 1, brand: brand, country: country, registration: Thu Oct 31 16:33:46 CET 2019, createdAt: Thu Oct 31 16:33:46 CET 2019, lastUpdated: Thu Oct 31 16:33:46 CET 2019] updated
+2019-10-31 16:33:46 INFO  CarService:31 - Getting all the cars from the database.
+2019-10-31 16:33:46 INFO  CarService:33 - All the cars retrieved from the database.
+2019-10-31 16:33:46 INFO  CarService:47 - Getting all the cars from the country 'spain'.
+2019-10-31 16:33:46 INFO  CarService:49 - All the cars from country 'spain' retrieved from the database.
+2019-10-31 16:33:46 INFO  CarService:58 - Adding the car: Car [id: 1, brand: brand, country: country, registration: Thu Oct 31 16:33:46 CET 2019, createdAt: Thu Oct 31 16:33:46 CET 2019, lastUpdated: Thu Oct 31 16:33:46 CET 2019]
+2019-10-31 16:33:46 INFO  CarService:62 - Car Car [id: 1, brand: brand, country: country, registration: Thu Oct 31 16:33:46 CET 2019, createdAt: Thu Oct 31 16:33:46 CET 2019, lastUpdated: Thu Oct 31 16:33:46 CET 2019] added to the database.
+2019-10-31 16:33:46 INFO  CarService:38 - Getting the car with ID 1 from the database.
+2019-10-31 16:33:46 INFO  CarService:41 - The car with ID 1 was retrieved from the database.
+2019-10-31 16:33:46 INFO  CarService:83 - Removing the car with ID: 1
+2019-10-31 16:33:46 INFO  CarService:95 - Checking if the car with ID: 1 exists.
+2019-10-31 16:33:46 INFO  CarService:98 - The car with ID: 1 exists.
+2019-10-31 16:33:46 INFO  CarService:38 - Getting the car with ID 1 from the database.
+2019-10-31 16:33:46 INFO  CarService:41 - The car with ID 1 was retrieved from the database.
+2019-10-31 16:33:46 INFO  CarService:90 - The car with ID: 1 was removed from the database
+2019-10-31 16:34:07 INFO  CarService:68 - Updating the car: Car [id: 1, brand: brand, country: country, registration: Thu Oct 31 16:34:07 CET 2019, createdAt: Thu Oct 31 16:34:07 CET 2019, lastUpdated: Thu Oct 31 16:34:07 CET 2019]
+2019-10-31 16:34:07 INFO  CarService:95 - Checking if the car with ID: 1 exists.
+2019-10-31 16:34:07 INFO  CarService:98 - The car with ID: 1 exists.
+2019-10-31 16:34:07 INFO  CarService:38 - Getting the car with ID 1 from the database.
+2019-10-31 16:34:07 INFO  CarService:41 - The car with ID 1 was retrieved from the database.
+2019-10-31 16:34:07 INFO  CarService:78 - Car Car [id: 1, brand: brand, country: country, registration: Thu Oct 31 16:34:07 CET 2019, createdAt: Thu Oct 31 16:34:07 CET 2019, lastUpdated: Thu Oct 31 16:34:07 CET 2019] updated
+2019-10-31 16:34:07 INFO  CarService:31 - Getting all the cars from the database.
+2019-10-31 16:34:07 INFO  CarService:33 - All the cars retrieved from the database.
+2019-10-31 16:34:07 INFO  CarService:47 - Getting all the cars from the country 'spain'.
+2019-10-31 16:34:07 INFO  CarService:49 - All the cars from country 'spain' retrieved from the database.
+2019-10-31 16:34:07 INFO  CarService:58 - Adding the car: Car [id: 1, brand: brand, country: country, registration: Thu Oct 31 16:34:07 CET 2019, createdAt: Thu Oct 31 16:34:07 CET 2019, lastUpdated: Thu Oct 31 16:34:07 CET 2019]
+2019-10-31 16:34:07 INFO  CarService:62 - Car Car [id: 1, brand: brand, country: country, registration: Thu Oct 31 16:34:07 CET 2019, createdAt: Thu Oct 31 16:34:07 CET 2019, lastUpdated: Thu Oct 31 16:34:07 CET 2019] added to the database.
+2019-10-31 16:34:07 INFO  CarService:38 - Getting the car with ID 1 from the database.
+2019-10-31 16:34:07 INFO  CarService:41 - The car with ID 1 was retrieved from the database.
+2019-10-31 16:34:07 INFO  CarService:83 - Removing the car with ID: 1
+2019-10-31 16:34:07 INFO  CarService:95 - Checking if the car with ID: 1 exists.
+2019-10-31 16:34:07 INFO  CarService:98 - The car with ID: 1 exists.
+2019-10-31 16:34:07 INFO  CarService:38 - Getting the car with ID 1 from the database.
+2019-10-31 16:34:07 INFO  CarService:41 - The car with ID 1 was retrieved from the database.
+2019-10-31 16:34:07 INFO  CarService:90 - The car with ID: 1 was removed from the database
+2019-10-31 16:37:14 INFO  CarService:38 - Getting the car with ID 1 from the database.
+2019-10-31 16:37:14 INFO  CarService:41 - The car with ID 1 was retrieved from the database.
+2019-10-31 16:38:26 INFO  CarService:47 - Getting all the cars from the country 'spain'.
+2019-10-31 16:38:26 INFO  CarService:49 - All the cars from country 'spain' retrieved from the database.
+2019-10-31 16:39:40 INFO  CarService:58 - Adding the car: Mock for Car, hashCode: 71706941
+2019-10-31 16:39:40 INFO  CarService:62 - Car Mock for Car, hashCode: 71706941 added to the database.
+2019-10-31 16:40:57 INFO  CarService:68 - Updating the car: Mock for Car, hashCode: 556488341
+2019-10-31 16:40:57 WARN  CarService:71 - The car that it is trying to get updated does not exist.
+2019-10-31 16:40:57 INFO  CarService:31 - Getting all the cars from the database.
+2019-10-31 16:40:57 INFO  CarService:33 - All the cars retrieved from the database.
+2019-10-31 16:40:57 INFO  CarService:47 - Getting all the cars from the country 'spain'.
+2019-10-31 16:40:57 INFO  CarService:49 - All the cars from country 'spain' retrieved from the database.
+2019-10-31 16:40:57 INFO  CarService:58 - Adding the car: Mock for Car, hashCode: 1325144078
+2019-10-31 16:40:57 INFO  CarService:62 - Car Mock for Car, hashCode: 1325144078 added to the database.
+2019-10-31 16:40:57 INFO  CarService:38 - Getting the car with ID 1 from the database.
+2019-10-31 16:40:57 INFO  CarService:41 - The car with ID 1 was retrieved from the database.
+2019-10-31 16:40:57 INFO  CarService:83 - Removing the car with ID: 1
+2019-10-31 16:40:57 INFO  CarService:95 - Checking if the car with ID: 1 exists.
+2019-10-31 16:40:57 INFO  CarService:98 - The car with ID: 1 exists.
+2019-10-31 16:40:57 INFO  CarService:38 - Getting the car with ID 1 from the database.
+2019-10-31 16:40:57 INFO  CarService:41 - The car with ID 1 was retrieved from the database.
+2019-10-31 16:40:57 INFO  CarService:90 - The car with ID: 1 was removed from the database
+2019-10-31 16:42:17 INFO  CarService:68 - Updating the car: Mock for Car, hashCode: 71706941
+2019-10-31 16:42:17 WARN  CarService:71 - The car that it is trying to get updated does not exist.
+2019-10-31 16:46:25 INFO  CarService:68 - Updating the car: Mock for Car, hashCode: 71706941
+2019-10-31 16:46:25 WARN  CarService:71 - The car that it is trying to get updated does not exist.
+2019-10-31 16:47:13 INFO  CarService:68 - Updating the car: Mock for Car, hashCode: 71706941
+2019-10-31 16:47:13 WARN  CarService:71 - The car that it is trying to get updated does not exist.
+2019-10-31 16:48:00 INFO  CarService:68 - Updating the car: Car [id: 1, brand: null, country: null, registration: null, createdAt: null, lastUpdated: null]
+2019-10-31 16:48:00 INFO  CarService:95 - Checking if the car with ID: 1 exists.
+2019-10-31 16:48:00 INFO  CarService:98 - The car with ID: 1 exists.
+2019-10-31 16:48:00 INFO  CarService:38 - Getting the car with ID 1 from the database.
+2019-10-31 16:48:00 INFO  CarService:41 - The car with ID 1 was retrieved from the database.
+2019-10-31 16:48:00 INFO  CarService:78 - Car Car [id: 1, brand: null, country: null, registration: null, createdAt: null, lastUpdated: Thu Oct 31 16:48:00 CET 2019] updated
+2019-10-31 16:48:47 INFO  CarService:68 - Updating the car: Car [id: 1, brand: null, country: null, registration: null, createdAt: null, lastUpdated: null]
+2019-10-31 16:48:47 INFO  CarService:95 - Checking if the car with ID: 1 exists.
+2019-10-31 16:48:47 INFO  CarService:98 - The car with ID: 1 exists.
+2019-10-31 16:48:47 INFO  CarService:38 - Getting the car with ID 1 from the database.
+2019-10-31 16:48:47 INFO  CarService:41 - The car with ID 1 was retrieved from the database.
+2019-10-31 16:48:47 INFO  CarService:78 - Car Car [id: 1, brand: null, country: null, registration: null, createdAt: null, lastUpdated: Thu Oct 31 16:48:47 CET 2019] updated
+2019-10-31 16:48:53 INFO  CarService:68 - Updating the car: Car [id: 1, brand: null, country: null, registration: null, createdAt: null, lastUpdated: null]
+2019-10-31 16:48:53 INFO  CarService:95 - Checking if the car with ID: 1 exists.
+2019-10-31 16:48:53 INFO  CarService:98 - The car with ID: 1 exists.
+2019-10-31 16:48:53 INFO  CarService:38 - Getting the car with ID 1 from the database.
+2019-10-31 16:48:53 INFO  CarService:41 - The car with ID 1 was retrieved from the database.
+2019-10-31 16:48:53 INFO  CarService:78 - Car Car [id: 1, brand: null, country: null, registration: null, createdAt: null, lastUpdated: Thu Oct 31 16:48:53 CET 2019] updated
+2019-10-31 16:48:53 INFO  CarService:31 - Getting all the cars from the database.
+2019-10-31 16:48:53 INFO  CarService:33 - All the cars retrieved from the database.
+2019-10-31 16:48:53 INFO  CarService:47 - Getting all the cars from the country 'spain'.
+2019-10-31 16:48:53 INFO  CarService:49 - All the cars from country 'spain' retrieved from the database.
+2019-10-31 16:48:53 INFO  CarService:58 - Adding the car: Mock for Car, hashCode: 1048855692
+2019-10-31 16:48:53 INFO  CarService:62 - Car Mock for Car, hashCode: 1048855692 added to the database.
+2019-10-31 16:48:53 INFO  CarService:38 - Getting the car with ID 1 from the database.
+2019-10-31 16:48:53 INFO  CarService:41 - The car with ID 1 was retrieved from the database.
+2019-10-31 16:48:53 INFO  CarService:83 - Removing the car with ID: 1
+2019-10-31 16:48:53 INFO  CarService:95 - Checking if the car with ID: 1 exists.
+2019-10-31 16:48:53 INFO  CarService:98 - The car with ID: 1 exists.
+2019-10-31 16:48:53 INFO  CarService:38 - Getting the car with ID 1 from the database.
+2019-10-31 16:48:53 INFO  CarService:41 - The car with ID 1 was retrieved from the database.
+2019-10-31 16:48:53 INFO  CarService:90 - The car with ID: 1 was removed from the database
+2019-10-31 17:06:30 INFO  CarService:68 - Updating the car: Car [id: 1, brand: null, country: null, registration: null, createdAt: null, lastUpdated: null]
+2019-10-31 17:06:30 INFO  CarService:95 - Checking if the car with ID: 1 exists.
+2019-10-31 17:06:30 INFO  CarService:98 - The car with ID: 1 exists.
+2019-10-31 17:06:30 INFO  CarService:38 - Getting the car with ID 1 from the database.
+2019-10-31 17:06:30 INFO  CarService:41 - The car with ID 1 was retrieved from the database.
+2019-10-31 17:06:30 INFO  CarService:78 - Car Car [id: 1, brand: null, country: null, registration: null, createdAt: null, lastUpdated: Thu Oct 31 17:06:30 CET 2019] updated
+2019-10-31 17:06:30 INFO  CarService:31 - Getting all the cars from the database.
+2019-10-31 17:06:30 INFO  CarService:33 - All the cars retrieved from the database.
+2019-10-31 17:06:30 INFO  CarService:47 - Getting all the cars from the country 'spain'.
+2019-10-31 17:06:30 INFO  CarService:49 - All the cars from country 'spain' retrieved from the database.
+2019-10-31 17:06:30 INFO  CarService:58 - Adding the car: Mock for Car, hashCode: 1866875501
+2019-10-31 17:06:30 INFO  CarService:62 - Car Mock for Car, hashCode: 1866875501 added to the database.
+2019-10-31 17:06:30 INFO  CarService:38 - Getting the car with ID 1 from the database.
+2019-10-31 17:06:30 INFO  CarService:41 - The car with ID 1 was retrieved from the database.
+2019-10-31 17:06:30 INFO  CarService:83 - Removing the car with ID: 1
+2019-10-31 17:06:30 INFO  CarService:95 - Checking if the car with ID: 1 exists.
+2019-10-31 17:06:30 INFO  CarService:98 - The car with ID: 1 exists.
+2019-10-31 17:06:30 INFO  CarService:38 - Getting the car with ID 1 from the database.
+2019-10-31 17:06:30 INFO  CarService:41 - The car with ID 1 was retrieved from the database.
+2019-10-31 17:06:30 INFO  CarService:90 - The car with ID: 1 was removed from the database
+2019-10-31 17:53:56 INFO  CarService:68 - Updating the car: Car [id: 1, brand: null, country: null, registration: null, createdAt: null, lastUpdated: null]
+2019-10-31 17:53:56 INFO  CarService:95 - Checking if the car with ID: 1 exists.
+2019-10-31 17:53:56 INFO  CarService:98 - The car with ID: 1 exists.
+2019-10-31 17:53:56 INFO  CarService:38 - Getting the car with ID 1 from the database.
+2019-10-31 17:53:56 INFO  CarService:41 - The car with ID 1 was retrieved from the database.
+2019-10-31 17:53:56 INFO  CarService:78 - Car Car [id: 1, brand: null, country: null, registration: null, createdAt: null, lastUpdated: Thu Oct 31 17:53:56 CET 2019] updated
+2019-10-31 17:53:56 INFO  CarService:31 - Getting all the cars from the database.
+2019-10-31 17:53:56 INFO  CarService:33 - All the cars retrieved from the database.
+2019-10-31 17:53:56 INFO  CarService:47 - Getting all the cars from the country 'spain'.
+2019-10-31 17:53:56 INFO  CarService:49 - All the cars from country 'spain' retrieved from the database.
+2019-10-31 17:53:56 INFO  CarService:58 - Adding the car: Mock for Car, hashCode: 2143139988
+2019-10-31 17:53:56 INFO  CarService:62 - Car Mock for Car, hashCode: 2143139988 added to the database.
+2019-10-31 17:53:56 INFO  CarService:38 - Getting the car with ID 1 from the database.
+2019-10-31 17:53:56 INFO  CarService:41 - The car with ID 1 was retrieved from the database.
+2019-10-31 17:53:56 INFO  CarService:83 - Removing the car with ID: 1
+2019-10-31 17:53:56 INFO  CarService:95 - Checking if the car with ID: 1 exists.
+2019-10-31 17:53:56 INFO  CarService:98 - The car with ID: 1 exists.
+2019-10-31 17:53:56 INFO  CarService:38 - Getting the car with ID 1 from the database.
+2019-10-31 17:53:56 INFO  CarService:41 - The car with ID 1 was retrieved from the database.
+2019-10-31 17:53:56 INFO  CarService:90 - The car with ID: 1 was removed from the database
+2019-10-31 17:58:09 INFO  CarService:68 - Updating the car: Car [id: 1, brand: null, country: null, registration: null, createdAt: null, lastUpdated: null]
+2019-10-31 17:58:09 INFO  CarService:95 - Checking if the car with ID: 1 exists.
+2019-10-31 17:58:09 INFO  CarService:98 - The car with ID: 1 exists.
+2019-10-31 17:58:09 INFO  CarService:38 - Getting the car with ID 1 from the database.
+2019-10-31 17:58:09 INFO  CarService:41 - The car with ID 1 was retrieved from the database.
+2019-10-31 17:58:09 INFO  CarService:78 - Car Car [id: 1, brand: null, country: null, registration: null, createdAt: null, lastUpdated: Thu Oct 31 17:58:09 CET 2019] updated
+2019-10-31 17:58:09 INFO  CarService:31 - Getting all the cars from the database.
+2019-10-31 17:58:09 INFO  CarService:33 - All the cars retrieved from the database.
+2019-10-31 17:58:09 INFO  CarService:47 - Getting all the cars from the country 'spain'.
+2019-10-31 17:58:09 INFO  CarService:49 - All the cars from country 'spain' retrieved from the database.
+2019-10-31 17:58:09 INFO  CarService:58 - Adding the car: Mock for Car, hashCode: 2143139988
+2019-10-31 17:58:09 INFO  CarService:62 - Car Mock for Car, hashCode: 2143139988 added to the database.
+2019-10-31 17:58:09 INFO  CarService:38 - Getting the car with ID 1 from the database.
+2019-10-31 17:58:09 INFO  CarService:41 - The car with ID 1 was retrieved from the database.
+2019-10-31 17:58:09 INFO  CarService:83 - Removing the car with ID: 1
+2019-10-31 17:58:09 INFO  CarService:95 - Checking if the car with ID: 1 exists.
+2019-10-31 17:58:09 INFO  CarService:98 - The car with ID: 1 exists.
+2019-10-31 17:58:09 INFO  CarService:38 - Getting the car with ID 1 from the database.
+2019-10-31 17:58:09 INFO  CarService:41 - The car with ID 1 was retrieved from the database.
+2019-10-31 17:58:09 INFO  CarService:90 - The car with ID: 1 was removed from the database
