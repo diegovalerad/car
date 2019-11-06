@@ -9,6 +9,7 @@ import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 
 import org.diego.tutorial.car.databases.IJPA;
+import org.diego.tutorial.car.exceptions.DataAlreadyExistsException;
 import org.diego.tutorial.car.exceptions.DataNotFoundException;
 
 @Stateless
@@ -40,7 +41,7 @@ public class JPAImpl implements IJPA {
 		try {
 			em.persist(entity);
 		} catch (PersistenceException e) {
-			throw new DataNotFoundException("Trying to add an object that already exists");
+			throw new DataAlreadyExistsException("Trying to add an object that already exists");
 		}
 		
 		return entity;
