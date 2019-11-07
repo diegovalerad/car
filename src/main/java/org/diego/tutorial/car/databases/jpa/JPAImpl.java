@@ -12,6 +12,11 @@ import org.diego.tutorial.car.databases.IJPA;
 import org.diego.tutorial.car.exceptions.DataAlreadyExistsException;
 import org.diego.tutorial.car.exceptions.DataNotFoundException;
 
+/**
+ * 
+ * Implementation of the JPA persistence
+ *
+ */
 @Stateless
 public class JPAImpl implements IJPA {
 	@PersistenceContext(unitName = "postg")
