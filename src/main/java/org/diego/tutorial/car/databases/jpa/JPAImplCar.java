@@ -7,8 +7,18 @@ import javax.persistence.TypedQuery;
 
 import org.diego.tutorial.car.model.Car;
 
+/**
+ * Implementation of the JPA persistence with specific
+ * car methods
+ */
 @Stateless
 public class JPAImplCar extends JPAImpl {
+	/**
+	 * Method that retrieves all the car objects from the database, that are
+	 * from a certain country.
+	 * @param country Country searched
+	 * @return List of cars from the country searched
+	 */
 	public List<Car> getAllCarsFromCountry(String country){
 		String countryLowerCase = country.toLowerCase();
 		

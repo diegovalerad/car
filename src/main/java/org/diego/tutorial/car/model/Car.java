@@ -16,6 +16,12 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * Entity that represents a persistence domain object. This entity is persisted 
+ * in database through the creation of a table "car", where every property in
+ * that table is a field in this class.
+ *
+ */
 @XmlRootElement
 @Entity
 @Table(name = "car")

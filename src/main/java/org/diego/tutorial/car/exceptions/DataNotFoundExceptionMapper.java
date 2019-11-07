@@ -8,6 +8,11 @@ import javax.ws.rs.ext.Provider;
 import org.apache.log4j.Logger;
 import org.diego.tutorial.car.model.ErrorMessage;
 
+/**
+ * Exception mapper that maps a {@link DataNotFoundException} exception to a {@link Response}, 
+ * with a NOT FOUND status code.
+ * 
+ */
 @Provider
 public class DataNotFoundExceptionMapper implements ExceptionMapper<DataNotFoundException> {
 	
