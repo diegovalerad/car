@@ -18,11 +18,17 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
 import org.diego.tutorial.car.model.Car;
 import org.diego.tutorial.car.model.service.CarService;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 @Path("/cars")
 @Consumes(value = { MediaType.APPLICATION_JSON, MediaType.TEXT_XML })
@@ -34,6 +40,16 @@ public class CarResource {
 	private @Context UriInfo uriInfo;
 	
 	@GET
+	@Operation(summary = "Get all the cars",
+			description = "Retrieves all the cars from the system",
+			responses = {
+					@ApiResponse(
+							description = "Cars",
+							responseCode = "200",
+							content = @Content(
+									array = @ArraySchema(schema = @Schema(implementation = Car.class))
+				            )),
+			})
 	public Response getCars(@QueryParam("country") String country){
 		List<Car> cars = null;
 		if (country != null && !country.isEmpty()) { // If "country" in the query
@@ -49,7 +65,18 @@ public class CarResource {
 	}
 	
 	@POST
-	public Response addCar(Car car) {
+	@Operation(summary = "Create a car",
+	description = "Create a car and store it in the system",
+	responses = {
+			@ApiResponse(
+					description = "Car", 
+					responseCode = "201",
+					content = @Content(
+                    schema = @Schema(implementation = Car.class)
+		            )),
+			@ApiResponse(responseCode = "409", description = "Car already exists"),
+	})
+	public Response addCar(@Parameter(description = "updated car object", required = true) Car car) {
 		Car carAdded = carService.addCar(car);
 		String newId = String.valueOf(carAdded.getId());
 		URI uri = uriInfo.getAbsolutePathBuilder().path(newId).build();
@@ -64,7 +91,18 @@ public class CarResource {
 	
 	@GET
 	@Path("/{id}")
-	public Response getCar(@PathParam("id") long id) {
+	@Operation(summary = "Get a car",
+	description = "Get a car given by an ID from the system",
+	responses = {
+			@ApiResponse(
+					description = "Car", 
+					responseCode = "200",
+					content = @Content(
+                    schema = @Schema(implementation = Car.class)
+		            )),
+			@ApiResponse(responseCode = "404", description = "Car not found"),
+	})
+	public Response getCar(@Parameter(description = "id of the car that should be retrieved", required = true) @PathParam("id") long id) {
 		Car car = carService.getCar(id);
 		String urlSelf = getUriForSelf(id);
 		car.addLink(urlSelf, "self");
@@ -76,8 +114,19 @@ public class CarResource {
 	
 	@PUT
 	@Path("/{id}")
-	public Response updateCar(@PathParam("id") long id,
-							Car car) {
+	@Operation(summary = "Update a car",
+	description = "Update a car from the system",
+	responses = {
+			@ApiResponse(
+					description = "Car", 
+					responseCode = "200",
+					content = @Content(
+                    schema = @Schema(implementation = Car.class)
+		            )),
+			@ApiResponse(responseCode = "404", description = "Car not found"),
+	})
+	public Response updateCar(@Parameter(description = "id of the car that should be updated", required = true) @PathParam("id") long id,
+			@Parameter(description = "updated car object", required = true) Car car) {
 		car.setId(id);
 		Car carUpdated = carService.updateCar(car);
 		
@@ -91,7 +140,18 @@ public class CarResource {
 	
 	@DELETE
 	@Path("/{id}")
-	public Response deleteCar(@PathParam("id") long id) {
+	@Operation(summary = "Delete a car",
+	description = "Delete a car given by an ID from the system",
+	responses = {
+			@ApiResponse(
+					description = "Car", 
+					responseCode = "200",
+					content = @Content(
+                    schema = @Schema(implementation = Car.class)
+		            )),
+			@ApiResponse(responseCode = "404", description = "Car not found"),
+	})
+	public Response deleteCar(@Parameter(description = "id of the car that should be removed", required = true) @PathParam("id") long id) {
 		Car car = carService.removeCar(id);
 		
 		String urlSelf = getUriForSelf(id);
