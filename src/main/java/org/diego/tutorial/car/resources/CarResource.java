@@ -20,8 +20,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import org.diego.tutorial.car.exceptions.BadRequestException;
 import org.diego.tutorial.car.model.Car;
 import org.diego.tutorial.car.model.service.CarService;
+import org.diego.tutorial.car.validations.CarValidator;
 
 /**
  * Endpoint of our REST service, that provides all the necessary methods
@@ -65,6 +67,15 @@ public class CarResource {
 	 */
 	@POST
 	public Response addCar(Car car) {
+		List<String> validationErrors = CarValidator.validateAddAndUpdate(car);
+		if (!validationErrors.isEmpty()) {
+			String message = "Request to add a car with non valid fields: ";
+			for (String validationError : validationErrors) {
+				message += validationError + " - ";
+			}
+			throw new BadRequestException(message);
+		}
+		
 		Car carAdded = carService.addCar(car);
 		String newId = String.valueOf(carAdded.getId());
 		URI uri = uriInfo.getAbsolutePathBuilder().path(newId).build();
@@ -85,6 +96,10 @@ public class CarResource {
 	@GET
 	@Path("/{id}")
 	public Response getCar(@PathParam("id") long id) {
+		if (id <= 0) {
+			String message = "Request to get a car with non valid ID: " + id;
+			throw new BadRequestException(message);
+		}
 		Car car = carService.getCar(id);
 		String urlSelf = getUriForSelf(id);
 		car.addLink(urlSelf, "self");
@@ -105,6 +120,16 @@ public class CarResource {
 	public Response updateCar(@PathParam("id") long id,
 							Car car) {
 		car.setId(id);
+		
+		List<String> validationErrors = CarValidator.validateAddAndUpdate(car);
+		if (!validationErrors.isEmpty()) {
+			String message = "Request to update car with non valid fields: <p>";
+			for (String validationError : validationErrors) {
+				message += validationError + "<p>";
+			}
+			throw new BadRequestException(message);
+		}
+		
 		Car carUpdated = carService.updateCar(car);
 		
 		String urlSelf = getUriForSelf(id);
@@ -123,6 +148,10 @@ public class CarResource {
 	@DELETE
 	@Path("/{id}")
 	public Response deleteCar(@PathParam("id") long id) {
+		if (id <= 0) {
+			String message = "Request to delete a car with non valid ID: " + id;
+			throw new BadRequestException(message);
+		}
 		Car car = carService.removeCar(id);
 		
 		String urlSelf = getUriForSelf(id);
