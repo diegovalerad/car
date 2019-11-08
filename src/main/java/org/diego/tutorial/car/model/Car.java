@@ -14,7 +14,10 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import org.diego.tutorial.car.validations.AddAndUpdateChecks;
 
 /**
  * Entity that represents a persistence domain object. This entity is persisted 
@@ -34,18 +37,28 @@ public class Car implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private long id;
+	
 	@Column(nullable = false)
+	@NotNull(message = "Brand cannot be null", groups = AddAndUpdateChecks.class)
 	private String brand;
+	
 	@Column(nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
+	@NotNull(message = "Registration date cannot be null")
 	private Date registration;
+	
 	@Column(nullable = false)
+	@NotNull(message = "Country cannot be null", groups = AddAndUpdateChecks.class)
 	private String country;
+	
 	@Column(nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
+	@NotNull(message = "Creation date cannot be null")
 	private Date createdAt;
+	
 	@Column(nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
+	@NotNull(message = "Updated date cannot be null")
 	private Date lastUpdated;
 	
 	@Transient // Links are not stored in database
