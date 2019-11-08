@@ -14,6 +14,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import javax.ws.rs.DefaultValue;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
@@ -24,9 +25,9 @@ public class Car implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -4239800821516578196L;
-	
+
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	@Column(nullable = false)
 	private String brand;
@@ -41,9 +42,12 @@ public class Car implements Serializable {
 	@Column(nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date lastUpdated;
-	
+
 	@Transient // Links are not stored in database
 	private List<Link> links = new ArrayList<Link>();
+
+	@DefaultValue(value = "false")
+	private boolean checked;
 
 	public Car() {
 	}
@@ -55,6 +59,7 @@ public class Car implements Serializable {
 		this.country = country;
 		this.createdAt = createdAt;
 		this.lastUpdated = lastUpdated;
+		this.checked = false;
 	}
 
 	public long getId() {
@@ -123,7 +128,15 @@ public class Car implements Serializable {
 	public void removeLinks() {
 		links.clear();
 	}
-	
+
+	public boolean isChecked() {
+		return checked;
+	}
+
+	public void setChecked(boolean checked) {
+		this.checked = checked;
+	}
+
 	@Override
 	public String toString() {
 		return "Car [id: " + id + ", brand: " + brand + ", country: " + country + ", registration: " + registration

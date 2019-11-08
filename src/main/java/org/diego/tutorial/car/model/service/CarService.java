@@ -51,6 +51,17 @@ public class CarService {
 		return carsForCountry;
 	}
 	
+	/**
+	 * Gets all the non checked cars from the system
+	 * @return Non checked cars
+	 */
+	public List<Car> getAllNonCheckedCars(){
+		LOGGER.info("Getting all the non checked cars");
+		List<Car> carsNonChecked = jpaImpl.getAllNonCheckedCars();
+		LOGGER.info("All the non checked cars have been retrieved");
+		return carsNonChecked;
+	}
+	
 	public Car addCar(Car car) {
 		car.setCreatedAt(new Date());
 		car.setLastUpdated(new Date());

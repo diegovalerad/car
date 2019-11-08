@@ -18,4 +18,16 @@ public class JPAImplCar extends JPAImpl {
 		List<Car> carsFromCountry = createQuery.getResultList();
 		return carsFromCountry;
 	}
+
+	/**
+	 * Method that queries the database and retrieves all the non checked cars
+	 * @return List of non checked cars.
+	 */
+	public List<Car> getAllNonCheckedCars() {
+		String query = "SELECT car FROM Car car WHERE car.checked='false'";
+		
+		TypedQuery<Car> createQuery = em.createQuery(query, Car.class);
+		List<Car> nonCheckedCars = createQuery.getResultList();
+		return nonCheckedCars;
+	}
 }
