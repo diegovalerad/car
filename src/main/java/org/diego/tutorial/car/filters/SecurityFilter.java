@@ -20,6 +20,9 @@ public class SecurityFilter implements ContainerRequestFilter {
 	private static final String AUTHORIZATION_HEADER_KEY = "Authorization";
 	private static final String AUTHORIZATION_HEADER_PREFIX = "Basic ";
 	
+	/**
+	 * Method that filters every request and checks if the user is authenticated
+	 */
 	@Override
 	public void filter(ContainerRequestContext requestContext) throws IOException {
 		List<String> authHeader = requestContext.getHeaders().get(AUTHORIZATION_HEADER_KEY);

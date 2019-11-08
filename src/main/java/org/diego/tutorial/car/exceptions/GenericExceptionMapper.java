@@ -8,6 +8,11 @@ import javax.ws.rs.ext.Provider;
 import org.apache.log4j.Logger;
 import org.diego.tutorial.car.model.ErrorMessage;
 
+/**
+ * Exception mapper that maps a any non-mapped exception to a {@link Response}, 
+ * with an INTERNAL SERVER ERROR status code.
+ * 
+ */
 @Provider
 public class GenericExceptionMapper implements ExceptionMapper<Throwable> {
 	
@@ -17,7 +22,7 @@ public class GenericExceptionMapper implements ExceptionMapper<Throwable> {
 	public Response toResponse(Throwable exception) {
 		String errorMessage = exception.getMessage();
 		int errorCode = Status.INTERNAL_SERVER_ERROR.getStatusCode();
-		String documentation = "everis";
+		String documentation = "Contact to Everis if this error persists.";
 		ErrorMessage error = new ErrorMessage(errorMessage, errorCode, documentation);
 		
 		LOGGER.warn("Something went wrong!", exception);
