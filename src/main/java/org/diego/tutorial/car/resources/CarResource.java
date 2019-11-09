@@ -68,13 +68,8 @@ public class CarResource {
 	@POST
 	public Response addCar(Car car) {
 		List<String> validationErrors = CarValidator.validateAddAndUpdate(car);
-		if (!validationErrors.isEmpty()) {
-			String message = "Request to add a car with non valid fields: ";
-			for (String validationError : validationErrors) {
-				message += validationError + " - ";
-			}
-			throw new BadRequestException(message);
-		}
+		String errorMessage = "Request to add a car with non valid fields";
+		checkValidationErrors(validationErrors, errorMessage);
 		
 		Car carAdded = carService.addCar(car);
 		String newId = String.valueOf(carAdded.getId());
@@ -96,10 +91,9 @@ public class CarResource {
 	@GET
 	@Path("/{id}")
 	public Response getCar(@PathParam("id") long id) {
-		if (id <= 0) {
-			String message = "Request to get a car with non valid ID: " + id;
-			throw new BadRequestException(message);
-		}
+		String errorMessage = "Request to get a car with non valid ID: " + id;
+		checkValidationErrors(id, errorMessage);
+		
 		Car car = carService.getCar(id);
 		String urlSelf = getUriForSelf(id);
 		car.addLink(urlSelf, "self");
@@ -122,13 +116,8 @@ public class CarResource {
 		car.setId(id);
 		
 		List<String> validationErrors = CarValidator.validateAddAndUpdate(car);
-		if (!validationErrors.isEmpty()) {
-			String message = "Request to update car with non valid fields: <p>";
-			for (String validationError : validationErrors) {
-				message += validationError + "<p>";
-			}
-			throw new BadRequestException(message);
-		}
+		String errorMessage = "Request to update car with non valid fields";
+		checkValidationErrors(validationErrors, errorMessage);
 		
 		Car carUpdated = carService.updateCar(car);
 		
@@ -148,10 +137,9 @@ public class CarResource {
 	@DELETE
 	@Path("/{id}")
 	public Response deleteCar(@PathParam("id") long id) {
-		if (id <= 0) {
-			String message = "Request to delete a car with non valid ID: " + id;
-			throw new BadRequestException(message);
-		}
+		String errorMessage = "Request to delete a car with non valid ID: " + id;
+		checkValidationErrors(id, errorMessage);
+		
 		Car car = carService.removeCar(id);
 		
 		String urlSelf = getUriForSelf(id);
@@ -174,5 +162,35 @@ public class CarResource {
 				.build()
 				.toString();
 		return urlSelf;
+	}
+	
+	/**
+	 * Method that loops though a list of validation errors, throwing a {@link BadRequestException} exception
+	 * in case there is one or more validation errors. This exception includes the list of errors and a 
+	 * descriptive error message.
+	 * @param validationErrors List of possible validation errors
+	 * @param errorMessage Descriptive error message thrown in the {@link BadRequestException} exception next to the list of errors. 
+	 */
+	private void checkValidationErrors(List<String> validationErrors, String errorMessage) {
+		if (!validationErrors.isEmpty()) {
+			String message = errorMessage + ": ";
+			for (String validationError : validationErrors) {
+				message += validationError + " - ";
+			}
+			throw new BadRequestException(message);
+		}
+	}
+	
+	/**
+	 * Alternative method of checking validation errors, where it is only checked the ID of the car that is being
+	 * checked. If the ID is less or equal to zero, a {@link BadRequestException} exception is thrown, including an
+	 * error message.
+	 * @param id Identifier of the car
+	 * @param errorMessage Descriptive error message thrown in the {@link BadRequestException} exception. 
+	 */
+	private void checkValidationErrors(long id, String errorMessage) {
+		if (id <= 0) {
+			throw new BadRequestException(errorMessage);
+		}
 	}
 }
