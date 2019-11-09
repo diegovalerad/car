@@ -21,18 +21,18 @@ public class CarsTimer {
 	private final static Logger LOGGER = Logger.getLogger(CarsTimer.class);
 	
 	/**
-	 * Method executed every 10 minutes, that gets a list of all the 
+	 * Method executed every minute, that gets a list of all the 
 	 * non-checked cars, and them checks them.
 	 * */
-	@Schedule(minute = "*/10", hour = "*", dayOfMonth = "*")
+	@Schedule(hour = "*", minute = "*/1", persistent = false)
 	public void checkedField() {
 		LOGGER.info("Checking the cars");
 		List<Car> nonCheckedCars = carService.getAllNonCheckedCars();
 		
 		for (Car car : nonCheckedCars) {
+			LOGGER.info("Checking the car: " + car);
 			car.setChecked(true);
 			carService.updateCar(car);
-			LOGGER.info("Checking the car: " + car);
 		}
 		
 		LOGGER.info("All the cars are checked");
