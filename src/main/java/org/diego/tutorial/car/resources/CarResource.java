@@ -25,6 +25,14 @@ import org.diego.tutorial.car.model.Car;
 import org.diego.tutorial.car.model.service.CarService;
 import org.diego.tutorial.car.validations.CarValidator;
 
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+
 /**
  * Endpoint of our REST service, that provides all the necessary methods
  * regarding cars.
@@ -46,6 +54,16 @@ public class CarResource {
 	 * @return List of cars retrieved
 	 */
 	@GET
+	@Operation(summary = "Get all the cars",
+			description = "Retrieves all the cars from the system",
+			responses = {
+					@ApiResponse(
+							description = "Cars",
+							responseCode = "200",
+							content = @Content(
+									array = @ArraySchema(schema = @Schema(implementation = Car.class))
+				            )),
+			})
 	public Response getCars(@QueryParam("country") String country){
 		List<Car> cars = null;
 		if (country != null && !country.isEmpty()) { // If "country" in the query
@@ -66,7 +84,17 @@ public class CarResource {
 	 * @return Car added
 	 */
 	@POST
-	public Response addCar(Car car) {
+	@Operation(summary = "Create a car",
+	description = "Create a car and store it in the system",
+	responses = {
+			@ApiResponse(
+					description = "Car", 
+					responseCode = "201",
+					content = @Content(
+                    schema = @Schema(implementation = Car.class)
+		            )),
+	})
+	public Response addCar(@Parameter(description = "updated car object", required = true) Car car) {
 		List<String> validationErrors = CarValidator.validateAddAndUpdate(car);
 		String errorMessage = "Request to add a car with non valid fields";
 		checkValidationErrors(validationErrors, errorMessage);
@@ -90,7 +118,18 @@ public class CarResource {
 	 */
 	@GET
 	@Path("/{id}")
-	public Response getCar(@PathParam("id") long id) {
+	@Operation(summary = "Get a car",
+	description = "Get a car given by an ID from the system",
+	responses = {
+			@ApiResponse(
+					description = "Car", 
+					responseCode = "200",
+					content = @Content(
+                    schema = @Schema(implementation = Car.class)
+		            )),
+			@ApiResponse(responseCode = "404", description = "Car not found"),
+	})
+	public Response getCar(@Parameter(description = "id of the car that should be retrieved", required = true) @PathParam("id") long id) {
 		String errorMessage = "Request to get a car with non valid ID: " + id;
 		checkValidationErrors(id, errorMessage);
 		
@@ -111,8 +150,19 @@ public class CarResource {
 	 */
 	@PUT
 	@Path("/{id}")
-	public Response updateCar(@PathParam("id") long id,
-							Car car) {
+	@Operation(summary = "Update a car",
+	description = "Update a car from the system",
+	responses = {
+			@ApiResponse(
+					description = "Car", 
+					responseCode = "200",
+					content = @Content(
+                    schema = @Schema(implementation = Car.class)
+		            )),
+			@ApiResponse(responseCode = "404", description = "Car not found"),
+	})
+	public Response updateCar(@Parameter(description = "id of the car that should be updated", required = true) @PathParam("id") long id,
+			@Parameter(description = "updated car object", required = true) Car car) {
 		car.setId(id);
 		
 		List<String> validationErrors = CarValidator.validateAddAndUpdate(car);
@@ -136,7 +186,18 @@ public class CarResource {
 	 */
 	@DELETE
 	@Path("/{id}")
-	public Response deleteCar(@PathParam("id") long id) {
+	@Operation(summary = "Delete a car",
+	description = "Delete a car given by an ID from the system",
+	responses = {
+			@ApiResponse(
+					description = "Car", 
+					responseCode = "200",
+					content = @Content(
+                    schema = @Schema(implementation = Car.class)
+		            )),
+			@ApiResponse(responseCode = "404", description = "Car not found"),
+	})
+	public Response deleteCar(@Parameter(description = "id of the car that should be removed", required = true) @PathParam("id") long id) {
 		String errorMessage = "Request to delete a car with non valid ID: " + id;
 		checkValidationErrors(id, errorMessage);
 		
