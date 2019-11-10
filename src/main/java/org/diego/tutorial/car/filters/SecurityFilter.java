@@ -9,12 +9,20 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.ext.Provider;
 
+/**
+ * Class that provides a basic authentication security, through filtering 
+ * all requests 
+ *
+ */
 @Provider
 public class SecurityFilter implements ContainerRequestFilter {
 
 	private static final String AUTHORIZATION_HEADER_KEY = "Authorization";
 	private static final String AUTHORIZATION_HEADER_PREFIX = "Basic ";
 	
+	/**
+	 * Method that filters every request and checks if the user is authenticated
+	 */
 	@Override
 	public void filter(ContainerRequestContext requestContext) throws IOException {
 		List<String> authHeader = requestContext.getHeaders().get(AUTHORIZATION_HEADER_KEY);
@@ -30,9 +38,16 @@ public class SecurityFilter implements ContainerRequestFilter {
 			if (userIsAuthenticated(username, password)) {
 				return;
 			}
+			// TODO authentication incompleted
 		}
 	}
 
+	/**
+	 * Method that checks if an user is authenticated
+	 * @param username Username of the user
+	 * @param password Password of the user
+	 * @return Boolean indicating if user and passwords are correct.
+	 */
 	private boolean userIsAuthenticated(String username, String password) {
 		if (username.equals("username") && password.equals("password"))
 			return true;
