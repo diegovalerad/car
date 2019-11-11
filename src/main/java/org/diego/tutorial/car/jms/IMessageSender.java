@@ -1,7 +1,8 @@
 package org.diego.tutorial.car.jms;
 
 import javax.ejb.Local;
-import javax.jms.JMSException;
+
+import org.diego.tutorial.car.model.Car;
 
 /**
  * Interface of the sending bean
@@ -10,9 +11,20 @@ import javax.jms.JMSException;
 @Local
 public interface IMessageSender {
 	/**
-	 * Method that sends a message to a queue
-	 * @param message Message to send
-	 * @throws JMSException Exception thrown if there is any error using the queue
+	 * Method that sends a message to the queue, to create a new car
+	 * @param car Car that should be created
 	 */
-	public void sendMessage(String message);
+	public void sendCreateCar(Car car);
+	
+	/**
+	 * Method that sends a message to the queue, to update a car
+	 * @param car Car that should be updated
+	 */
+	public void sendUpdateCar(Car car);
+	
+	/**
+	 * Method that sends a message to the queue, to remove a car
+	 * @param car Car that should be removed
+	 */
+	public void sendRemoveCar(Car car);
 }

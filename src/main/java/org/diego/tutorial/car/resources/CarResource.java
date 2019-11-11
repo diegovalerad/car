@@ -1,7 +1,6 @@
 package org.diego.tutorial.car.resources;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -74,9 +73,7 @@ public class CarResource {
 		if (country != null && !country.isEmpty()) { // If "country" in the query
 			cars = carService.getAllCarsFromCountry(country);
 		}else{
-			//cars = carService.getAllCars();
-			jmsSender.sendMessage("getAllCars");
-			cars = new ArrayList<Car>();
+			cars = carService.getAllCars();
 		}
 		// Mapping the List in a generic entity to be able to return it
 		GenericEntity<List<Car>> carsGeneric = new GenericEntity<List<Car>>(cars) {};
