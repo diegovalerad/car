@@ -22,7 +22,7 @@ public class CarsTimer {
 	
 	/**
 	 * Method executed every minute, that gets a list of all the 
-	 * non-checked cars, and them checks them.
+	 * non-checked cars, and then checks them.
 	 * */
 	@Schedule(hour = "*", minute = "*/1", persistent = false)
 	public void checkedField() {
@@ -32,7 +32,6 @@ public class CarsTimer {
 		for (Car car : nonCheckedCars) {
 			LOGGER.info("Checking the car: " + car);
 			car.setChecked(true);
-			carService.updateCar(car);
 		}
 		
 		LOGGER.info("All the cars are checked");

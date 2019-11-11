@@ -35,6 +35,7 @@ public class JPAImplTest {
 		
 		cars.add(car);
 		
+		@SuppressWarnings("unchecked")
 		TypedQuery<Object> typedQuery = Mockito.mock(TypedQuery.class);
 		Mockito.when(em.createQuery(Mockito.anyString(), Mockito.any()))
 				.thenReturn(typedQuery);
