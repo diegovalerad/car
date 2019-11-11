@@ -2,6 +2,12 @@ package org.diego.tutorial.car.model;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * Class that represents additional information about a {@link Car} object. 
+ * Each car will have multiple links, indicating the URL of the entity or important
+ * fields so that the client access them.  
+ *
+ */
 @XmlRootElement
 public class Link {
 	private String link;

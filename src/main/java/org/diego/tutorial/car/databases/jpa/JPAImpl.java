@@ -5,13 +5,16 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 
 import org.diego.tutorial.car.databases.IJPA;
-import org.diego.tutorial.car.exceptions.DataAlreadyExistsException;
 import org.diego.tutorial.car.exceptions.DataNotFoundException;
 
+/**
+ * 
+ * Implementation of the JPA persistence
+ *
+ */
 @Stateless
 public class JPAImpl implements IJPA {
 	@PersistenceContext(unitName = "postg")
@@ -38,11 +41,7 @@ public class JPAImpl implements IJPA {
 
 	@Override
 	public <T> T add(T entity) {
-		try {
-			em.persist(entity);
-		} catch (PersistenceException e) {
-			throw new DataAlreadyExistsException("Trying to add an object that already exists");
-		}
+		em.persist(entity);
 		
 		return entity;
 	}

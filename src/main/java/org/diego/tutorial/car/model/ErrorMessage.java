@@ -1,7 +1,19 @@
 package org.diego.tutorial.car.model;
 
+import javax.ws.rs.core.Response.Status;
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * Class that represents an error message. This error is used by the exceptions to 
+ * simplify its use. 
+ * <p>
+ * Each error message, will have 3 fields:
+ * <ul>
+ * <li>An error message, that provides information about the error.</li>
+ * <li>An error code, that provides the {@link Status} error.</li>
+ * <li>A documentation, that provides additional information.</li>
+ * </ul>
+ */
 @XmlRootElement
 public class ErrorMessage {
 	private String errorMessage;
