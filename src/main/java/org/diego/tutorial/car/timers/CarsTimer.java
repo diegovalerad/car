@@ -22,7 +22,7 @@ public class CarsTimer {
 	
 	/**
 	 * Method executed every minute, that gets a list of all the 
-	 * non-checked cars, and then checks them.
+	 * soft removed cars, and then completely removes them.
 	 * */
 	@Schedule(hour = "*", minute = "*/1", persistent = false)
 	public void checkSoftRemovedCars() {
