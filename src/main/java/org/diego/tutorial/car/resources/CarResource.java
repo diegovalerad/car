@@ -1,6 +1,7 @@
 package org.diego.tutorial.car.resources;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -75,6 +76,7 @@ public class CarResource {
 		}else{
 			//cars = carService.getAllCars();
 			jmsSender.sendMessage("getAllCars");
+			cars = new ArrayList<Car>();
 		}
 		// Mapping the List in a generic entity to be able to return it
 		GenericEntity<List<Car>> carsGeneric = new GenericEntity<List<Car>>(cars) {};

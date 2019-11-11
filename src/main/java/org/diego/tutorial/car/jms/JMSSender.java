@@ -17,7 +17,7 @@ import org.apache.log4j.Logger;
  *
  */
 @Stateless
-public class JMSSender {
+public class JMSSender implements IMessageSender {
 	
 	@Resource(name = "jms/carsConnectionFactory")
 	private ConnectionFactory connectionFactory;

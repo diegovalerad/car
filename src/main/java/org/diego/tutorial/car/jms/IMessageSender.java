@@ -7,12 +7,12 @@ import javax.jms.JMSException;
  * Interface of the sending bean
  *
  */
-
+@Local
 public interface IMessageSender {
 	/**
 	 * Method that sends a message to a queue
 	 * @param message Message to send
 	 * @throws JMSException Exception thrown if there is any error using the queue
 	 */
-	void sendMessage(String message);
+	public void sendMessage(String message);
 }
