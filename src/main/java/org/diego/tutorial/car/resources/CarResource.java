@@ -21,6 +21,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import org.diego.tutorial.car.exceptions.BadRequestException;
+import org.diego.tutorial.car.jms.JMSSender;
 import org.diego.tutorial.car.model.Car;
 import org.diego.tutorial.car.model.service.CarService;
 import org.diego.tutorial.car.validations.CarValidator;
@@ -47,6 +48,9 @@ public class CarResource {
 	private CarService carService;
 	private @Context UriInfo uriInfo;
 	
+	@EJB
+	private JMSSender jmsSender;
+	
 	/**
 	 * Method that retrieves all the cars from the database. <p>
 	 * Optionally, the country param can be provided.
@@ -69,7 +73,8 @@ public class CarResource {
 		if (country != null && !country.isEmpty()) { // If "country" in the query
 			cars = carService.getAllCarsFromCountry(country);
 		}else{
-			cars = carService.getAllCars();
+			//cars = carService.getAllCars();
+			jmsSender.sendMessage("getAllCars");
 		}
 		// Mapping the List in a generic entity to be able to return it
 		GenericEntity<List<Car>> carsGeneric = new GenericEntity<List<Car>>(cars) {};
