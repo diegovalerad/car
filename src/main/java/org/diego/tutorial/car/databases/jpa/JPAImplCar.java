@@ -30,14 +30,15 @@ public class JPAImplCar extends JPAImpl {
 	}
 
 	/**
-	 * Method that queries the database and retrieves all the non checked cars
-	 * @return List of non checked cars.
+	 * Method that queries the database and retrieves all the soft removed cars. A 
+	 * soft removed car is a car with a flag that the car should be removed.
+	 * @return List of soft removed cars.
 	 */
-	public List<Car> getAllNonCheckedCars() {
-		String query = "SELECT car FROM Car car WHERE car.checked='false'";
+	public List<Car> getAllSoftRemovedCars() {
+		String query = "SELECT car FROM Car car WHERE car.softRemoved='true'";
 		
 		TypedQuery<Car> createQuery = em.createQuery(query, Car.class);
-		List<Car> nonCheckedCars = createQuery.getResultList();
-		return nonCheckedCars;
+		List<Car> softRemovedCars = createQuery.getResultList();
+		return softRemovedCars;
 	}
 }

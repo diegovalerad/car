@@ -16,6 +16,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
+/**
+ * Set of unit tests for the {@link JPAImplCar} class
+ *
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class JPAImplCarTest {
 	@InjectMocks
@@ -24,9 +28,9 @@ public class JPAImplCarTest {
 	private EntityManager em; 
 
 	@Test
-	public void testGetAllNonCheckedCars() {
-		String query = "SELECT car FROM Car car WHERE car.checked='false'";
-		List<Car> carsNonChecked = new ArrayList<Car>();
+	public void testGetAllSoftRemovedCars() {
+		String query = "SELECT car FROM Car car WHERE car.softRemoved='true'";
+		List<Car> carsSoftRemoved = new ArrayList<Car>();
 		
 		@SuppressWarnings("unchecked")
 		TypedQuery<Car> typedQuery = Mockito.mock(TypedQuery.class);
@@ -34,9 +38,9 @@ public class JPAImplCarTest {
 		Mockito.when(em.createQuery(query, Car.class))
 				.thenReturn(typedQuery);
 		Mockito.when(typedQuery.getResultList())
-				.thenReturn(carsNonChecked);
+				.thenReturn(carsSoftRemoved);
 		
-		assertEquals(carsNonChecked, jpaImplCar.getAllNonCheckedCars());
+		assertEquals(carsSoftRemoved, jpaImplCar.getAllSoftRemovedCars());
 	}
 
 }

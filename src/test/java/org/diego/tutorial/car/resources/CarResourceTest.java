@@ -7,7 +7,6 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.ws.rs.client.Client;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
@@ -24,8 +23,14 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
+/**
+ * Set of unit tests for the {@link CarResource} class
+ *
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class CarResourceTest {
+	
+	//TODO Fix tests of this class. All of them fails.
 	
 	@InjectMocks
 	private CarResource carResource;
@@ -126,7 +131,7 @@ public class CarResourceTest {
 		Long carId = 8L;
 		car.setId(carId);
 		
-		Mockito.when(carService.removeCar(carId))
+		Mockito.when(carService.softRemoveCar(carId))
 				.thenReturn(car);
 		
 		Response response = carResource.deleteCar(carId);

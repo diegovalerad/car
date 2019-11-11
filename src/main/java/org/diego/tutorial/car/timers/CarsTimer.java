@@ -25,15 +25,14 @@ public class CarsTimer {
 	 * non-checked cars, and then checks them.
 	 * */
 	@Schedule(hour = "*", minute = "*/1", persistent = false)
-	public void checkedField() {
-		LOGGER.info("Checking the cars");
-		List<Car> nonCheckedCars = carService.getAllNonCheckedCars();
+	public void checkSoftRemovedCars() {
+		LOGGER.info("Checking the soft-removed cars");
+		List<Car> softRemovedCars = carService.getAllSoftRemovedCars();
 		
-		for (Car car : nonCheckedCars) {
-			LOGGER.info("Checking the car: " + car);
-			car.setChecked(true);
+		for (Car car : softRemovedCars) {
+			carService.removeCar(car);
 		}
 		
-		LOGGER.info("All the cars are checked");
+		LOGGER.info("All the cars are removed from the database");
 	}
 }

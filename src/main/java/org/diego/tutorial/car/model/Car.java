@@ -66,7 +66,7 @@ public class Car implements Serializable {
 	private List<Link> links = new ArrayList<Link>();
 
 	@DefaultValue(value = "false")
-	private boolean checked;
+	private boolean softRemoved;
 
 	public Car() {
 	}
@@ -78,7 +78,7 @@ public class Car implements Serializable {
 		this.country = country;
 		this.createdAt = createdAt;
 		this.lastUpdated = lastUpdated;
-		this.checked = false;
+		this.softRemoved = false;
 	}
 
 	public long getId() {
@@ -148,17 +148,17 @@ public class Car implements Serializable {
 		links.clear();
 	}
 
-	public boolean isChecked() {
-		return checked;
+	public boolean isSoftRemoved() {
+		return softRemoved;
 	}
 
-	public void setChecked(boolean checked) {
-		this.checked = checked;
+	public void setSoftRemoved(boolean softRemoved) {
+		this.softRemoved = softRemoved;
 	}
 
 	@Override
 	public String toString() {
 		return "Car [id: " + id + ", brand: " + brand + ", country: " + country + ", registration: " + registration
-				+ ", createdAt: " + createdAt + ", lastUpdated: " + lastUpdated + ", checked: " + checked + "]";
+				+ ", createdAt: " + createdAt + ", lastUpdated: " + lastUpdated + ", softRemoved: " + softRemoved + "]";
 	}
 }

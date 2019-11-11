@@ -1,7 +1,5 @@
 package org.diego.tutorial.car.timers;
 
-import static org.junit.Assert.*;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,6 +13,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
+/**
+ * Set of unit tests for the {@link CarsTimer} class
+ *
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class CarsTimerTest {
 
@@ -24,8 +26,8 @@ public class CarsTimerTest {
 	private CarService carService;
 	
 	@Test
-	public void testCheckedField() {
-		List<Car> nonCheckedCars = new ArrayList<Car>();
+	public void testCheckSoftRemovedCars() {
+		List<Car> softRemovedCars = new ArrayList<Car>();
 		
 		for (int i = 0; i < 10; i++) {
 			long id = (long) i;
@@ -34,16 +36,17 @@ public class CarsTimerTest {
 			registration = createdAt = lastUpdated = new Date();
 			String country = "country" + i;
 			Car car = new Car(id, brand, registration, country, createdAt, lastUpdated);
-			nonCheckedCars.add(car);
+			softRemovedCars.add(car);
+			
+			Mockito.when(carService.removeCar(car))
+					.thenReturn(car);
 		}
 		
-		Mockito.when(carService.getAllNonCheckedCars())
-				.thenReturn(nonCheckedCars);
+		Mockito.when(carService.getAllSoftRemovedCars())
+				.thenReturn(softRemovedCars);
 		
-		carsTimer.checkedField();
-		for (Car car : nonCheckedCars) {
-			assertEquals(true, car.isChecked());
-		}
+		carsTimer.checkSoftRemovedCars();
+		
 	}
 
 }
