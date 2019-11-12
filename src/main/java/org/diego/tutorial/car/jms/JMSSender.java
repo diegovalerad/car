@@ -41,7 +41,7 @@ public class JMSSender implements IMessageSender {
 	
 	@Override
 	public void sendRemoveCar(Car car) {
-		sendMessage(car, JMSGroups.GLOBAL, JMSOperations.DELELE);
+		sendMessage(car, JMSGroups.GLOBAL, JMSOperations.DELETE);
 	}
 	
 	private void sendMessage(Car car, JMSGroups group, JMSOperations operation) {

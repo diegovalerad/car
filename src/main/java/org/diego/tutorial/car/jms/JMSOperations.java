@@ -5,5 +5,5 @@ package org.diego.tutorial.car.jms;
  *
  */
 public enum JMSOperations {
-	CREATE, UPDATE, DELELE;
+	CREATE, UPDATE, DELETE;
 }

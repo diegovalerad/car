@@ -6,7 +6,6 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
-import javax.jms.TextMessage;
 
 import org.apache.log4j.Logger;
 import org.diego.tutorial.car.model.Car;
@@ -17,7 +16,6 @@ import org.diego.tutorial.car.model.service.CarService;
  * container when there is a new message in the queue
  *
  */
-
 @MessageDriven(
 		mappedName = "jms/carsQueue"
 )
@@ -33,15 +31,6 @@ public class JMSReceiver implements MessageListener {
 	 */
 	@Override
 	public void onMessage(Message message) {
-		LOGGER.info("Received message: " + message);
-		TextMessage textMessage = (TextMessage) message;
-		try {
-			String text = textMessage.getText();
-			LOGGER.info("\n\nReceived text: " + text + "\n\n");
-		} catch (JMSException e) {
-			LOGGER.info("Exception retrieving message content: " + e.getMessage());
-		}
-		
 		ObjectMessage objectMessage = (ObjectMessage) message;
 		try {
 			String operationString = objectMessage.getStringProperty(JMSGroups.GLOBAL.toString());
@@ -59,7 +48,7 @@ public class JMSReceiver implements MessageListener {
 					carService.updateCar(car);
 					LOGGER.info("Car updated: " + car);
 					break;
-				case DELELE:
+				case DELETE:
 					carService.removeCar(car.getId());
 					LOGGER.info("Car removed: " + car);
 					break;
