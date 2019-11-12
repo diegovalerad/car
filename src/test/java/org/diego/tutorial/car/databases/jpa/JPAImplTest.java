@@ -31,12 +31,8 @@ public class JPAImplTest {
 	
 	@Test
 	public void testGetAll() {
-		long id = 0;
 		List<Object> cars = new ArrayList<Object>();
-		
 		Car car = Mockito.mock(Car.class);
-		car.setId(id);
-		
 		cars.add(car);
 		
 		@SuppressWarnings("unchecked")
