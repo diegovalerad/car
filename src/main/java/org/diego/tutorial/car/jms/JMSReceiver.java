@@ -49,8 +49,8 @@ public class JMSReceiver implements MessageListener {
 					LOGGER.info("Car updated: " + car);
 					break;
 				case DELETE:
-					carService.removeCar(car.getId());
-					LOGGER.info("Car removed: " + car);
+					carService.softRemoveCar(car.getId());
+					LOGGER.info("Car soft-removed: " + car);
 					break;
 			}
 		} catch (JMSException e) {
