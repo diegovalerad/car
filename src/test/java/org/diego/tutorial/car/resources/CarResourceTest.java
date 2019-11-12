@@ -7,8 +7,6 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriBuilderException;
@@ -35,6 +33,17 @@ public class CarResourceTest {
 	private UriInfo uriInfo;
 	
 	private UriBuilder uriBuilder;
+	
+	@Before
+	public void setup() throws IllegalArgumentException, UriBuilderException, URISyntaxException {
+		uriBuilder = Mockito.mock(UriBuilder.class);
+		
+		Mockito.when(uriInfo.getBaseUriBuilder()).thenReturn(uriBuilder);
+        Mockito.when(uriBuilder.path(CarResource.class)).thenReturn(uriBuilder);
+        Mockito.when(uriBuilder.path(Mockito.anyString())).thenReturn(uriBuilder);
+        Mockito.when(uriBuilder.build()).thenReturn(new URI("www.abc.es"));
+        Mockito.when(uriBuilder.toString()).thenReturn("http://www.prueba.es");
+	}
 
 	@Test
 	public void testGetCars() {
@@ -45,9 +54,7 @@ public class CarResourceTest {
 		Mockito.when(carService.getAllCars())
 				.thenReturn(cars);
 		
-		GenericEntity<List<Car>> carsGeneric = new GenericEntity<List<Car>>(cars) {};
-		
-		assertEquals(carsGeneric, carResource.getCars(null).getEntity());
+		assertEquals(cars, carResource.getCars(null).getEntity());
 	}
 	
 	@Test
@@ -61,19 +68,7 @@ public class CarResourceTest {
 		Mockito.when(carService.getAllCarsFromCountry(country))
 				.thenReturn(cars);
 		
-		GenericEntity<List<Car>> carsGeneric = new GenericEntity<List<Car>>(cars) {};
-		
-		assertEquals(carsGeneric, carResource.getCars(country).getEntity());
-	}
-	
-	@Before
-	public void setup() throws IllegalArgumentException, UriBuilderException, URISyntaxException {
-		uriBuilder = Mockito.mock(UriBuilder.class);
-		
-		Mockito.when(uriInfo.getBaseUriBuilder()).thenReturn(uriBuilder);
-        Mockito.when(uriBuilder.path(CarResource.class)).thenReturn(uriBuilder);
-        Mockito.when(uriBuilder.build()).thenReturn(new URI("www.abc.es"));
-        Mockito.when(uriBuilder.toString()).thenReturn("http://www.prueba.es");
+		assertEquals(cars, carResource.getCars(country).getEntity());
 	}
 	
 	@Test
@@ -84,6 +79,8 @@ public class CarResourceTest {
 		Mockito.when(uriInfo.getAbsolutePathBuilder()).thenReturn(uriBuilder);
         Mockito.when(uriBuilder.path(Mockito.anyString())).thenReturn(uriBuilder);
 		
+        //TODO car validator
+        
 		Mockito.when(carService.addCar(car))
 				.thenReturn(car);
 		
@@ -93,7 +90,7 @@ public class CarResourceTest {
 	}
 	
 	@Test
-	public void testGetCar() {
+	public void testGetCar() throws Exception {
 		Car car = Mockito.mock(Car.class);
 		long carId = 8L;
 		car.setId(carId);
@@ -112,6 +109,7 @@ public class CarResourceTest {
 		Long carId = 8L;
 		car.setId(carId);
 		
+		//TODO car validator
 		Mockito.when(carService.updateCar(car))
 				.thenReturn(car);
 		

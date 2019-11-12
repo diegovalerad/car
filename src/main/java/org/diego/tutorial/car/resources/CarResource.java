@@ -74,8 +74,8 @@ public class CarResource {
 		// Mapping the List in a generic entity to be able to return it
 		GenericEntity<List<Car>> carsGeneric = new GenericEntity<List<Car>>(cars) {};
 		return Response.ok()
-					.entity(carsGeneric)
-					.build();
+				.entity(carsGeneric)
+				.build();
 	}
 	
 	/**
