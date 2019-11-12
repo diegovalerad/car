@@ -3,28 +3,32 @@ package org.diego.tutorial.car.resources;
 import static org.junit.Assert.*;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.core.GenericEntity;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
-import javax.ws.rs.core.UriBuilderException;
 import javax.ws.rs.core.UriInfo;
 
 import org.diego.tutorial.car.model.Car;
 import org.diego.tutorial.car.model.service.CarService;
+import org.diego.tutorial.car.validations.CarValidator;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
-@RunWith(MockitoJUnitRunner.class)
+//@RunWith(MockitoJUnitRunner.class)
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({Validation.class, CarValidator.class})
 public class CarResourceTest {
 	
 	@InjectMocks
@@ -35,6 +39,38 @@ public class CarResourceTest {
 	private UriInfo uriInfo;
 	
 	private UriBuilder uriBuilder;
+	
+	@Before
+	public void setup() throws Exception {
+		setupUriInfo();
+		setupValidationErrors();
+	}
+	
+	private void setupUriInfo() throws Exception {
+		uriBuilder = Mockito.mock(UriBuilder.class);
+		
+		Mockito.when(uriInfo.getBaseUriBuilder()).thenReturn(uriBuilder);
+        Mockito.when(uriBuilder.path(CarResource.class)).thenReturn(uriBuilder);
+        Mockito.when(uriBuilder.path(Mockito.anyString())).thenReturn(uriBuilder);
+        Mockito.when(uriBuilder.build()).thenReturn(new URI("www.abc.es"));
+        Mockito.when(uriBuilder.toString()).thenReturn("http://www.prueba.es");
+	}
+	
+	private void setupValidationErrors() throws Exception {
+		List<String> validationErrors = new ArrayList<String>();
+        ValidatorFactory validatorFactory = Mockito.mock(ValidatorFactory.class);
+        Validator validator = Mockito.mock(Validator.class);
+        
+        PowerMockito.mockStatic(Validation.class);
+        PowerMockito.when(Validation.class, "buildDefaultValidatorFactory")
+        		.thenReturn(validatorFactory);
+        PowerMockito.when(validatorFactory.getValidator())
+        		.thenReturn(validator);
+        
+        PowerMockito.mockStatic(CarValidator.class);
+        PowerMockito.when(CarValidator.class, "validateAddAndUpdate", Mockito.any(Car.class))
+        		.thenReturn(validationErrors);
+	}
 
 	@Test
 	public void testGetCars() {
@@ -45,9 +81,7 @@ public class CarResourceTest {
 		Mockito.when(carService.getAllCars())
 				.thenReturn(cars);
 		
-		GenericEntity<List<Car>> carsGeneric = new GenericEntity<List<Car>>(cars) {};
-		
-		assertEquals(carsGeneric, carResource.getCars(null).getEntity());
+		assertEquals(cars, carResource.getCars(null).getEntity());
 	}
 	
 	@Test
@@ -61,29 +95,17 @@ public class CarResourceTest {
 		Mockito.when(carService.getAllCarsFromCountry(country))
 				.thenReturn(cars);
 		
-		GenericEntity<List<Car>> carsGeneric = new GenericEntity<List<Car>>(cars) {};
-		
-		assertEquals(carsGeneric, carResource.getCars(country).getEntity());
-	}
-	
-	@Before
-	public void setup() throws IllegalArgumentException, UriBuilderException, URISyntaxException {
-		uriBuilder = Mockito.mock(UriBuilder.class);
-		
-		Mockito.when(uriInfo.getBaseUriBuilder()).thenReturn(uriBuilder);
-        Mockito.when(uriBuilder.path(CarResource.class)).thenReturn(uriBuilder);
-        Mockito.when(uriBuilder.build()).thenReturn(new URI("www.abc.es"));
-        Mockito.when(uriBuilder.toString()).thenReturn("http://www.prueba.es");
+		assertEquals(cars, carResource.getCars(country).getEntity());
 	}
 	
 	@Test
-	public void testAddCar() throws IllegalArgumentException, UriBuilderException, URISyntaxException {
+	public void testAddCar() throws Exception {
         Car car = Mockito.mock(Car.class);
 		car.setId(8L);
 		
 		Mockito.when(uriInfo.getAbsolutePathBuilder()).thenReturn(uriBuilder);
         Mockito.when(uriBuilder.path(Mockito.anyString())).thenReturn(uriBuilder);
-		
+        
 		Mockito.when(carService.addCar(car))
 				.thenReturn(car);
 		
@@ -93,7 +115,7 @@ public class CarResourceTest {
 	}
 	
 	@Test
-	public void testGetCar() {
+	public void testGetCar() throws Exception {
 		Car car = Mockito.mock(Car.class);
 		long carId = 8L;
 		car.setId(carId);
