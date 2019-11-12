@@ -79,7 +79,7 @@ public class JMSReceiverTest {
 		jmsReceiver.onMessage(message);
 		
 		Mockito.verify(carService)
-				.removeCar(car.getId());
+				.softRemoveCar(car.getId());
 	}
 	
 	@Test(expected = ClassCastException.class)

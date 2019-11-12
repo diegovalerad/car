@@ -65,6 +65,17 @@ public class CarService {
 	}
 	
 	/**
+	 * Gets all the soft removed cars from the system
+	 * @return Soft removed cars
+	 */
+	public List<Car> getAllSoftRemovedCars(){
+		LOGGER.info("Getting all the soft removed cars");
+		List<Car> carsSoftRemoved = jpaImpl.getAllSoftRemovedCars();
+		LOGGER.info("All the soft removed cars have been retrieved");
+		return carsSoftRemoved;
+	}
+	
+	/**
 	 * Method that adds a new car to the database
 	 * @param car Car that should be added
 	 * @return Car added
@@ -104,19 +115,39 @@ public class CarService {
 	}
 	
 	/**
-	 * Method that removes an existing car from the database. <p>
-	 * If the car already exists, an {@link DataNotFoundException} exception is thrown.
+	 * Method that soft-removes an existing car from the database. <p>
+	 * If the car does not exists, an {@link DataNotFoundException} exception is thrown.
 	 * @param id Identifier of the car that should be removed
+	 * @return Car soft-removed
+	 */
+	public Car softRemoveCar(long id) {
+		LOGGER.info("Soft-removing the car with ID: " + id);
+		if (id <= 0 || !carAlreadyExists(id)) {
+			LOGGER.warn("The car that it is trying to be soft-removed does not exist.");
+			throw new DataNotFoundException(createErrorMessageCarDoesNotExist("soft-remove", id));
+		}
+		
+		Car carSoftRemoved = getCar(id);
+		carSoftRemoved.setSoftRemoved(true);
+		LOGGER.info("The car with ID: " + id + " was soft-removed from the database");
+		return carSoftRemoved;
+	}
+	
+	/**
+	 * Method that completely removes an existing car from the database. <p>
+	 * If the car does not exists, an {@link DataNotFoundException} exception is thrown.
+	 * @param car Car object that should be removed
 	 * @return Car removed
 	 */
-	public Car removeCar(long id) {
+	public Car removeCar(Car car) {
+		long id = car.getId();
 		LOGGER.info("Removing the car with ID: " + id);
 		if (id <= 0 || !carAlreadyExists(id)) {
-			LOGGER.warn("The car that it is trying to get removed does not exist.");
+			LOGGER.warn("The car that it is trying to be removed does not exist.");
 			throw new DataNotFoundException(createErrorMessageCarDoesNotExist("remove", id));
 		}
 		
-		Car carRemoved = jpaImpl.delete(getCar(id));
+		Car carRemoved = jpaImpl.delete(car);
 		LOGGER.info("The car with ID: " + id + " was removed from the database");
 		return carRemoved;
 	}

@@ -17,6 +17,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
+/**
+ * Set of unit tests for the {@link JPAImpl} class
+ *
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class JPAImplTest {
 

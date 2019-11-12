@@ -14,6 +14,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import javax.ws.rs.DefaultValue;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -33,9 +34,9 @@ public class Car implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -4239800821516578196L;
-	
+
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
 	@Column(nullable = false)
@@ -60,9 +61,12 @@ public class Car implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	@NotNull(message = "Updated date cannot be null")
 	private Date lastUpdated;
-	
+
 	@Transient // Links are not stored in database
 	private List<Link> links = new ArrayList<Link>();
+
+	@DefaultValue(value = "false")
+	private boolean softRemoved;
 
 	public Car() {
 	}
@@ -74,6 +78,7 @@ public class Car implements Serializable {
 		this.country = country;
 		this.createdAt = createdAt;
 		this.lastUpdated = lastUpdated;
+		this.softRemoved = false;
 	}
 
 	public long getId() {
@@ -142,10 +147,18 @@ public class Car implements Serializable {
 	public void removeLinks() {
 		links.clear();
 	}
-	
+
+	public boolean isSoftRemoved() {
+		return softRemoved;
+	}
+
+	public void setSoftRemoved(boolean softRemoved) {
+		this.softRemoved = softRemoved;
+	}
+
 	@Override
 	public String toString() {
 		return "Car [id: " + id + ", brand: " + brand + ", country: " + country + ", registration: " + registration
-				+ ", createdAt: " + createdAt + ", lastUpdated: " + lastUpdated + "]";
+				+ ", createdAt: " + createdAt + ", lastUpdated: " + lastUpdated + ", softRemoved: " + softRemoved + "]";
 	}
 }

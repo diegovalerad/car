@@ -14,6 +14,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
+/**
+ * Set of unit tests for the {@link CarService} class
+ *
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class CarServiceTest {
 	
@@ -92,9 +96,22 @@ public class CarServiceTest {
 	}
 	
 	@Test
+	public void testSoftRemoveCar() {
+		long id = 1;
+		Car car = new Car();
+		car.setId(id);
+		
+		Mockito.when(jpaImpl.get(Car.class, id))
+				.thenReturn(car);
+		
+		assertEquals(car, carService.softRemoveCar(id));
+		assertEquals(true, car.isSoftRemoved());
+	}
+	
+	@Test
 	public void testRemoveCar() {
 		long id = 1;
-		Car car = Mockito.mock(Car.class);
+		Car car = new Car();
 		car.setId(id);
 		
 		Mockito.when(jpaImpl.get(Car.class, id))
@@ -102,6 +119,6 @@ public class CarServiceTest {
 		Mockito.when(jpaImpl.delete(car))
 				.thenReturn(car);
 		
-		assertEquals(car, carService.removeCar(id));
+		assertEquals(car, carService.removeCar(car));
 	}
 }

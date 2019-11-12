@@ -180,14 +180,17 @@ public class CarResource {
 	}
 	
 	/**
-	 * Method that removes a car from the database
+	 * Method that soft-removes a car from the database, that is,
+	 * the car is set with a flag, and it will be removed
+	 * in a period of time.
 	 * @param id Identifier of the car that should be removed
 	 * @return Car removed
 	 */
 	@DELETE
 	@Path("/{id}")
 	@Operation(summary = "Delete a car",
-	description = "Delete a car given by an ID from the system",
+	description = "Soft-delete a car given by an ID from the system. The car will be completely "
+			+ "removed from the system after a certain period of time.",
 	responses = {
 			@ApiResponse(
 					description = "Car", 
@@ -198,10 +201,10 @@ public class CarResource {
 			@ApiResponse(responseCode = "404", description = "Car not found"),
 	})
 	public Response deleteCar(@Parameter(description = "id of the car that should be removed", required = true) @PathParam("id") long id) {
-		String errorMessage = "Request to delete a car with non valid ID: " + id;
+		String errorMessage = "Request to soft-delete a car with non valid ID: " + id;
 		checkValidationErrors(id, errorMessage);
 		
-		Car car = carService.removeCar(id);
+		Car car = carService.softRemoveCar(id);
 		
 		String urlSelf = getUriForSelf(id);
 		car.addLink(urlSelf, "self");

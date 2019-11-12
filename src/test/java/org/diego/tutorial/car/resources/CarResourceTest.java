@@ -26,10 +26,15 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-//@RunWith(MockitoJUnitRunner.class)
+/**
+ * Set of unit tests for the {@link CarResource} class
+ *
+ */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Validation.class, CarValidator.class})
 public class CarResourceTest {
+	
+	//TODO Fix tests of this class. All of them fails.
 	
 	@InjectMocks
 	private CarResource carResource;
@@ -148,7 +153,7 @@ public class CarResourceTest {
 		Long carId = 8L;
 		car.setId(carId);
 		
-		Mockito.when(carService.removeCar(carId))
+		Mockito.when(carService.softRemoveCar(carId))
 				.thenReturn(car);
 		
 		Response response = carResource.deleteCar(carId);
