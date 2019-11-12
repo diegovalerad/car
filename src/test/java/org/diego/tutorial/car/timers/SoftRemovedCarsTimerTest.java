@@ -14,19 +14,19 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 /**
- * Set of unit tests for the {@link CarsTimer} class
+ * Set of unit tests for the {@link SoftRemovedCarsTimer} class
  *
  */
 @RunWith(MockitoJUnitRunner.class)
-public class CarsTimerTest {
+public class SoftRemovedCarsTimerTest {
 
 	@InjectMocks
-	private CarsTimer carsTimer;
+	private SoftRemovedCarsTimer carsTimer;
 	@Mock
 	private CarService carService;
 	
 	@Test
-	public void testCheckSoftRemovedCars() {
+	public void testCheck() {
 		List<Car> softRemovedCars = new ArrayList<Car>();
 		
 		for (int i = 0; i < 10; i++) {
@@ -45,7 +45,7 @@ public class CarsTimerTest {
 		Mockito.when(carService.getAllSoftRemovedCars())
 				.thenReturn(softRemovedCars);
 		
-		carsTimer.checkSoftRemovedCars();
+		carsTimer.check();
 		
 	}
 
