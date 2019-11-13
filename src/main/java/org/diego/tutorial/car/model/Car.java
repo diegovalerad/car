@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -39,9 +40,9 @@ public class Car implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
-	@Column(nullable = false)
 	@NotNull(message = "Brand cannot be null", groups = AddAndUpdateChecks.class)
-	private String brand;
+	@ManyToOne(optional = false)
+	private Brand brand;
 	
 	@Column(nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
@@ -71,7 +72,7 @@ public class Car implements Serializable {
 	public Car() {
 	}
 
-	public Car(long id, String brand, Date registration, String country, Date createdAt, Date lastUpdated) {
+	public Car(long id, Brand brand, Date registration, String country, Date createdAt, Date lastUpdated) {
 		this.id = id;
 		this.brand = brand;
 		this.registration = registration;
@@ -89,11 +90,11 @@ public class Car implements Serializable {
 		this.id = id;
 	}
 
-	public String getBrand() {
+	public Brand getBrand() {
 		return brand;
 	}
 
-	public void setBrand(String brand) {
+	public void setBrand(Brand brand) {
 		this.brand = brand;
 	}
 
