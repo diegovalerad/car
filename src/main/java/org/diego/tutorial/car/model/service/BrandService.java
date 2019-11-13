@@ -39,6 +39,19 @@ public class BrandService {
 	}
 	
 	/**
+	 * Retrieves all the brands from a certain company
+	 * @param company Company which brands are part of.
+	 * @return List of brands
+	 */
+	public List<Brand> getAllBrandsFromCompany(String company) {
+		String companyLowerCase = company.toLowerCase();
+		LOGGER.info("Getting all the brands from the company '" + companyLowerCase + "'");
+		List<Brand> brands = jpaImplBrand.getAllBrandsFromCompany(companyLowerCase);
+		LOGGER.info("All the brands retrieved from the database.");
+		return brands;
+	}
+	
+	/**
 	 * Retrieves a requested brand given by its name
 	 * @param brandName Name of the brand
 	 * @return Brand
@@ -56,6 +69,7 @@ public class BrandService {
 	 * @return Created brand
 	 */
 	public Brand addBrand(Brand brand) {
+		brand.setBrand(brand.getBrand().toLowerCase());
 		if (brandAlreadyExists(brand.getBrand())) {
 			String message = "Trying to add a brand with name: '" + brand.getBrand() + "' that already exists.";
 			LOGGER.info(message);
@@ -71,6 +85,7 @@ public class BrandService {
 	 * @return Updated brand
 	 */
 	public Brand updateBrand(Brand brand) {
+		brand.setBrand(brand.getBrand().toLowerCase());
 		if (!brandAlreadyExists(brand.getBrand())) {
 			String message = createErrorMessageBrandDoesNotExist("update", brand.getBrand());
 			LOGGER.info(message);
@@ -86,6 +101,7 @@ public class BrandService {
 	 * @return Removed brand
 	 */
 	public Brand removeBrand(String brandName) {
+		brandName = brandName.toLowerCase();
 		if (!brandAlreadyExists(brandName)) {
 			String message = createErrorMessageBrandDoesNotExist("delete", brandName);
 			LOGGER.info(message);

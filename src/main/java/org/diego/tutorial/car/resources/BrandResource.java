@@ -1,6 +1,5 @@
 package org.diego.tutorial.car.resources;
 
-import java.net.HttpURLConnection;
 import java.net.URI;
 import java.util.List;
 
@@ -14,6 +13,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
@@ -48,7 +48,10 @@ public class BrandResource {
 	private final static Logger LOGGER = Logger.getLogger(BrandResource.class);
 	
 	/**
-	 * Method that retrieves all the brands from the system
+	 * Method that retrieves all the brands from the system. <p>
+	 * Optionally, a company param can be provided, in order to
+	 * retrieve all the cars from that company.
+	 * @param company Company of the brands.
 	 * @return List of brands
 	 */
 	@GET
@@ -64,10 +67,15 @@ public class BrandResource {
 					),
 			}
 	)
-	public Response getBrands() {
+	public Response getBrands(@QueryParam("company") String company) {
 		List<Brand> brands = null;
-		LOGGER.info("Retrieving all the brands");
-		brands = brandService.getAllBrands();
+		if (company != null && !company.isEmpty()) {
+			LOGGER.info("Retrieving all the brands from the company '" + company + "'");
+			brands = brandService.getAllBrandsFromCompany(company);
+		}else {
+			LOGGER.info("Retrieving all the brands");
+			brands = brandService.getAllBrands();
+		}
 		LOGGER.info("All the brands retrieved");
 		GenericEntity<List<Brand>> brandGeneric = new GenericEntity<List<Brand>>(brands) {};
 		return Response.ok()
