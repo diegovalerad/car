@@ -59,6 +59,8 @@ public class BrandService {
 	public Brand getBrand(String brandName) {
 		LOGGER.info("Getting the brand '" + brandName + "'");
 		Brand brand = jpaImplBrand.get(Brand.class, brandName);
+		if (brand == null)
+			throw new DataNotFoundException("Trying to get a brand which name '" + brandName + "' does not exist");
 		LOGGER.info("Brand retrieved: " + brand);
 		return brand;
 	}
@@ -108,6 +110,8 @@ public class BrandService {
 			throw new DataNotFoundException(message);
 		}
 		Brand brand = jpaImplBrand.get(Brand.class, brandName);
+		if (brand == null)
+			throw new DataNotFoundException("Trying to get a brand with name '" + brandName + "' that does not exists");
 		Brand removedBrand = jpaImplBrand.delete(brand);
 		return removedBrand;
 	}
@@ -120,14 +124,13 @@ public class BrandService {
 	private boolean brandAlreadyExists(String brandName) {
 		LOGGER.info("Checking if the brand '" + brandName + "' exists");
 		
-		try {
-			jpaImplBrand.get(Brand.class, brandName);
-			LOGGER.info("The brand '" + brandName + "' exists");
-			return true;
-		} catch (DataNotFoundException e) {
+		Brand brand = jpaImplBrand.get(Brand.class, brandName); 
+		if (brand == null) {
 			LOGGER.info("The brand '" + brandName + "' does not exist");
 			return false;
 		}
+		LOGGER.info("The brand '" + brandName + "' exists");
+		return true;
 	}
 	
 	/**

@@ -21,7 +21,7 @@ public interface IJPA {
 	 * @param <T> Class of the object
 	 * @param type Object
 	 * @param id Identifier of the object to get.
-	 * @return T object
+	 * @return T object or null if it does not exist
 	 */
 	public <T> T get(Class<T> type, Object id);
 	

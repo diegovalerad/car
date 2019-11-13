@@ -19,7 +19,7 @@ import javax.ws.rs.DefaultValue;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.diego.tutorial.car.validations.AddAndUpdateChecks;
+import org.diego.tutorial.car.validations.car.AddAndUpdateChecks;
 
 /**
  * Entity that represents a persistence domain object. This entity is persisted 

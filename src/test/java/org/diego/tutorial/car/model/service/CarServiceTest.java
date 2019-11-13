@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.diego.tutorial.car.databases.jpa.JPAImplCar;
+import org.diego.tutorial.car.model.Brand;
 import org.diego.tutorial.car.model.Car;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,6 +26,8 @@ public class CarServiceTest {
 	private CarService carService;
 	@Mock
 	private JPAImplCar jpaImpl;
+	@Mock
+	private BrandService brandService;
 	
 	@Test
 	public void testGetAllCars() {
@@ -73,7 +76,9 @@ public class CarServiceTest {
 	
 	@Test
 	public void testAddCar() {
-		Car car = Mockito.mock(Car.class);
+		Car car = new Car();
+		Brand brand = Mockito.mock(Brand.class);
+		car.setBrand(brand);
 		
 		Mockito.when(jpaImpl.add(car))
 				.thenReturn(car);
@@ -86,6 +91,8 @@ public class CarServiceTest {
 		long id = 1;
 		Car car = new Car();
 		car.setId(id);
+		Brand brand = Mockito.mock(Brand.class);
+		car.setBrand(brand);
 		
 		Mockito.when(jpaImpl.get(Car.class, id))
 				.thenReturn(car);

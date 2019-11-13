@@ -6,24 +6,31 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
 import org.diego.tutorial.car.model.Brand;
 import org.diego.tutorial.car.model.service.BrandService;
+import org.diego.tutorial.car.validations.brand.BrandValidator;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 /**
  * Set of unit tests for the {@link BrandResource} class
  *
  */
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({Validation.class, BrandValidator.class})
 public class BrandResourceTest {
 	
 	@InjectMocks
@@ -41,6 +48,7 @@ public class BrandResourceTest {
 	@Before
 	public void setUp() throws Exception {
 		setupUriInfo();
+		setupValidationErrors();
 		
 		brandName = "brandName";
 		company = "company";
@@ -54,6 +62,22 @@ public class BrandResourceTest {
         Mockito.when(uriBuilder.path(BrandResource.class)).thenReturn(uriBuilder);
         Mockito.when(uriBuilder.path(Mockito.anyString())).thenReturn(uriBuilder);
         Mockito.when(uriBuilder.build()).thenReturn(new URI("www.abc.es"));
+	}
+	
+	private void setupValidationErrors() throws Exception {
+		List<String> validationErrors = new ArrayList<String>();
+        ValidatorFactory validatorFactory = Mockito.mock(ValidatorFactory.class);
+        Validator validator = Mockito.mock(Validator.class);
+        
+        PowerMockito.mockStatic(Validation.class);
+        PowerMockito.when(Validation.class, "buildDefaultValidatorFactory")
+        		.thenReturn(validatorFactory);
+        PowerMockito.when(validatorFactory.getValidator())
+        		.thenReturn(validator);
+        
+        PowerMockito.mockStatic(BrandValidator.class);
+        PowerMockito.when(BrandValidator.class, "validateBrand", Mockito.any(Brand.class))
+        		.thenReturn(validationErrors);
 	}
 
 	@Test

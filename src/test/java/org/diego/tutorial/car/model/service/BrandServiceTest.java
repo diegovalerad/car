@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.diego.tutorial.car.databases.jpa.JPAImplBrand;
-import org.diego.tutorial.car.exceptions.DataNotFoundException;
 import org.diego.tutorial.car.model.Brand;
 import org.junit.Before;
 import org.junit.Test;
@@ -70,7 +69,7 @@ public class BrandServiceTest {
 	@Test
 	public void testAddBrand() {
 		Mockito.when(jpaImplBrand.get(Brand.class, brandName.toLowerCase()))
-				.thenThrow(new DataNotFoundException("data not found message"));
+				.thenReturn(null);
 		
 		Mockito.when(jpaImplBrand.add(brand))
 				.thenReturn(brand);

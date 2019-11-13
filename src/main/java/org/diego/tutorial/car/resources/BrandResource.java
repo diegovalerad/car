@@ -21,8 +21,10 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import org.apache.log4j.Logger;
+import org.diego.tutorial.car.exceptions.BadRequestException;
 import org.diego.tutorial.car.model.Brand;
 import org.diego.tutorial.car.model.service.BrandService;
+import org.diego.tutorial.car.validations.brand.BrandValidator;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -102,10 +104,19 @@ public class BrandResource {
 					@ApiResponse(
 						description ="Brand already exists",
 						responseCode = "409"
+					),
+					@ApiResponse(
+						description = "Trying to create a brand with non-valid fields",
+						responseCode = "400"
 					)
 	})
 	public Response addBrand(@Parameter(description = "new brand", required = true) Brand brand) {
 		LOGGER.info("Trying to create a new brand: " + brand);
+		
+		List<String> validationErrors = BrandValidator.validateBrand(brand);
+		String errorMessage = "Request to create a new brand with non-valid fields";
+		checkValidationErrors(validationErrors, errorMessage);
+		
 		Brand addedBrand = brandService.addBrand(brand);
 		LOGGER.info("Brand created: " + brand);
 		
@@ -145,6 +156,7 @@ public class BrandResource {
 	public Response getBrand(@Parameter(description = "name of the brand", required = true) 
 								@PathParam("brandName") String brandName) {
 		LOGGER.info("Trying to get the brand '" + brandName + "'");
+		
 		Brand brand = brandService.getBrand(brandName);
 		LOGGER.info("Brand '" + brandName + "' retrieved");
 		
@@ -177,7 +189,12 @@ public class BrandResource {
 					@ApiResponse(
 						description = "Brand does not exist",
 						responseCode = "404"
+					),
+					@ApiResponse(
+						description = "Trying to update a brand with non-valid fields",
+						responseCode = "400"
 					)
+					
 			}
 	)
 	public Response updateBrand(@Parameter(description = "Name of the brand that should be updated", required = true) 
@@ -185,6 +202,11 @@ public class BrandResource {
 								@Parameter(description = "Brand that should be updated", required = true) 
 									Brand brand){
 		LOGGER.info("Trying to update the brand '" + brand + "'");
+		
+		List<String> validationErrors = BrandValidator.validateBrand(brand);
+		String errorMessage = "Request to update a brand with non-valid fields";
+		checkValidationErrors(validationErrors, errorMessage);
+		
 		Brand updatedBrand = brandService.updateBrand(brand);
 		LOGGER.info("Updated brand '" + brand + "'");
 		
@@ -196,6 +218,11 @@ public class BrandResource {
 				.build();
 	}
 	
+	/**
+	 * Removes a brand from the database
+	 * @param brandName Name of the brand
+	 * @return Response with the removed brand
+	 */
 	@DELETE
 	@Path("/{brandName}")
 	@Operation(summary = "Delete a brand",
@@ -217,6 +244,7 @@ public class BrandResource {
 	public Response removeBrand(@Parameter(description = "Name of the brand that should be removed", required = true)
 									@PathParam("brandName") String brandName) {
 		LOGGER.info("Trying to remove the brand '" + brandName + "'");
+		
 		Brand removedBrand = brandService.removeBrand(brandName);
 		LOGGER.info("Removed brand '" + brandName + "'");
 		
@@ -240,6 +268,23 @@ public class BrandResource {
 				.build()
 				.toString();
 		return urlSelf;
+	}
+	
+	/**
+	 * Method that loops though a list of validation errors, throwing a {@link BadRequestException} exception
+	 * in case there is one or more validation errors. This exception includes the list of errors and a 
+	 * descriptive error message.
+	 * @param validationErrors List of possible validation errors
+	 * @param errorMessage Descriptive error message thrown in the {@link BadRequestException} exception next to the list of errors. 
+	 */
+	private void checkValidationErrors(List<String> validationErrors, String errorMessage) {
+		if (!validationErrors.isEmpty()) {
+			String message = errorMessage + ": ";
+			for (String validationError : validationErrors) {
+				message += validationError + " - ";
+			}
+			throw new BadRequestException(message);
+		}
 	}
 	
 }

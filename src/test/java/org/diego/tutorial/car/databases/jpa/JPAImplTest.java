@@ -55,14 +55,6 @@ public class JPAImplTest {
 		assertEquals(car, jpaImpl.get(Car.class, 0L));
 	}
 	
-	@Test(expected = DataNotFoundException.class)
-	public void testGetDataNotFound() {
-		Mockito.when(em.find(Mockito.any(), Mockito.any()))
-				.thenReturn(null);
-		
-		jpaImpl.get(Car.class, 0);
-	}
-	
 	@Test
 	public void testAdd() {
 		Car carExpected = Mockito.mock(Car.class);

@@ -1,4 +1,4 @@
-package org.diego.tutorial.car.validations;
+package org.diego.tutorial.car.validations.car;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ import org.apache.log4j.Logger;
 import org.diego.tutorial.car.model.Car;
 
 /**
- * Class that validates car objects
+ * Class that validates {@link Car} objects
  *
  */
 public class CarValidator {

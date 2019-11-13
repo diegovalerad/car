@@ -20,9 +20,7 @@ public class JPAImplCar extends JPAImpl {
 	 * @return List of cars from the country searched
 	 */
 	public List<Car> getAllCarsFromCountry(String country){
-		String countryLowerCase = country.toLowerCase();
-		
-		String query = "SELECT car FROM Car car WHERE car.country='" + countryLowerCase + "'";
+		String query = "SELECT car FROM Car car WHERE car.country='" + country + "'";
 		TypedQuery<Car> createQuery = em.createQuery(query, Car.class);
 		
 		List<Car> carsFromCountry = createQuery.getResultList();

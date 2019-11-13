@@ -8,7 +8,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.diego.tutorial.car.databases.IJPA;
-import org.diego.tutorial.car.exceptions.DataNotFoundException;
 
 /**
  * 
@@ -34,8 +33,6 @@ public class JPAImpl implements IJPA {
 	public <T> T get(Class<T> type, Object id){
 		T t = em.find(type, id);
 		
-		if (t == null)
-			throw new DataNotFoundException("Trying to get an object that does not exists");
 		return t;
 	}
 

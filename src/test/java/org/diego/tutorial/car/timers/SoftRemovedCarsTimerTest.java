@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.diego.tutorial.car.model.Brand;
 import org.diego.tutorial.car.model.Car;
 import org.diego.tutorial.car.model.service.CarService;
 import org.junit.Test;
@@ -31,10 +32,12 @@ public class SoftRemovedCarsTimerTest {
 		
 		for (int i = 0; i < 10; i++) {
 			long id = (long) i;
-			String brand = "brand" + i;
 			Date registration, createdAt, lastUpdated;
 			registration = createdAt = lastUpdated = new Date();
 			String country = "country" + i;
+			
+			Brand brand = new Brand("brand" + i, "company" + i);
+			
 			Car car = new Car(id, brand, registration, country, createdAt, lastUpdated);
 			softRemovedCars.add(car);
 			

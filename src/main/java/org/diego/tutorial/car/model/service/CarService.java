@@ -7,7 +7,9 @@ import javax.ejb.Stateless;
 
 import org.apache.log4j.Logger;
 import org.diego.tutorial.car.databases.jpa.JPAImplCar;
+import org.diego.tutorial.car.exceptions.BadRequestException;
 import org.diego.tutorial.car.exceptions.DataNotFoundException;
+import org.diego.tutorial.car.model.Brand;
 import org.diego.tutorial.car.model.Car;
 
 /**
@@ -19,6 +21,9 @@ import org.diego.tutorial.car.model.Car;
 public class CarService {
 	@EJB
 	private JPAImplCar jpaImpl;
+	
+	@EJB
+	private BrandService brandService;
 	
 	private final static Logger LOGGER = Logger.getLogger(CarService.class);
 	
@@ -45,7 +50,11 @@ public class CarService {
 	public Car getCar(long id) {
 		LOGGER.info("Getting the car with ID " + id + " from the database.");
 		Car car = null;
+		
 		car = jpaImpl.get(Car.class, id);
+		if (car == null)
+			throw new DataNotFoundException("Trying to get a car with ID '" + id + "' that does not exists");
+		
 		LOGGER.info("The car with ID " + id + " was retrieved from the database.");
 		
 		return car;
@@ -57,6 +66,7 @@ public class CarService {
 	 * @return List of car objects, whose country field is the same as the requested.
 	 */
 	public List<Car> getAllCarsFromCountry(String country){
+		country = country.toLowerCase();
 		LOGGER.info("Getting all the cars from the country '" + country + "'.");
 		List<Car> carsForCountry = jpaImpl.getAllCarsFromCountry(country);
 		LOGGER.info("All the cars from country '" + country + "' retrieved from the database.");
@@ -81,10 +91,12 @@ public class CarService {
 	 * @return Car added
 	 */
 	public Car addCar(Car car) {
+		LOGGER.info("Adding the car: " + car);
+		checkBrand(car.getBrand());
+		
 		car.setCreatedAt(new Date());
 		car.setLastUpdated(new Date());
 		car.setRegistration(new Date());
-		LOGGER.info("Adding the car: " + car);
 		
 		Car carAdded = jpaImpl.add(car);
 		
@@ -106,6 +118,9 @@ public class CarService {
 			LOGGER.warn("The car that it is trying to get updated does not exist.");
 			throw new DataNotFoundException(createErrorMessageCarDoesNotExist("update", idCar));
 		}
+		
+		checkBrand(car.getBrand());
+		
 		Car carOld = getCar(idCar);
 		car.setCreatedAt(carOld.getCreatedAt());
 		car.setRegistration(carOld.getRegistration());
@@ -159,14 +174,14 @@ public class CarService {
 	 */
 	private boolean carAlreadyExists(long id) {
 		LOGGER.info("Checking if the car with ID: " + id + " exists.");
-		try {
-			jpaImpl.get(Car.class, id);
-			LOGGER.info("The car with ID: " + id + " exists.");
-			return true;
-		} catch (DataNotFoundException e) {
+		
+		Car car = jpaImpl.get(Car.class, id);
+		if (car == null) {
 			LOGGER.info("The car with ID: " + id + " does not exist.");
 			return false;
 		}
+		LOGGER.info("The car with ID: " + id + " exists.");
+		return true;
 	}
 	
 	/**
@@ -178,6 +193,29 @@ public class CarService {
 	 */
 	private String createErrorMessageCarDoesNotExist(String operation, long id) {
 		return "Trying to " + operation + " a car with ID: " + id + " that does not exist.";
+	}
+	
+	/**
+	 * Method that checks if a brand exists
+	 * @param brand Given brand
+	 */
+	private void checkBrand(Brand brand) {
+		LOGGER.info("Checking the brand: " + brand);
+		String message = null;
+		if (brand == null) {
+			message = "The brand is a required field";
+		}else {
+			try {
+				brandService.getBrand(brand.getBrand());
+			} catch (DataNotFoundException e) {
+				message = "The brand must exist";
+			}
+		}
+		if (message != null) {
+			LOGGER.info("Error checking the brand: " + message);
+			throw new BadRequestException(message);
+		}
+		LOGGER.info("Checking of the brand " + brand + " finished");
 	}
 	
 }
