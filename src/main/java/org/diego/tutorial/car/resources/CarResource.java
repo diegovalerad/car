@@ -94,7 +94,7 @@ public class CarResource {
                     schema = @Schema(implementation = Car.class)
 		            )),
 	})
-	public Response addCar(@Parameter(description = "updated car object", required = true) Car car) {
+	public Response addCar(@Parameter(description = "new car object", required = true) Car car) {
 		List<String> validationErrors = CarValidator.validateAddAndUpdate(car);
 		String errorMessage = "Request to add a car with non valid fields";
 		checkValidationErrors(validationErrors, errorMessage);

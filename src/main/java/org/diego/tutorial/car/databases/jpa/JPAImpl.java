@@ -31,7 +31,7 @@ public class JPAImpl implements IJPA {
 	}
 
 	@Override
-	public <T> T get(Class<T> type, long id){
+	public <T> T get(Class<T> type, Object id){
 		T t = em.find(type, id);
 		
 		if (t == null)

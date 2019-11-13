@@ -23,7 +23,7 @@ public interface IJPA {
 	 * @param id Identifier of the object to get.
 	 * @return T object
 	 */
-	public <T> T get(Class<T> type, long id);
+	public <T> T get(Class<T> type, Object id);
 	
 	/**
 	 * Method that adds an object to the database

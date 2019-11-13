@@ -33,9 +33,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Validation.class, CarValidator.class})
 public class CarResourceTest {
-	
-	//TODO Fix tests of this class. All of them fails.
-	
 	@InjectMocks
 	private CarResource carResource;
 	@Mock
