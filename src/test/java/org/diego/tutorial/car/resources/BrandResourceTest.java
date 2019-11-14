@@ -120,7 +120,7 @@ public class BrandResourceTest {
 	
 	@Test
 	public void testUpdateBrand() {
-		Mockito.when(brandService.updateBrand(brand))
+		Mockito.when(brandService.updateBrand(brandName, brand))
 				.thenReturn(brand);
 		
 		assertEquals(brand, brandResource.updateBrand(brandName, brand).getEntity());

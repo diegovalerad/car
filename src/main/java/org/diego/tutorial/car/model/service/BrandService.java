@@ -7,9 +7,11 @@ import javax.ejb.Stateless;
 
 import org.apache.log4j.Logger;
 import org.diego.tutorial.car.databases.jpa.JPAImplBrand;
+import org.diego.tutorial.car.exceptions.BadRequestException;
 import org.diego.tutorial.car.exceptions.DataAlreadyExistsException;
 import org.diego.tutorial.car.exceptions.DataNotFoundException;
 import org.diego.tutorial.car.model.Brand;
+import org.diego.tutorial.car.model.Car;
 
 /**
  * Class that represents the service of Brands, in charge of doing the operations involving brands, 
@@ -20,6 +22,9 @@ import org.diego.tutorial.car.model.Brand;
 public class BrandService {
 	@EJB
 	private JPAImplBrand jpaImplBrand;
+	
+	@EJB
+	private CarService carService;
 	
 	private final static Logger LOGGER = Logger.getLogger(BrandService.class);
 	
@@ -57,6 +62,7 @@ public class BrandService {
 	 * @return Brand
 	 */
 	public Brand getBrand(String brandName) {
+		brandName = brandName.toLowerCase();
 		LOGGER.info("Getting the brand '" + brandName + "'");
 		Brand brand = jpaImplBrand.get(Brand.class, brandName);
 		if (brand == null)
@@ -71,7 +77,8 @@ public class BrandService {
 	 * @return Created brand
 	 */
 	public Brand addBrand(Brand brand) {
-		brand.setBrand(brand.getBrand().toLowerCase());
+		String brandName = brand.getBrand().toLowerCase();
+		brand.setBrand(brandName);
 		if (brandAlreadyExists(brand.getBrand())) {
 			String message = "Trying to add a brand with name: '" + brand.getBrand() + "' that already exists.";
 			LOGGER.info(message);
@@ -83,17 +90,27 @@ public class BrandService {
 	
 	/**
 	 * Tries to update an existing brand
-	 * @param brand Brand that should be updated
+	 * @param brand name of the brand that should be updated
+	 * @param updateBrand object with the new info for the brand
 	 * @return Updated brand
 	 */
-	public Brand updateBrand(Brand brand) {
-		brand.setBrand(brand.getBrand().toLowerCase());
-		if (!brandAlreadyExists(brand.getBrand())) {
-			String message = createErrorMessageBrandDoesNotExist("update", brand.getBrand());
+	public Brand updateBrand(String brand, Brand updateBrand) {
+		String brandNameLowerCase = updateBrand.getBrand().toLowerCase();
+		String brandName2LowerCase = brand.toLowerCase();
+		
+		if (!brandNameLowerCase.equals(brandName2LowerCase)) {
+			String message = "The brand name cannot be updated";
+			LOGGER.info(message);
+			throw new BadRequestException(message);
+		}
+		
+		updateBrand.setBrand(brandNameLowerCase);
+		if (!brandAlreadyExists(updateBrand.getBrand())) {
+			String message = createErrorMessageBrandDoesNotExist("update", updateBrand.getBrand());
 			LOGGER.info(message);
 			throw new DataNotFoundException(message);
 		}
-		Brand updatedBrand = jpaImplBrand.update(brand);
+		Brand updatedBrand = jpaImplBrand.update(updateBrand);
 		return updatedBrand;
 	}
 	
@@ -109,9 +126,15 @@ public class BrandService {
 			LOGGER.info(message);
 			throw new DataNotFoundException(message);
 		}
+		
 		Brand brand = jpaImplBrand.get(Brand.class, brandName);
 		if (brand == null)
 			throw new DataNotFoundException("Trying to get a brand with name '" + brandName + "' that does not exists");
+		
+		if (brandHasCars(brandName)) {
+			throw new BadRequestException("Trying to remove the brand '" + brandName + "' that has cars");
+		}
+		
 		Brand removedBrand = jpaImplBrand.delete(brand);
 		return removedBrand;
 	}
@@ -144,7 +167,12 @@ public class BrandService {
 		return "Trying to " + operation + " a brand with name '" + brand + "' that does not exist.";
 	}
 	
-	
+	private boolean brandHasCars(String brandName) {
+		LOGGER.info("Checking the number of cars of the brand '" + brandName + "'");
+		List<Car> carsOfBrand = carService.getAllCarsFromBrand(brandName);
+		LOGGER.info("The brand '" + brandName + "' has " + carsOfBrand.size() + " cars");
+		return !carsOfBrand.isEmpty();
+	}
 	
 	
 }

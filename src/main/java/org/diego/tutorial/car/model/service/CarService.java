@@ -52,7 +52,7 @@ public class CarService {
 		Car car = null;
 		
 		car = jpaImpl.get(Car.class, id);
-		if (car == null)
+		if (car == null || (car.isSoftRemoved()))
 			throw new DataNotFoundException("Trying to get a car with ID '" + id + "' that does not exists");
 		
 		LOGGER.info("The car with ID " + id + " was retrieved from the database.");
@@ -66,12 +66,24 @@ public class CarService {
 	 * @return List of car objects, whose country field is the same as the requested.
 	 */
 	public List<Car> getAllCarsFromCountry(String country){
-		country = country.toLowerCase();
 		LOGGER.info("Getting all the cars from the country '" + country + "'.");
 		List<Car> carsForCountry = jpaImpl.getAllCarsFromCountry(country);
 		LOGGER.info("All the cars from country '" + country + "' retrieved from the database.");
 		
 		return carsForCountry;
+	}
+	
+	/**
+	 * Retrieves all cars from a certain brand
+	 * @param brand Name of the brand
+	 * @return List of cars
+	 */
+	public List<Car> getAllCarsFromBrand(String brand){
+		LOGGER.info("Getting all the cars from the brand '" + brand + "'.");
+		List<Car> carsFromBrand = jpaImpl.getAllCarsFromBrand(brand);
+		LOGGER.info("All the cars from brand '" + brand + "' retrieved from the database.");
+		
+		return carsFromBrand;
 	}
 	
 	/**
@@ -206,6 +218,7 @@ public class CarService {
 			message = "The brand is a required field";
 		}else {
 			try {
+				brand.setBrand(brand.getBrand().toLowerCase());
 				brandService.getBrand(brand.getBrand());
 			} catch (DataNotFoundException e) {
 				message = "The brand must exist";

@@ -1,786 +1,1591 @@
 {
 	"info": {
-		"_postman_id": "6eb361ad-4179-434c-b3fd-1e63d16433c9",
+		"_postman_id": "836f664c-08e2-4a87-a0aa-b2b1b03e749c",
 		"name": "carsApp",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "Get All cars",
-			"event": [
+			"name": "Brands",
+			"item": [
 				{
-					"listen": "test",
-					"script": {
-						"id": "24aa0812-cb08-4abd-8215-593bf4856d8d",
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{url}}/cars/",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						"cars",
-						""
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Create new car",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"id": "4feb7c56-c194-4c31-8dc7-c5d2d5115c45",
-						"exec": [
-							"pm.test(\"Created, Status code is 201\", function () {",
-							"    pm.response.to.have.status(201);",
-							"});",
-							"",
-							"var jsonData = pm.response.json();",
-							"pm.globals.set(\"carId\", jsonData.id);",
-							"",
-							"pm.sendRequest({",
-							"    url: pm.variables.get(\"url\") + \"/cars/\" + pm.globals.get(\"carId\"),",
-							"    method: 'DELETE'",
-							"}, function (err, res) {",
-							"        ",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"brand\": \"mercedes\",\r\n    \"country\": \"spain\"\r\n}"
-				},
-				"url": {
-					"raw": "{{url}}/cars",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						"cars"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get existing car",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"id": "581b62ed-bcab-492a-837f-92938b0957c8",
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});",
-							"",
-							"pm.sendRequest({",
-							"    url: pm.variables.get(\"url\") + \"/cars/\" + pm.globals.get(\"carId\"),",
-							"    method: 'DELETE'",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				},
-				{
-					"listen": "prerequest",
-					"script": {
-						"id": "483bf0f4-8b05-4974-99e7-4abeb0631601",
-						"exec": [
-							"pm.sendRequest({\r",
-							"    url: pm.variables.get(\"url\") + \"/cars/\",\r",
-							"    method: 'POST',\r",
-							"    header: 'Content-Type:application/json',\r",
-							"    body: {\r",
-							"        mode: 'raw',\r",
-							"        raw: JSON.stringify({ brand: 'brandCar', country: 'countryNonExistingCar' })\r",
-							"    }\r",
-							"}, function (err, res) {\r",
-							"    pm.globals.set(\"carId\", res.json().id);\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{url}}/cars/{{carId}}",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						"cars",
-						"{{carId}}"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get non existing car",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"id": "581b62ed-bcab-492a-837f-92938b0957c8",
-						"exec": [
-							"pm.test(\"Status code is 404\", function () {",
-							"    pm.response.to.have.status(404);",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				},
-				{
-					"listen": "prerequest",
-					"script": {
-						"id": "483bf0f4-8b05-4974-99e7-4abeb0631601",
-						"exec": [
-							"pm.sendRequest({\r",
-							"    url: pm.variables.get(\"url\") + \"/cars/\",\r",
-							"    method: 'POST',\r",
-							"    header: 'Content-Type:application/json',\r",
-							"    body: {\r",
-							"        mode: 'raw',\r",
-							"        raw: JSON.stringify({ brand: 'brandNonExistingCar', country: 'countryNonExistingCar' })\r",
-							"    }\r",
-							"}, function (err, res) {\r",
-							"    pm.globals.set(\"carId\", res.json().id);\r",
-							"    \r",
-							"    pm.sendRequest({\r",
-							"    url: pm.variables.get(\"url\") + \"/cars/\" + pm.globals.get(\"carId\"),\r",
-							"    method: 'DELETE'\r",
-							"    }, function (err, res) {\r",
-							"        \r",
-							"    });\r",
-							"})"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{url}}/cars/{{carId}}",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						"cars",
-						"{{carId}}"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get car with non valid ID",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"id": "68041a89-58c0-4635-8025-8d2a609d46d8",
-						"exec": [
-							"pm.test(\"Bad request, Status code is 400\", function () {",
-							"    pm.response.to.have.status(400);",
-							"});",
-							"",
-							"pm.test(\"Body matches string\", function () {",
-							"    pm.expect(pm.response.text()).to.include(\"Request to get a car with non valid ID: 0\");",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				},
-				{
-					"listen": "prerequest",
-					"script": {
-						"id": "b303cea9-1dc4-4f93-8a53-68c22b0c32ea",
-						"exec": [
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{url}}/cars/0",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						"cars",
-						"0"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get cars from country",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"id": "60441e2b-73a5-4986-a150-ccdd454b9163",
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});",
-							"",
-							"pm.sendRequest({",
-							"    url: pm.variables.get(\"url\") + \"/cars/\" + pm.globals.get(\"carId\"),",
-							"    method: 'DELETE'",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				},
-				{
-					"listen": "prerequest",
-					"script": {
-						"id": "c73f0230-f9ad-403b-8034-a4c03dc9faba",
-						"exec": [
-							"pm.sendRequest({\r",
-							"    url: pm.variables.get(\"url\") + \"/cars/\",\r",
-							"    method: 'POST',\r",
-							"    header: 'Content-Type:application/json',\r",
-							"    body: {\r",
-							"        mode: 'raw',\r",
-							"        raw: JSON.stringify({ brand: 'brand', country: 'country' })\r",
-							"    }\r",
-							"}, function (err, res) {\r",
-							"    pm.globals.set(\"carId\", res.json().id);\r",
-							"})"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{url}}/cars?country=country",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						"cars"
-					],
-					"query": [
+					"name": "Get All brands",
+					"event": [
 						{
-							"key": "country",
-							"value": "country"
+							"listen": "test",
+							"script": {
+								"id": "20775114-365c-4ce9-a245-906049061828",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
 						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get cars from non existing country",
-			"event": [
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/brands/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"brands",
+								""
+							]
+						}
+					},
+					"response": []
+				},
 				{
-					"listen": "test",
-					"script": {
-						"id": "60441e2b-73a5-4986-a150-ccdd454b9163",
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{url}}/cars?country=abiowneion",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						"cars"
-					],
-					"query": [
+					"name": "Get brands from company",
+					"event": [
 						{
-							"key": "country",
-							"value": "abiowneion"
+							"listen": "test",
+							"script": {
+								"id": "60441e2b-73a5-4986-a150-ccdd454b9163",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.sendRequest({",
+									"    url: pm.variables.get(\"url\") + \"/brands/\" + pm.globals.get(\"brandNameGetBrandsFromCompany\"),",
+									"    method: 'DELETE'",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "c73f0230-f9ad-403b-8034-a4c03dc9faba",
+								"exec": [
+									"pm.sendRequest({\r",
+									"    url: pm.variables.get(\"url\") + \"/brands/\",\r",
+									"    method: 'POST',\r",
+									"    header: 'Content-Type:application/json',\r",
+									"    body: {\r",
+									"        mode: 'raw',\r",
+									"        raw: JSON.stringify({ brand: 'brandNameGetBrandsFromCompany', company: 'company' })\r",
+									"    }\r",
+									"}, function (err, res) {\r",
+									"    pm.globals.set(\"brandNameGetBrandsFromCompany\", res.json().brand);\r",
+									"    pm.globals.set(\"brandCompanyGetBrandsFromCompany\", res.json().company);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
 						}
-					]
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/brands?company={{brandCompanyGetBrandsFromCompany}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"brands"
+							],
+							"query": [
+								{
+									"key": "company",
+									"value": "{{brandCompanyGetBrandsFromCompany}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new brand",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "4feb7c56-c194-4c31-8dc7-c5d2d5115c45",
+								"exec": [
+									"pm.test(\"Created, Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"var jsonData = pm.response.json();",
+									"pm.globals.set(\"brandNameCreateNewBrand\", jsonData.brand);",
+									"",
+									"pm.sendRequest({",
+									"    url: pm.variables.get(\"url\") + \"/brands/\" + pm.globals.get(\"brandNameCreateNewBrand\"),",
+									"    method: 'DELETE'",
+									"}, function (err, res) {",
+									"        ",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"brand\": \"brandNameCreateNewBrand\",\r\n    \"company\": \"company\"\r\n}"
+						},
+						"url": {
+							"raw": "{{url}}/brands",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"brands"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get existing brand",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "581b62ed-bcab-492a-837f-92938b0957c8",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.sendRequest({",
+									"    url: pm.variables.get(\"url\") + \"/brands/\" + pm.globals.get(\"brandGetExistingBrand\"),",
+									"    method: 'DELETE'",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "483bf0f4-8b05-4974-99e7-4abeb0631601",
+								"exec": [
+									"pm.sendRequest({\r",
+									"    url: pm.variables.get(\"url\") + \"/brands/\",\r",
+									"    method: 'POST',\r",
+									"    header: 'Content-Type:application/json',\r",
+									"    body: {\r",
+									"        mode: 'raw',\r",
+									"        raw: JSON.stringify({ brand: 'brandGetExistingBrand', company: 'company' })\r",
+									"    }\r",
+									"}, function (err, res) {\r",
+									"    pm.globals.set(\"brandGetExistingBrand\", res.json().brand);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{url}}/brands/{{brandGetExistingBrand}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"brands",
+								"{{brandGetExistingBrand}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get non existing brand",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "581b62ed-bcab-492a-837f-92938b0957c8",
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "483bf0f4-8b05-4974-99e7-4abeb0631601",
+								"exec": [
+									"pm.sendRequest({\r",
+									"    url: pm.variables.get(\"url\") + \"/brands/\",\r",
+									"    method: 'POST',\r",
+									"    header: 'Content-Type:application/json',\r",
+									"    body: {\r",
+									"        mode: 'raw',\r",
+									"        raw: JSON.stringify({ brand: 'brandGetNonExistingBrand', company: 'company' })\r",
+									"    }\r",
+									"}, function (err, res) {\r",
+									"    pm.globals.set(\"brandGetNonExistingBrand\", res.json().brand);\r",
+									"    \r",
+									"    pm.sendRequest({\r",
+									"    url: pm.variables.get(\"url\") + \"/brands/\" + pm.globals.get(\"brandGetNonExistingBrand\"),\r",
+									"    method: 'DELETE'\r",
+									"    }, function (err, res) {\r",
+									"        \r",
+									"    });\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/brands/{{brandGetNonExistingBrand}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"brands",
+								"{{brandGetNonExistingBrand}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update existing brand",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "4439c061-0ccf-4ffb-8da8-549fb001f32f",
+								"exec": [
+									"pm.sendRequest({\r",
+									"    url: pm.variables.get(\"url\") + \"/brands/\",\r",
+									"    method: 'POST',\r",
+									"    header: 'Content-Type:application/json',\r",
+									"    body: {\r",
+									"        mode: 'raw',\r",
+									"        raw: JSON.stringify({ brand: 'brandUpdateExistingBrand', company: 'company' })\r",
+									"    }\r",
+									"}, function (err, res) {\r",
+									"    pm.globals.set(\"brandUpdateExistingBrand\", res.json().brand);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "fd42428c-4ff9-4add-b8d6-054a5e687f33",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.sendRequest({",
+									"    url: pm.variables.get(\"url\") + \"/brands/\" + pm.globals.get(\"brandUpdateExistingBrand\"),",
+									"    method: 'DELETE'",
+									"}, function (err, res) {",
+									"        ",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"brand\": \"brandUpdateExistingBrand\",\r\n    \"company\": \"companyUpdated\"\r\n}"
+						},
+						"url": {
+							"raw": "{{url}}/brands/{{brandUpdateExistingBrand}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"brands",
+								"{{brandUpdateExistingBrand}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update existing brandName",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "4439c061-0ccf-4ffb-8da8-549fb001f32f",
+								"exec": [
+									"pm.sendRequest({\r",
+									"    url: pm.variables.get(\"url\") + \"/brands/\",\r",
+									"    method: 'POST',\r",
+									"    header: 'Content-Type:application/json',\r",
+									"    body: {\r",
+									"        mode: 'raw',\r",
+									"        raw: JSON.stringify({ brand: 'brandUpdateExistingBrandName', company: 'company' })\r",
+									"    }\r",
+									"}, function (err, res) {\r",
+									"    pm.globals.set(\"brandUpdateExistingBrandName\", res.json().brand);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "fd42428c-4ff9-4add-b8d6-054a5e687f33",
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.sendRequest({",
+									"    url: pm.variables.get(\"url\") + \"/brands/\" + pm.globals.get(\"brandUpdateExistingBrandName\"),",
+									"    method: 'DELETE'",
+									"}, function (err, res) {",
+									"        ",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"brand\": \"brandUpdateExistingBrandNameUpdated\",\r\n    \"company\": \"company\"\r\n}"
+						},
+						"url": {
+							"raw": "{{url}}/brands/{{brandUpdateExistingBrandName}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"brands",
+								"{{brandUpdateExistingBrandName}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update existing brand with non valid fields",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "4439c061-0ccf-4ffb-8da8-549fb001f32f",
+								"exec": [
+									"pm.sendRequest({\r",
+									"    url: pm.variables.get(\"url\") + \"/brands/\",\r",
+									"    method: 'POST',\r",
+									"    header: 'Content-Type:application/json',\r",
+									"    body: {\r",
+									"        mode: 'raw',\r",
+									"        raw: JSON.stringify({ brand: 'brandUpdateExistingBrandWithNonValidFields', company: 'company' })\r",
+									"    }\r",
+									"}, function (err, res) {\r",
+									"    pm.globals.set(\"brandUpdateExistingBrandWithNonValidFields\", res.json().brand);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "fd42428c-4ff9-4add-b8d6-054a5e687f33",
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.sendRequest({",
+									"    url: pm.variables.get(\"url\") + \"/brands/\" + pm.globals.get(\"brandUpdateExistingBrandWithNonValidFields\"),",
+									"    method: 'DELETE'",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"brand\": \"brandUpdateExistingBrand\"\r\n}"
+						},
+						"url": {
+							"raw": "{{url}}/brands/{{brandUpdateExistingBrandWithNonValidFields}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"brands",
+								"{{brandUpdateExistingBrandWithNonValidFields}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update non existing brand",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "072a84f7-557b-4fcf-8bf0-fa7ab6335b05",
+								"exec": [
+									"pm.test(\"Not found, Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "12246e95-f3cb-478a-bd2c-b482dd15d835",
+								"exec": [
+									"pm.sendRequest({\r",
+									"    url: pm.variables.get(\"url\") + \"/brands/\",\r",
+									"    method: 'POST',\r",
+									"    header: 'Content-Type:application/json',\r",
+									"    body: {\r",
+									"        mode: 'raw',\r",
+									"        raw: JSON.stringify({ brand: 'brandUpdateNonExistingBrand', company: 'company' })\r",
+									"    }\r",
+									"}, function (err, res) {\r",
+									"    pm.globals.set(\"brandUpdateNonExistingBrand\", res.json().brand);\r",
+									"    \r",
+									"    pm.sendRequest({\r",
+									"    url: pm.variables.get(\"url\") + \"/brands/\" + pm.globals.get(\"brandUpdateNonExistingBrand\"),\r",
+									"    method: 'DELETE'\r",
+									"    }, function (err, res) {\r",
+									"        \r",
+									"    });\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"brand\": \"brandUpdateNonExistingBrand\",\r\n    \"company\": \"companyUpdated\"\r\n}"
+						},
+						"url": {
+							"raw": "{{url}}/brands/{{brandUpdateNonExistingBrand}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"brands",
+								"{{brandUpdateNonExistingBrand}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove existing brand",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1f05691c-87e5-4e85-9af5-b0dc6a034b26",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.sendRequest({",
+									"    url: pm.variables.get(\"url\") + \"/brands/\" + pm.globals.get(\"brandRemoveExistingBrand\"),",
+									"    method: 'DELETE'",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "8bb97c9e-b599-4081-9f21-7743f7208edb",
+								"exec": [
+									"pm.sendRequest({\r",
+									"    url: pm.variables.get(\"url\") + \"/brands/\",\r",
+									"    method: 'POST',\r",
+									"    header: 'Content-Type:application/json',\r",
+									"    body: {\r",
+									"        mode: 'raw',\r",
+									"        raw: JSON.stringify({ brand: 'brandRemoveExistingBrand', company: 'company' })\r",
+									"    }\r",
+									"}, function (err, res) {\r",
+									"    pm.globals.set(\"brandRemoveExistingBrand\", res.json().brand);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/brands/{{brandRemoveExistingBrand}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"brands",
+								"{{brandRemoveExistingBrand}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove existing brand with cars",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1f05691c-87e5-4e85-9af5-b0dc6a034b26",
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "8bb97c9e-b599-4081-9f21-7743f7208edb",
+								"exec": [
+									"pm.sendRequest({\r",
+									"    url: pm.variables.get(\"url\") + \"/brands/\",\r",
+									"    method: 'POST',\r",
+									"    header: 'Content-Type:application/json',\r",
+									"    body: {\r",
+									"        mode: 'raw',\r",
+									"        raw: JSON.stringify({ brand: 'brandRemoveExistingBrandWithCars', company: 'company' })\r",
+									"    }\r",
+									"}, function (err, res) {\r",
+									"    pm.globals.set(\"brandRemoveExistingBrandWithCars\", res.json().brand);\r",
+									"    \r",
+									"    pm.sendRequest({\r",
+									"        url: pm.variables.get(\"url\") + \"/cars/\",\r",
+									"        method: 'POST',\r",
+									"        header: 'Content-Type:application/json',\r",
+									"        body: {\r",
+									"            mode: 'raw',\r",
+									"            raw: JSON.stringify(\r",
+									"                {\r",
+									"                \t\"country\": \"countryTestPost\",\r",
+									"                \t\"brand\": {\r",
+									"                \t\t\"brand\": \"brandremoveexistingbrandwithcars\",\r",
+									"                \t\t\"company\": \"companyTest\"  \r",
+									"                \t}\r",
+									"                }    \r",
+									"            )\r",
+									"        }\r",
+									"    })\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/brands/{{brandRemoveExistingBrandWithCars}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"brands",
+								"{{brandRemoveExistingBrandWithCars}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove non existing brand",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e99810b8-ea6b-4973-8752-7b1d982a32f7",
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "9dc975fb-8085-4624-bcdf-99de88e90e42",
+								"exec": [
+									"pm.sendRequest({\r",
+									"    url: pm.variables.get(\"url\") + \"/brands/\",\r",
+									"    method: 'POST',\r",
+									"    header: 'Content-Type:application/json',\r",
+									"    body: {\r",
+									"        mode: 'raw',\r",
+									"        raw: JSON.stringify({ brand: 'brandRemoveNonExistingBrand', company: 'company' })\r",
+									"    }\r",
+									"}, function (err, res) {\r",
+									"    pm.globals.set(\"brandRemoveNonExistingBrand\", res.json().brand);\r",
+									"    \r",
+									"    pm.sendRequest({\r",
+									"    url: pm.variables.get(\"url\") + \"/brands/\" + pm.globals.get(\"brandRemoveNonExistingBrand\"),\r",
+									"    method: 'DELETE'\r",
+									"    }, function (err, res) {\r",
+									"        \r",
+									"    });\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/brands/{{brandRemoveNonExistingBrand}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"brands",
+								"{{brandRemoveNonExistingBrand}}"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "Update existing car",
+			"name": "Cars",
+			"item": [
+				{
+					"name": "Get All cars",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "24aa0812-cb08-4abd-8215-593bf4856d8d",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/cars/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"cars",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get cars from country",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "60441e2b-73a5-4986-a150-ccdd454b9163",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "c73f0230-f9ad-403b-8034-a4c03dc9faba",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/cars?country={{carCountry}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"cars"
+							],
+							"query": [
+								{
+									"key": "country",
+									"value": "{{carCountry}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get cars from non existing country",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "60441e2b-73a5-4986-a150-ccdd454b9163",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/cars?country={{carCountry}}{{carCountry}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"cars"
+							],
+							"query": [
+								{
+									"key": "country",
+									"value": "{{carCountry}}{{carCountry}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new car",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "4feb7c56-c194-4c31-8dc7-c5d2d5115c45",
+								"exec": [
+									"pm.test(\"Created, Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"var jsonData = pm.response.json();",
+									"",
+									"pm.sendRequest({",
+									"    url: pm.variables.get(\"url\") + \"/cars/\" + jsonData.id,",
+									"    method: 'DELETE'",
+									"}, function (err, res) {",
+									"        ",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "34f1ae15-7f4c-4795-a183-473d21f8a819",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"country\": \"countryTestPost\",\n\t\"brand\": {\n\t\t\"brand\": \"brandtest\",\n\t\t\"company\": \"companyTest\"  \n\t}\n}"
+						},
+						"url": {
+							"raw": "{{url}}/cars",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"cars"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get existing car",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "581b62ed-bcab-492a-837f-92938b0957c8",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.sendRequest({",
+									"    url: pm.variables.get(\"url\") + \"/cars/\" + pm.globals.get(\"carIdGetExistingCar\"),",
+									"    method: 'DELETE'",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "483bf0f4-8b05-4974-99e7-4abeb0631601",
+								"exec": [
+									"pm.sendRequest({",
+									"        url: pm.variables.get(\"url\") + \"/cars/\",",
+									"        method: 'POST',",
+									"        header: 'Content-Type:application/json',",
+									"        body: {",
+									"            mode: 'raw',",
+									"            raw: JSON.stringify(",
+									"                {",
+									"                  \"country\": \"countryTestGetExistingCar\",",
+									"                  \"brand\": {",
+									"                  \t\"brand\": \"brandtest\",",
+									"                    \"company\": \"companyTest\"  ",
+									"                  }",
+									"                }",
+									"            )",
+									"        }",
+									"    }, function (err, res) {",
+									"        pm.globals.set(\"carIdGetExistingCar\", res.json().id);",
+									"    }",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/cars/{{carIdGetExistingCar}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"cars",
+								"{{carIdGetExistingCar}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get non existing car",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "581b62ed-bcab-492a-837f-92938b0957c8",
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "483bf0f4-8b05-4974-99e7-4abeb0631601",
+								"exec": [
+									"pm.sendRequest({\r",
+									"        url: pm.variables.get(\"url\") + \"/cars/\",\r",
+									"        method: 'POST',\r",
+									"        header: 'Content-Type:application/json',\r",
+									"        body: {\r",
+									"            mode: 'raw',\r",
+									"            raw: JSON.stringify(\r",
+									"                {\r",
+									"                  \"country\": \"countryTestGetNonExistingCar\",\r",
+									"                  \"brand\": {\r",
+									"                  \t\"brand\": \"brandtest\",\r",
+									"                    \"company\": \"companyTest\"  \r",
+									"                  }\r",
+									"                }\r",
+									"            )\r",
+									"        }\r",
+									"    }, function (err, res) {\r",
+									"        pm.globals.set(\"carIdGetNonExistingCar\", res.json().id);\r",
+									"    \r",
+									"        pm.sendRequest({\r",
+									"        url: pm.variables.get(\"url\") + \"/cars/\" + pm.globals.get(\"carIdGetNonExistingCar\"),\r",
+									"        method: 'DELETE'\r",
+									"        }, function (err, res) {\r",
+									"            \r",
+									"        });\r",
+									"    });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/cars/{{carIdGetNonExistingCar}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"cars",
+								"{{carIdGetNonExistingCar}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get car with non valid ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "68041a89-58c0-4635-8025-8d2a609d46d8",
+								"exec": [
+									"pm.test(\"Bad request, Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "b303cea9-1dc4-4f93-8a53-68c22b0c32ea",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/cars/0",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"cars",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update existing car",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "4439c061-0ccf-4ffb-8da8-549fb001f32f",
+								"exec": [
+									"pm.sendRequest({",
+									"        url: pm.variables.get(\"url\") + \"/cars/\",",
+									"        method: 'POST',",
+									"        header: 'Content-Type:application/json',",
+									"        body: {",
+									"            mode: 'raw',",
+									"            raw: JSON.stringify(",
+									"                {",
+									"                  \"country\": \"countryTestUpdateExistingCar\",",
+									"                  \"brand\": {",
+									"                  \t\"brand\": \"brandtest\",",
+									"                    \"company\": \"companyTest\"  ",
+									"                  }",
+									"                }",
+									"            )",
+									"        }",
+									"    }, function (err, res) {",
+									"        pm.globals.set(\"carIdUpdateExistingCar\", res.json().id);",
+									"    }",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "fd42428c-4ff9-4add-b8d6-054a5e687f33",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.sendRequest({",
+									"    url: pm.variables.get(\"url\") + \"/cars/\" + pm.globals.get(\"carIdUpdateExistingCar\"),",
+									"    method: 'DELETE'",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"country\": \"countryTestUpdateExistingCarUpdated\",\n    \"brand\": {\n        \"brand\": \"brandtest\",\n        \"company\": \"companyTest\"\n    }\n}"
+						},
+						"url": {
+							"raw": "{{url}}/cars/{{carIdUpdateExistingCar}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"cars",
+								"{{carIdUpdateExistingCar}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update non existing car",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "072a84f7-557b-4fcf-8bf0-fa7ab6335b05",
+								"exec": [
+									"pm.test(\"Not found, Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "12246e95-f3cb-478a-bd2c-b482dd15d835",
+								"exec": [
+									"pm.sendRequest({\r",
+									"        url: pm.variables.get(\"url\") + \"/cars/\",\r",
+									"        method: 'POST',\r",
+									"        header: 'Content-Type:application/json',\r",
+									"        body: {\r",
+									"            mode: 'raw',\r",
+									"            raw: JSON.stringify(\r",
+									"                {\r",
+									"                  \"country\": \"countryTestUpdateNonExistingCar\",\r",
+									"                  \"brand\": {\r",
+									"                  \t\"brand\": \"brandtest\",\r",
+									"                    \"company\": \"companyTest\"  \r",
+									"                  }\r",
+									"                }\r",
+									"            )\r",
+									"        }\r",
+									"    }, function (err, res) {\r",
+									"        pm.globals.set(\"carIdUpdateNonExistingCar\", res.json().id);\r",
+									"    \r",
+									"        pm.sendRequest({\r",
+									"        url: pm.variables.get(\"url\") + \"/cars/\" + pm.globals.get(\"carIdUpdateNonExistingCar\"),\r",
+									"        method: 'DELETE'\r",
+									"        }, function (err, res) {\r",
+									"            \r",
+									"        });\r",
+									"    });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"country\": \"countryTestUpdateNonExistingCarUpdated\",\n    \"brand\": {\n        \"brand\": \"brandtest\",\n        \"company\": \"companyTest\"\n    }\n}"
+						},
+						"url": {
+							"raw": "{{url}}/cars/{{carIdUpdateNonExistingCar}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"cars",
+								"{{carIdUpdateNonExistingCar}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update existing car without all required fields",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "4439c061-0ccf-4ffb-8da8-549fb001f32f",
+								"exec": [
+									"pm.sendRequest({",
+									"        url: pm.variables.get(\"url\") + \"/cars/\",",
+									"        method: 'POST',",
+									"        header: 'Content-Type:application/json',",
+									"        body: {",
+									"            mode: 'raw',",
+									"            raw: JSON.stringify(",
+									"                {",
+									"                  \"country\": \"countryTestUpdateExistingCarWithoutAllFields\",",
+									"                  \"brand\": {",
+									"                  \t\"brand\": \"brandtest\",",
+									"                    \"company\": \"companyTest\"  ",
+									"                  }",
+									"                }",
+									"            )",
+									"        }",
+									"    }, function (err, res) {",
+									"        pm.globals.set(\"carIdUpdateExistingCarWithoutAllFields\", res.json().id);",
+									"    }",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "fd42428c-4ff9-4add-b8d6-054a5e687f33",
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Body matches string\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"Request to update car with non valid fields\");",
+									"});",
+									"",
+									"pm.sendRequest({",
+									"    url: pm.variables.get(\"url\") + \"/cars/\" + pm.globals.get(\"carIdUpdateExistingCarWithoutAllFields\"),",
+									"    method: 'DELETE'",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"country\": \"countryUpdated\"\r\n}"
+						},
+						"url": {
+							"raw": "{{url}}/cars/{{carIdUpdateExistingCarWithoutAllFields}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"cars",
+								"{{carIdUpdateExistingCarWithoutAllFields}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update car with non valid ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "072a84f7-557b-4fcf-8bf0-fa7ab6335b05",
+								"exec": [
+									"pm.test(\"Not found, Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "12246e95-f3cb-478a-bd2c-b482dd15d835",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"country\": \"countryTestUpdateExistingCarUpdated\",\n    \"brand\": {\n        \"brand\": \"brandtest\",\n        \"company\": \"companyTest\"\n    }\n}"
+						},
+						"url": {
+							"raw": "{{url}}/cars/0",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"cars",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove existing car",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1f05691c-87e5-4e85-9af5-b0dc6a034b26",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.sendRequest({",
+									"    url: pm.variables.get(\"url\") + \"/cars/\" + pm.globals.get(\"carIdRemoveExistingCar\"),",
+									"    method: 'DELETE'",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "8bb97c9e-b599-4081-9f21-7743f7208edb",
+								"exec": [
+									"pm.sendRequest({",
+									"        url: pm.variables.get(\"url\") + \"/cars/\",",
+									"        method: 'POST',",
+									"        header: 'Content-Type:application/json',",
+									"        body: {",
+									"            mode: 'raw',",
+									"            raw: JSON.stringify(",
+									"                {",
+									"                  \"country\": \"countryTestRemoveExistingCar\",",
+									"                  \"brand\": {",
+									"                  \t\"brand\": \"brandtest\",",
+									"                    \"company\": \"companyTest\"  ",
+									"                  }",
+									"                }",
+									"            )",
+									"        }",
+									"    }, function (err, res) {",
+									"        pm.globals.set(\"carIdRemoveExistingCar\", res.json().id);",
+									"    }",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/cars/{{carIdRemoveExistingCar}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"cars",
+								"{{carIdRemoveExistingCar}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove non existing car",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e99810b8-ea6b-4973-8752-7b1d982a32f7",
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "9dc975fb-8085-4624-bcdf-99de88e90e42",
+								"exec": [
+									"pm.sendRequest({\r",
+									"        url: pm.variables.get(\"url\") + \"/cars/\",\r",
+									"        method: 'POST',\r",
+									"        header: 'Content-Type:application/json',\r",
+									"        body: {\r",
+									"            mode: 'raw',\r",
+									"            raw: JSON.stringify(\r",
+									"                {\r",
+									"                  \"country\": \"countryTestRemoveNonExistingCar\",\r",
+									"                  \"brand\": {\r",
+									"                  \t\"brand\": \"brandtest\",\r",
+									"                    \"company\": \"companyTest\"  \r",
+									"                  }\r",
+									"                }\r",
+									"            )\r",
+									"        }\r",
+									"    }, function (err, res) {\r",
+									"        pm.globals.set(\"carIdRemoveNonExistingCar\", res.json().id);\r",
+									"    \r",
+									"        pm.sendRequest({\r",
+									"        url: pm.variables.get(\"url\") + \"/cars/\" + pm.globals.get(\"carIdRemoveNonExistingCar\"),\r",
+									"        method: 'DELETE'\r",
+									"        }, function (err, res) {\r",
+									"            \r",
+									"        });\r",
+									"    });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/cars/{{carIdRemoveNonExistingCar}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"cars",
+								"{{carIdRemoveNonExistingCar}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove car with non valid ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e99810b8-ea6b-4973-8752-7b1d982a32f7",
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "9dc975fb-8085-4624-bcdf-99de88e90e42",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/cars/0",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"cars",
+								"0"
+							]
+						}
+					},
+					"response": []
+				}
+			],
 			"event": [
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "4439c061-0ccf-4ffb-8da8-549fb001f32f",
+						"id": "af50a477-90b8-4ec5-bdea-9b5d52af1240",
+						"type": "text/javascript",
 						"exec": [
-							"pm.sendRequest({\r",
-							"    url: pm.variables.get(\"url\") + \"/cars/\",\r",
-							"    method: 'POST',\r",
-							"    header: 'Content-Type:application/json',\r",
-							"    body: {\r",
-							"        mode: 'raw',\r",
-							"        raw: JSON.stringify({ brand: 'brandCar', country: 'countryNonExistingCar' })\r",
-							"    }\r",
-							"}, function (err, res) {\r",
-							"    pm.globals.set(\"carId\", res.json().id);\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				},
-				{
-					"listen": "test",
-					"script": {
-						"id": "fd42428c-4ff9-4add-b8d6-054a5e687f33",
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});",
-							"",
 							"pm.sendRequest({",
-							"    url: pm.variables.get(\"url\") + \"/cars/\" + pm.globals.get(\"carId\"),",
-							"    method: 'DELETE'",
+							"    url: pm.variables.get(\"url\") + \"/brands/\",",
+							"    method: 'POST',",
+							"    header: 'Content-Type:application/json',",
+							"    body: {",
+							"        mode: 'raw',",
+							"        raw: JSON.stringify({ brand: 'brandTest', company: 'companyTest' })",
+							"    }",
 							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "PUT",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"brand\": \"brandUpdated\",\r\n    \"country\": \"countryUpdated\"\r\n}"
-				},
-				"url": {
-					"raw": "{{url}}/cars/{{carId}}",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						"cars",
-						"{{carId}}"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Update non existing car",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"id": "072a84f7-557b-4fcf-8bf0-fa7ab6335b05",
-						"exec": [
-							"pm.test(\"Not found, Status code is 404\", function () {",
-							"    pm.response.to.have.status(404);",
-							"});",
-							"",
-							"pm.test(\"Body is correct\", function () {",
-							"    pm.expect(pm.response.text()).to.include(\"Trying to update a car with ID: \" + pm.globals.get(\"carId\") + \" that does not exist.\");",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				},
-				{
-					"listen": "prerequest",
-					"script": {
-						"id": "12246e95-f3cb-478a-bd2c-b482dd15d835",
-						"exec": [
-							"pm.sendRequest({\r",
-							"    url: pm.variables.get(\"url\") + \"/cars/\",\r",
-							"    method: 'POST',\r",
-							"    header: 'Content-Type:application/json',\r",
-							"    body: {\r",
-							"        mode: 'raw',\r",
-							"        raw: JSON.stringify({ brand: 'brandNonExistingCar', country: 'countryNonExistingCar' })\r",
-							"    }\r",
-							"}, function (err, res) {\r",
-							"    pm.globals.set(\"carId\", res.json().id);\r",
-							"    \r",
-							"    pm.sendRequest({\r",
-							"    url: pm.variables.get(\"url\") + \"/cars/\" + pm.globals.get(\"carId\"),\r",
-							"    method: 'DELETE'\r",
-							"    }, function (err, res) {\r",
-							"        \r",
-							"    });\r",
-							"})"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "PUT",
-				"header": [
-					{
-						"key": "Content-Type",
-						"type": "text",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"brand\": \"brandUpdated\",\r\n    \"country\": \"countryUpdated\"\r\n}"
-				},
-				"url": {
-					"raw": "{{url}}/cars/{{carId}}",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						"cars",
-						"{{carId}}"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Update existing car without all required fields",
-			"event": [
-				{
-					"listen": "prerequest",
-					"script": {
-						"id": "4439c061-0ccf-4ffb-8da8-549fb001f32f",
-						"exec": [
-							"pm.sendRequest({\r",
-							"    url: pm.variables.get(\"url\") + \"/cars/\",\r",
-							"    method: 'POST',\r",
-							"    header: 'Content-Type:application/json',\r",
-							"    body: {\r",
-							"        mode: 'raw',\r",
-							"        raw: JSON.stringify({ brand: 'brandCar', country: 'countryNonExistingCar' })\r",
-							"    }\r",
-							"}, function (err, res) {\r",
-							"    pm.globals.set(\"carId\", res.json().id);\r",
-							"});"
-						],
-						"type": "text/javascript"
+						]
 					}
 				},
 				{
 					"listen": "test",
 					"script": {
-						"id": "fd42428c-4ff9-4add-b8d6-054a5e687f33",
-						"exec": [
-							"pm.test(\"Status code is 400\", function () {",
-							"    pm.response.to.have.status(400);",
-							"});",
-							"",
-							"pm.test(\"Body matches string\", function () {",
-							"    pm.expect(pm.response.text()).to.include(\"Request to update car with non valid fields\");",
-							"});",
-							"",
-							"pm.sendRequest({",
-							"    url: pm.variables.get(\"url\") + \"/cars/\" + pm.globals.get(\"carId\"),",
-							"    method: 'DELETE'",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "PUT",
-				"header": [
-					{
-						"key": "Content-Type",
-						"type": "text",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"country\": \"countryUpdated\"\r\n}"
-				},
-				"url": {
-					"raw": "{{url}}/cars/{{carId}}",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						"cars",
-						"{{carId}}"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Update car with non valid ID",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"id": "072a84f7-557b-4fcf-8bf0-fa7ab6335b05",
-						"exec": [
-							"pm.test(\"Not found, Status code is 404\", function () {",
-							"    pm.response.to.have.status(404);",
-							"});",
-							"",
-							"pm.test(\"Body is correct\", function () {",
-							"    pm.expect(pm.response.text()).to.include(\"Trying to update a car with ID: 0 that does not exist.\");",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				},
-				{
-					"listen": "prerequest",
-					"script": {
-						"id": "12246e95-f3cb-478a-bd2c-b482dd15d835",
+						"id": "6163ec32-e6bb-42f2-a812-ece69479170a",
+						"type": "text/javascript",
 						"exec": [
 							""
-						],
-						"type": "text/javascript"
+						]
 					}
 				}
 			],
-			"request": {
-				"method": "PUT",
-				"header": [
-					{
-						"key": "Content-Type",
-						"type": "text",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"brand\": \"brandUpdated\",\r\n    \"country\": \"countryUpdated\"\r\n}"
-				},
-				"url": {
-					"raw": "{{url}}/cars/0",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						"cars",
-						"0"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Remove existing car",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"id": "1f05691c-87e5-4e85-9af5-b0dc6a034b26",
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});",
-							"",
-							"pm.sendRequest({",
-							"    url: pm.variables.get(\"url\") + \"/cars/\" + pm.globals.get(\"carId\"),",
-							"    method: 'DELETE'",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				},
-				{
-					"listen": "prerequest",
-					"script": {
-						"id": "8bb97c9e-b599-4081-9f21-7743f7208edb",
-						"exec": [
-							"pm.sendRequest({\r",
-							"    url: pm.variables.get(\"url\") + \"/cars/\",\r",
-							"    method: 'POST',\r",
-							"    header: 'Content-Type:application/json',\r",
-							"    body: {\r",
-							"        mode: 'raw',\r",
-							"        raw: JSON.stringify({ brand: 'brandCar', country: 'countryNonExistingCar' })\r",
-							"    }\r",
-							"}, function (err, res) {\r",
-							"    pm.globals.set(\"carId\", res.json().id);\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "DELETE",
-				"header": [],
-				"url": {
-					"raw": "{{url}}/cars/{{carId}}",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						"cars",
-						"{{carId}}"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Remove non existing car",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"id": "e99810b8-ea6b-4973-8752-7b1d982a32f7",
-						"exec": [
-							"pm.test(\"Status code is 404\", function () {",
-							"    pm.response.to.have.status(404);",
-							"});",
-							"",
-							"pm.test(\"Body is correct\", function () {",
-							"    pm.expect(pm.response.text()).to.include(\"Trying to remove a car with ID: \" + pm.globals.get(\"carId\") + \" that does not exist.\");",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				},
-				{
-					"listen": "prerequest",
-					"script": {
-						"id": "9dc975fb-8085-4624-bcdf-99de88e90e42",
-						"exec": [
-							"pm.sendRequest({\r",
-							"    url: pm.variables.get(\"url\") + \"/cars/\",\r",
-							"    method: 'POST',\r",
-							"    header: 'Content-Type:application/json',\r",
-							"    body: {\r",
-							"        mode: 'raw',\r",
-							"        raw: JSON.stringify({ brand: 'brandNonExistingCar', country: 'countryNonExistingCar' })\r",
-							"    }\r",
-							"}, function (err, res) {\r",
-							"    pm.globals.set(\"carId\", res.json().id);\r",
-							"    \r",
-							"    pm.sendRequest({\r",
-							"    url: pm.variables.get(\"url\") + \"/cars/\" + pm.globals.get(\"carId\"),\r",
-							"    method: 'DELETE'\r",
-							"    }, function (err, res) {\r",
-							"        \r",
-							"    });\r",
-							"})"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "DELETE",
-				"header": [],
-				"url": {
-					"raw": "{{url}}/cars/{{carId}}",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						"cars",
-						"{{carId}}"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Remove car with non valid ID",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"id": "e99810b8-ea6b-4973-8752-7b1d982a32f7",
-						"exec": [
-							"pm.test(\"Status code is 400\", function () {",
-							"    pm.response.to.have.status(400);",
-							"});",
-							"",
-							"pm.test(\"Body is correct\", function () {",
-							"    pm.expect(pm.response.text()).to.include(\"Request to delete a car with non valid ID: 0\");",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				},
-				{
-					"listen": "prerequest",
-					"script": {
-						"id": "9dc975fb-8085-4624-bcdf-99de88e90e42",
-						"exec": [
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "DELETE",
-				"header": [],
-				"url": {
-					"raw": "{{url}}/cars/0",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						"cars",
-						"0"
-					]
-				}
-			},
-			"response": []
+			"protocolProfileBehavior": {}
 		}
 	],
 	"event": [
@@ -807,7 +1612,7 @@
 	],
 	"variable": [
 		{
-			"id": "faf2ef88-20d2-4dbd-b379-e0da90086581",
+			"id": "5b3e5095-7b64-4024-9830-59b22b5ec8cc",
 			"key": "url",
 			"value": "http://localhost:8080/car/webapi",
 			"type": "string"

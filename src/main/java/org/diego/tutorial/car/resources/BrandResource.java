@@ -205,9 +205,9 @@ public class BrandResource {
 		
 		List<String> validationErrors = BrandValidator.validateBrand(brand);
 		String errorMessage = "Request to update a brand with non-valid fields";
-		checkValidationErrors(validationErrors, errorMessage);
+		checkValidationErrors(validationErrors, errorMessage);		
 		
-		Brand updatedBrand = brandService.updateBrand(brand);
+		Brand updatedBrand = brandService.updateBrand(brandName, brand);
 		LOGGER.info("Updated brand '" + brand + "'");
 		
 		String urlSelf = getUriForSelf(updatedBrand.getBrand());

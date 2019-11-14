@@ -20,6 +20,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import org.apache.log4j.Logger;
 import org.diego.tutorial.car.exceptions.BadRequestException;
 import org.diego.tutorial.car.model.Car;
 import org.diego.tutorial.car.model.service.CarService;
@@ -46,6 +47,8 @@ public class CarResource {
 	private CarService carService;
 	private @Context UriInfo uriInfo;
 	
+	private final static Logger LOGGER = Logger.getLogger(CarResource.class);
+	
 	/**
 	 * Method that retrieves all the cars from the database. <p>
 	 * Optionally, the country param can be provided.
@@ -66,10 +69,13 @@ public class CarResource {
 	public Response getCars(@QueryParam("country") String country){
 		List<Car> cars = null;
 		if (country != null && !country.isEmpty()) { // If "country" in the query
+			LOGGER.info("Trying to get all the cars from the country '" + country + "'");
 			cars = carService.getAllCarsFromCountry(country);
 		}else{
+			LOGGER.info("Trying to get all the cars");
 			cars = carService.getAllCars();
 		}
+		LOGGER.info("All the cars retrieved");
 		// Mapping the List in a generic entity to be able to return it
 		GenericEntity<List<Car>> carsGeneric = new GenericEntity<List<Car>>(cars) {};
 		return Response.ok()
@@ -100,6 +106,7 @@ public class CarResource {
 			}
 	)
 	public Response addCar(@Parameter(description = "new car object", required = true) Car car) {
+		LOGGER.info("Trying to create a car: " + car);
 		List<String> validationErrors = CarValidator.validateAddAndUpdate(car);
 		String errorMessage = "Request to add a car with non valid fields";
 		checkValidationErrors(validationErrors, errorMessage);
@@ -143,6 +150,7 @@ public class CarResource {
 			}
 	)
 	public Response getCar(@Parameter(description = "id of the car that should be retrieved", required = true) @PathParam("id") long id) {
+		LOGGER.info("Trying to get the car with ID '" + id + "'");
 		String errorMessage = "Request to get a car with non valid ID: " + id;
 		checkValidationErrors(id, errorMessage);
 		
@@ -185,6 +193,8 @@ public class CarResource {
 	public Response updateCar(@Parameter(description = "id of the car that should be updated", required = true) @PathParam("id") long id,
 			@Parameter(description = "updated car object", required = true) Car car) {
 		car.setId(id);
+		
+		LOGGER.info("Trying to update the car with ID '" + id + "' with the info: " + car);
 		
 		List<String> validationErrors = CarValidator.validateAddAndUpdate(car);
 		String errorMessage = "Request to update car with non valid fields";
@@ -231,6 +241,9 @@ public class CarResource {
 	)
 	public Response deleteCar(@Parameter(description = "id of the car that should be removed", required = true) @PathParam("id") long id) {
 		String errorMessage = "Request to soft-delete a car with non valid ID: " + id;
+		
+		LOGGER.info("Trying to remove the car with ID '" + id + "'");
+		
 		checkValidationErrors(id, errorMessage);
 		
 		Car car = carService.softRemoveCar(id);
@@ -289,13 +302,16 @@ public class CarResource {
 	 * @param errorMessage Descriptive error message thrown in the {@link BadRequestException} exception next to the list of errors. 
 	 */
 	private void checkValidationErrors(List<String> validationErrors, String errorMessage) {
+		LOGGER.info("Checking validation errors");
 		if (!validationErrors.isEmpty()) {
 			String message = errorMessage + ": ";
 			for (String validationError : validationErrors) {
+				LOGGER.info("Validation error: " + validationError);
 				message += validationError + " - ";
 			}
 			throw new BadRequestException(message);
 		}
+		LOGGER.info("Validation errors checked without errors");
 	}
 	
 	/**
@@ -306,7 +322,9 @@ public class CarResource {
 	 * @param errorMessage Descriptive error message thrown in the {@link BadRequestException} exception. 
 	 */
 	private void checkValidationErrors(long id, String errorMessage) {
+		LOGGER.info("Checking validation errors");
 		if (id <= 0) {
+			LOGGER.info("ID is less or equal to 0");
 			throw new BadRequestException(errorMessage);
 		}
 	}

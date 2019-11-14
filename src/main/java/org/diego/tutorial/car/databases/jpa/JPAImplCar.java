@@ -39,4 +39,18 @@ public class JPAImplCar extends JPAImpl {
 		List<Car> softRemovedCars = createQuery.getResultList();
 		return softRemovedCars;
 	}
+
+	/**
+	 * Method that queries the database and retrieves all the cars from
+	 * a certain brand
+	 * @param brand Name of the brand
+	 * @return List of cars
+	 */
+	public List<Car> getAllCarsFromBrand(String brand) {
+		String query = "SELECT car FROM Car car WHERE car.brand='" + brand + "'";
+		
+		TypedQuery<Car> createQuery = em.createQuery(query, Car.class);
+		List<Car> softRemovedCars = createQuery.getResultList();
+		return softRemovedCars;
+	}
 }

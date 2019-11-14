@@ -60,7 +60,7 @@ public class BrandServiceTest {
 	
 	@Test
 	public void testGetBrand() {
-		Mockito.when(jpaImplBrand.get(Brand.class, brandName))
+		Mockito.when(jpaImplBrand.get(Brand.class, brandName.toLowerCase()))
 				.thenReturn(brand);
 		
 		assertEquals(brand, brandService.getBrand(brandName));
@@ -84,7 +84,7 @@ public class BrandServiceTest {
 		Mockito.when(jpaImplBrand.update(brand))
 				.thenReturn(brand);
 		
-		assertEquals(brand, brandService.updateBrand(brand));
+		assertEquals(brand, brandService.updateBrand(brandName, brand));
 	}
 	
 	@Test
