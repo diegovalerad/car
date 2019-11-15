@@ -7,8 +7,11 @@ import javax.ejb.Stateless;
 
 import org.apache.log4j.Logger;
 import org.diego.tutorial.car.databases.jpa.JPAImplCar;
+import org.diego.tutorial.car.exceptions.BadRequestException;
 import org.diego.tutorial.car.exceptions.DataNotFoundException;
+import org.diego.tutorial.car.model.Brand;
 import org.diego.tutorial.car.model.Car;
+import org.diego.tutorial.car.validations.GeneralValidationErrorsChecker;
 
 /**
  * Class that represents the service of Cars, in charge of doing the operations involving cars, 
@@ -19,6 +22,9 @@ import org.diego.tutorial.car.model.Car;
 public class CarService {
 	@EJB
 	private JPAImplCar jpaImpl;
+	
+	@EJB
+	private BrandService brandService;
 	
 	private final static Logger LOGGER = Logger.getLogger(CarService.class);
 	
@@ -38,14 +44,19 @@ public class CarService {
 	}
 	
 	/**
-	 * Retrieves a requested car given by an identifier.
+	 * Retrieves a requested car given by an identifier. <p>
+	 * Throws a {@link DataNotFoundException} if the car does not exist
 	 * @param id Identifier of the requested car
 	 * @return Requested car
 	 */
 	public Car getCar(long id) {
 		LOGGER.info("Getting the car with ID " + id + " from the database.");
 		Car car = null;
+		
 		car = jpaImpl.get(Car.class, id);
+		if (car == null || (car.isSoftRemoved()))
+			throw new DataNotFoundException("Trying to get a car with ID '" + id + "' that does not exists");
+		
 		LOGGER.info("The car with ID " + id + " was retrieved from the database.");
 		
 		return car;
@@ -65,6 +76,18 @@ public class CarService {
 	}
 	
 	/**
+	 * Gets all the cars from a brand
+	 * @param id Identifier of the brand
+	 * @return List of cars
+	 */
+	public List<Car> getAllCarsFromBrand(long id){
+		LOGGER.info("Getting all the cars from the brand '" + id + "'");
+		List<Car> carsFromBrand = jpaImpl.getAllCarsFromBrand(id);
+		LOGGER.info("Retrieved all the cars from the brand '" + id + "'");
+		return carsFromBrand;
+	}
+	
+	/**
 	 * Gets all the soft removed cars from the system
 	 * @return Soft removed cars
 	 */
@@ -76,15 +99,22 @@ public class CarService {
 	}
 	
 	/**
-	 * Method that adds a new car to the database
+	 * Method that adds a new car to the database. It throws:
+	 * <p>
+	 * <ul>
+	 * <li> {@link BadRequestException} if the brand of the car was not in the request message or if it was, but in an incorrect format
+	 * <li> {@link DataNotFoundException} if the brand of the car does not exist
+	 * </ul>
 	 * @param car Car that should be added
-	 * @return Car added
+	 * @return Car added 
 	 */
 	public Car addCar(Car car) {
+		LOGGER.info("Adding the car: " + car);
+		checkBrand(car.getBrand());
+		
 		car.setCreatedAt(new Date());
 		car.setLastUpdated(new Date());
 		car.setRegistration(new Date());
-		LOGGER.info("Adding the car: " + car);
 		
 		Car carAdded = jpaImpl.add(car);
 		
@@ -94,8 +124,11 @@ public class CarService {
 	}
 	
 	/**
-	 * Method that updates an existing car in the database. <p>
-	 * If the car already exists, an {@link DataNotFoundException} exception is thrown.
+	 * Method that updates an existing car in the database. It throws: <p>
+	 * <ul>
+	 * <li>{@link DataNotFoundException} if the car or the brand of the car does not exist</li>
+	 * <li> {@link BadRequestException} if the brand of the car is not valid
+	 * </ul> 
 	 * @param car Car object that should be updated
 	 * @return Car updated
 	 */
@@ -106,6 +139,9 @@ public class CarService {
 			LOGGER.warn("The car that it is trying to get updated does not exist.");
 			throw new DataNotFoundException(createErrorMessageCarDoesNotExist("update", idCar));
 		}
+		
+		checkBrand(car.getBrand());
+		
 		Car carOld = getCar(idCar);
 		car.setCreatedAt(carOld.getCreatedAt());
 		car.setRegistration(carOld.getRegistration());
@@ -115,8 +151,8 @@ public class CarService {
 	}
 	
 	/**
-	 * Method that soft-removes an existing car from the database. <p>
-	 * If the car does not exists, an {@link DataNotFoundException} exception is thrown.
+	 * Method that soft-removes an existing car from the database. It throws<p>
+	 * {@link DataNotFoundException} if the car does not exist.
 	 * @param id Identifier of the car that should be removed
 	 * @return Car soft-removed
 	 */
@@ -134,8 +170,8 @@ public class CarService {
 	}
 	
 	/**
-	 * Method that completely removes an existing car from the database. <p>
-	 * If the car does not exists, an {@link DataNotFoundException} exception is thrown.
+	 * Method that completely removes an existing car from the database. It throws<p>
+	 *  {@link DataNotFoundException} if the car does not exist
 	 * @param car Car object that should be removed
 	 * @return Car removed
 	 */
@@ -159,14 +195,14 @@ public class CarService {
 	 */
 	private boolean carAlreadyExists(long id) {
 		LOGGER.info("Checking if the car with ID: " + id + " exists.");
-		try {
-			jpaImpl.get(Car.class, id);
-			LOGGER.info("The car with ID: " + id + " exists.");
-			return true;
-		} catch (DataNotFoundException e) {
+		
+		Car car = jpaImpl.get(Car.class, id);
+		if (car == null) {
 			LOGGER.info("The car with ID: " + id + " does not exist.");
 			return false;
 		}
+		LOGGER.info("The car with ID: " + id + " exists.");
+		return true;
 	}
 	
 	/**
@@ -178,6 +214,28 @@ public class CarService {
 	 */
 	private String createErrorMessageCarDoesNotExist(String operation, long id) {
 		return "Trying to " + operation + " a car with ID: " + id + " that does not exist.";
+	}
+	
+	/**
+	 * Method that checks a brand in the request. It throws <p>
+	 * <ul>
+	 * <li> {@link BadRequestException} if the brand was not in the request message or it was, but in an incorrect format
+	 * <li> {@link DataNotFoundException} if the brand does not exist 
+	 * </ul>
+	 * @param brand Given brand
+	 */
+	private void checkBrand(Brand brand) {
+		LOGGER.info("Checking the brand: " + brand);
+		String message = null;
+		if (brand == null) {
+			message = "The brand is a required field";
+			throw new BadRequestException(message);
+		}
+		GeneralValidationErrorsChecker.checkValidationErrors(brand, "get");
+		
+		brandService.getBrand(brand.getId());
+		
+		LOGGER.info("Checking of the brand " + brand + " finished");
 	}
 	
 }

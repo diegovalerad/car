@@ -12,6 +12,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.diego.tutorial.car.model.Brand;
 import org.diego.tutorial.car.model.Car;
 
 public class RestApiClient {
@@ -25,7 +26,9 @@ public class RestApiClient {
 
 		getCar(singleCarTarget, 1);
 
-		Car carPost = new Car(4, "brandClient", new Date(), "countryClient", new Date(), new Date());
+		Brand brand = new Brand("brand", "company");
+		
+		Car carPost = new Car(4, brand, new Date(), "countryClient", new Date(), new Date());
 		addCar(carsTarget, carPost);
 		
 		getCarsByCountry(carsTarget, "countryClient");
