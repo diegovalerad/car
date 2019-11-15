@@ -102,6 +102,10 @@ public class CarResource {
 					@ApiResponse( 
 						description = "Creating a car with non valid fields",
 						responseCode = "400"
+					),
+					@ApiResponse( 
+						description = "Not found the brand of the car",
+						responseCode = "404"
 					)
 			}
 	)
@@ -142,14 +146,11 @@ public class CarResource {
 				@ApiResponse(
 						description = "Car not found",
 						responseCode = "404"
-				),
-				@ApiResponse(
-						description = "Non valid parameters",
-						responseCode = "400"
 				)
 			}
 	)
-	public Response getCar(@Parameter(description = "id of the car that should be retrieved", required = true) @PathParam("id") long id) {
+	public Response getCar(@Parameter(description = "id of the car that should be retrieved", required = true) 
+							@PathParam("id") long id) {
 		LOGGER.info("Trying to get the car with ID '" + id + "'");
 		String errorMessage = "Request to get a car with non valid ID: " + id;
 		checkValidationErrors(id, errorMessage);
@@ -190,8 +191,10 @@ public class CarResource {
 				)
 			}
 	)
-	public Response updateCar(@Parameter(description = "id of the car that should be updated", required = true) @PathParam("id") long id,
-			@Parameter(description = "updated car object", required = true) Car car) {
+	public Response updateCar(@Parameter(description = "id of the car that should be updated", required = true) 
+								@PathParam("id") long id,
+							@Parameter(description = "updated car object", required = true) 
+								Car car) {
 		car.setId(id);
 		
 		LOGGER.info("Trying to update the car with ID '" + id + "' with the info: " + car);
@@ -262,7 +265,7 @@ public class CarResource {
 	private void addAllLinks(Car car) {
 		String urlSelf = getUriForSelf(car.getId());
 		car.addLink(urlSelf, "self");
-		String urlBrand = getUriForBrand(car.getBrand().getBrand());
+		String urlBrand = getUriForBrand(car.getBrand().getId());
 		car.addLink(urlBrand, "brand");
 	}
 	
@@ -285,10 +288,10 @@ public class CarResource {
 	 * @param brandName Name of the brand
 	 * @return String that contains the URI of the given brand. 
 	 */
-	private String getUriForBrand(String brandName) {
+	private String getUriForBrand(long id) {
 		String urlSelf = uriInfo.getBaseUriBuilder()
 				.path(BrandResource.class)
-				.path(brandName)
+				.path(String.valueOf(id))
 				.build()
 				.toString();
 		return urlSelf;

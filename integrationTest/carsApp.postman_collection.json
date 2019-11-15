@@ -53,7 +53,7 @@
 									"});",
 									"",
 									"pm.sendRequest({",
-									"    url: pm.variables.get(\"url\") + \"/brands/\" + pm.globals.get(\"brandNameGetBrandsFromCompany\"),",
+									"    url: pm.variables.get(\"url\") + \"/brands/\" + pm.globals.get(\"brandIdGetBrandsFromCompany\"),",
 									"    method: 'DELETE'",
 									"});"
 								],
@@ -74,6 +74,7 @@
 									"        raw: JSON.stringify({ brand: 'brandNameGetBrandsFromCompany', company: 'company' })\r",
 									"    }\r",
 									"}, function (err, res) {\r",
+									"    pm.globals.set(\"brandIdGetBrandsFromCompany\", res.json().id);\r",
 									"    pm.globals.set(\"brandNameGetBrandsFromCompany\", res.json().brand);\r",
 									"    pm.globals.set(\"brandCompanyGetBrandsFromCompany\", res.json().company);\r",
 									"})"
@@ -116,13 +117,11 @@
 									"});",
 									"",
 									"var jsonData = pm.response.json();",
-									"pm.globals.set(\"brandNameCreateNewBrand\", jsonData.brand);",
+									"pm.globals.set(\"brandIdCreateNewBrand\", jsonData.id);",
 									"",
 									"pm.sendRequest({",
-									"    url: pm.variables.get(\"url\") + \"/brands/\" + pm.globals.get(\"brandNameCreateNewBrand\"),",
+									"    url: pm.variables.get(\"url\") + \"/brands/\" + pm.globals.get(\"brandIdCreateNewBrand\"),",
 									"    method: 'DELETE'",
-									"}, function (err, res) {",
-									"        ",
 									"});"
 								],
 								"type": "text/javascript"
@@ -167,7 +166,7 @@
 									"});",
 									"",
 									"pm.sendRequest({",
-									"    url: pm.variables.get(\"url\") + \"/brands/\" + pm.globals.get(\"brandGetExistingBrand\"),",
+									"    url: pm.variables.get(\"url\") + \"/brands/\" + pm.globals.get(\"brandIdGetExistingBrand\"),",
 									"    method: 'DELETE'",
 									"});"
 								],
@@ -188,7 +187,7 @@
 									"        raw: JSON.stringify({ brand: 'brandGetExistingBrand', company: 'company' })\r",
 									"    }\r",
 									"}, function (err, res) {\r",
-									"    pm.globals.set(\"brandGetExistingBrand\", res.json().brand);\r",
+									"    pm.globals.set(\"brandIdGetExistingBrand\", res.json().id);\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -206,13 +205,13 @@
 							}
 						],
 						"url": {
-							"raw": "{{url}}/brands/{{brandGetExistingBrand}}",
+							"raw": "{{url}}/brands/{{brandIdGetExistingBrand}}",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"brands",
-								"{{brandGetExistingBrand}}"
+								"{{brandIdGetExistingBrand}}"
 							]
 						}
 					},
@@ -247,13 +246,11 @@
 									"        raw: JSON.stringify({ brand: 'brandGetNonExistingBrand', company: 'company' })\r",
 									"    }\r",
 									"}, function (err, res) {\r",
-									"    pm.globals.set(\"brandGetNonExistingBrand\", res.json().brand);\r",
+									"    pm.globals.set(\"brandIdGetNonExistingBrand\", res.json().id);\r",
 									"    \r",
 									"    pm.sendRequest({\r",
-									"    url: pm.variables.get(\"url\") + \"/brands/\" + pm.globals.get(\"brandGetNonExistingBrand\"),\r",
+									"    url: pm.variables.get(\"url\") + \"/brands/\" + pm.globals.get(\"brandIdGetNonExistingBrand\"),\r",
 									"    method: 'DELETE'\r",
-									"    }, function (err, res) {\r",
-									"        \r",
 									"    });\r",
 									"})"
 								],
@@ -265,13 +262,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{url}}/brands/{{brandGetNonExistingBrand}}",
+							"raw": "{{url}}/brands/{{brandIdGetNonExistingBrand}}",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"brands",
-								"{{brandGetNonExistingBrand}}"
+								"{{brandIdGetNonExistingBrand}}"
 							]
 						}
 					},
@@ -294,7 +291,7 @@
 									"        raw: JSON.stringify({ brand: 'brandUpdateExistingBrand', company: 'company' })\r",
 									"    }\r",
 									"}, function (err, res) {\r",
-									"    pm.globals.set(\"brandUpdateExistingBrand\", res.json().brand);\r",
+									"    pm.globals.set(\"brandIdUpdateExistingBrand\", res.json().id);\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -310,10 +307,8 @@
 									"});",
 									"",
 									"pm.sendRequest({",
-									"    url: pm.variables.get(\"url\") + \"/brands/\" + pm.globals.get(\"brandUpdateExistingBrand\"),",
+									"    url: pm.variables.get(\"url\") + \"/brands/\" + pm.globals.get(\"brandIdUpdateExistingBrand\"),",
 									"    method: 'DELETE'",
-									"}, function (err, res) {",
-									"        ",
 									"});"
 								],
 								"type": "text/javascript"
@@ -331,85 +326,16 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"brand\": \"brandUpdateExistingBrand\",\r\n    \"company\": \"companyUpdated\"\r\n}"
+							"raw": "{\r\n    \"brand\": \"brandUpdateExistingBrandUpdated\",\r\n    \"company\": \"companyUpdated\"\r\n}"
 						},
 						"url": {
-							"raw": "{{url}}/brands/{{brandUpdateExistingBrand}}",
+							"raw": "{{url}}/brands/{{brandIdUpdateExistingBrand}}",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"brands",
-								"{{brandUpdateExistingBrand}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update existing brandName",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"id": "4439c061-0ccf-4ffb-8da8-549fb001f32f",
-								"exec": [
-									"pm.sendRequest({\r",
-									"    url: pm.variables.get(\"url\") + \"/brands/\",\r",
-									"    method: 'POST',\r",
-									"    header: 'Content-Type:application/json',\r",
-									"    body: {\r",
-									"        mode: 'raw',\r",
-									"        raw: JSON.stringify({ brand: 'brandUpdateExistingBrandName', company: 'company' })\r",
-									"    }\r",
-									"}, function (err, res) {\r",
-									"    pm.globals.set(\"brandUpdateExistingBrandName\", res.json().brand);\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "test",
-							"script": {
-								"id": "fd42428c-4ff9-4add-b8d6-054a5e687f33",
-								"exec": [
-									"pm.test(\"Status code is 400\", function () {",
-									"    pm.response.to.have.status(400);",
-									"});",
-									"",
-									"pm.sendRequest({",
-									"    url: pm.variables.get(\"url\") + \"/brands/\" + pm.globals.get(\"brandUpdateExistingBrandName\"),",
-									"    method: 'DELETE'",
-									"}, function (err, res) {",
-									"        ",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "Content-Type",
-								"type": "text",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"brand\": \"brandUpdateExistingBrandNameUpdated\",\r\n    \"company\": \"company\"\r\n}"
-						},
-						"url": {
-							"raw": "{{url}}/brands/{{brandUpdateExistingBrandName}}",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"brands",
-								"{{brandUpdateExistingBrandName}}"
+								"{{brandIdUpdateExistingBrand}}"
 							]
 						}
 					},
@@ -432,7 +358,7 @@
 									"        raw: JSON.stringify({ brand: 'brandUpdateExistingBrandWithNonValidFields', company: 'company' })\r",
 									"    }\r",
 									"}, function (err, res) {\r",
-									"    pm.globals.set(\"brandUpdateExistingBrandWithNonValidFields\", res.json().brand);\r",
+									"    pm.globals.set(\"brandIdUpdateExistingBrandWithNonValidFields\", res.json().id);\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -448,7 +374,7 @@
 									"});",
 									"",
 									"pm.sendRequest({",
-									"    url: pm.variables.get(\"url\") + \"/brands/\" + pm.globals.get(\"brandUpdateExistingBrandWithNonValidFields\"),",
+									"    url: pm.variables.get(\"url\") + \"/brands/\" + pm.globals.get(\"brandIdUpdateExistingBrandWithNonValidFields\"),",
 									"    method: 'DELETE'",
 									"});"
 								],
@@ -470,13 +396,13 @@
 							"raw": "{\r\n    \"brand\": \"brandUpdateExistingBrand\"\r\n}"
 						},
 						"url": {
-							"raw": "{{url}}/brands/{{brandUpdateExistingBrandWithNonValidFields}}",
+							"raw": "{{url}}/brands/{{brandIdUpdateExistingBrandWithNonValidFields}}",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"brands",
-								"{{brandUpdateExistingBrandWithNonValidFields}}"
+								"{{brandIdUpdateExistingBrandWithNonValidFields}}"
 							]
 						}
 					},
@@ -511,13 +437,11 @@
 									"        raw: JSON.stringify({ brand: 'brandUpdateNonExistingBrand', company: 'company' })\r",
 									"    }\r",
 									"}, function (err, res) {\r",
-									"    pm.globals.set(\"brandUpdateNonExistingBrand\", res.json().brand);\r",
+									"    pm.globals.set(\"brandIdUpdateNonExistingBrand\", res.json().id);\r",
 									"    \r",
 									"    pm.sendRequest({\r",
-									"    url: pm.variables.get(\"url\") + \"/brands/\" + pm.globals.get(\"brandUpdateNonExistingBrand\"),\r",
+									"    url: pm.variables.get(\"url\") + \"/brands/\" + pm.globals.get(\"brandIdUpdateNonExistingBrand\"),\r",
 									"    method: 'DELETE'\r",
-									"    }, function (err, res) {\r",
-									"        \r",
 									"    });\r",
 									"})"
 								],
@@ -539,13 +463,13 @@
 							"raw": "{\r\n    \"brand\": \"brandUpdateNonExistingBrand\",\r\n    \"company\": \"companyUpdated\"\r\n}"
 						},
 						"url": {
-							"raw": "{{url}}/brands/{{brandUpdateNonExistingBrand}}",
+							"raw": "{{url}}/brands/{{brandIdUpdateNonExistingBrand}}",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"brands",
-								"{{brandUpdateNonExistingBrand}}"
+								"{{brandIdUpdateNonExistingBrand}}"
 							]
 						}
 					},
@@ -564,7 +488,7 @@
 									"});",
 									"",
 									"pm.sendRequest({",
-									"    url: pm.variables.get(\"url\") + \"/brands/\" + pm.globals.get(\"brandRemoveExistingBrand\"),",
+									"    url: pm.variables.get(\"url\") + \"/brands/\" + pm.globals.get(\"brandIdRemoveExistingBrand\"),",
 									"    method: 'DELETE'",
 									"});"
 								],
@@ -585,7 +509,7 @@
 									"        raw: JSON.stringify({ brand: 'brandRemoveExistingBrand', company: 'company' })\r",
 									"    }\r",
 									"}, function (err, res) {\r",
-									"    pm.globals.set(\"brandRemoveExistingBrand\", res.json().brand);\r",
+									"    pm.globals.set(\"brandIdRemoveExistingBrand\", res.json().id);\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -596,13 +520,13 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{url}}/brands/{{brandRemoveExistingBrand}}",
+							"raw": "{{url}}/brands/{{brandIdRemoveExistingBrand}}",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"brands",
-								"{{brandRemoveExistingBrand}}"
+								"{{brandIdRemoveExistingBrand}}"
 							]
 						}
 					},
@@ -637,7 +561,7 @@
 									"        raw: JSON.stringify({ brand: 'brandRemoveExistingBrandWithCars', company: 'company' })\r",
 									"    }\r",
 									"}, function (err, res) {\r",
-									"    pm.globals.set(\"brandRemoveExistingBrandWithCars\", res.json().brand);\r",
+									"    pm.globals.set(\"brandIdRemoveExistingBrandWithCars\", res.json().id);\r",
 									"    \r",
 									"    pm.sendRequest({\r",
 									"        url: pm.variables.get(\"url\") + \"/cars/\",\r",
@@ -649,6 +573,7 @@
 									"                {\r",
 									"                \t\"country\": \"countryTestPost\",\r",
 									"                \t\"brand\": {\r",
+									"                \t    \"id\": pm.globals.get(\"brandIdRemoveExistingBrandWithCars\"),\r",
 									"                \t\t\"brand\": \"brandremoveexistingbrandwithcars\",\r",
 									"                \t\t\"company\": \"companyTest\"  \r",
 									"                \t}\r",
@@ -666,13 +591,13 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{url}}/brands/{{brandRemoveExistingBrandWithCars}}",
+							"raw": "{{url}}/brands/{{brandIdRemoveExistingBrandWithCars}}",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"brands",
-								"{{brandRemoveExistingBrandWithCars}}"
+								"{{brandIdRemoveExistingBrandWithCars}}"
 							]
 						}
 					},
@@ -707,13 +632,11 @@
 									"        raw: JSON.stringify({ brand: 'brandRemoveNonExistingBrand', company: 'company' })\r",
 									"    }\r",
 									"}, function (err, res) {\r",
-									"    pm.globals.set(\"brandRemoveNonExistingBrand\", res.json().brand);\r",
+									"    pm.globals.set(\"brandIdRemoveNonExistingBrand\", res.json().id);\r",
 									"    \r",
 									"    pm.sendRequest({\r",
-									"    url: pm.variables.get(\"url\") + \"/brands/\" + pm.globals.get(\"brandRemoveNonExistingBrand\"),\r",
+									"    url: pm.variables.get(\"url\") + \"/brands/\" + pm.globals.get(\"brandIdRemoveNonExistingBrand\"),\r",
 									"    method: 'DELETE'\r",
-									"    }, function (err, res) {\r",
-									"        \r",
 									"    });\r",
 									"})"
 								],
@@ -725,13 +648,13 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{url}}/brands/{{brandRemoveNonExistingBrand}}",
+							"raw": "{{url}}/brands/{{brandIdRemoveNonExistingBrand}}",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"brands",
-								"{{brandRemoveNonExistingBrand}}"
+								"{{brandIdRemoveNonExistingBrand}}"
 							]
 						}
 					},
@@ -876,8 +799,6 @@
 									"pm.sendRequest({",
 									"    url: pm.variables.get(\"url\") + \"/cars/\" + jsonData.id,",
 									"    method: 'DELETE'",
-									"}, function (err, res) {",
-									"        ",
 									"});"
 								],
 								"type": "text/javascript"
@@ -905,7 +826,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"country\": \"countryTestPost\",\n\t\"brand\": {\n\t\t\"brand\": \"brandtest\",\n\t\t\"company\": \"companyTest\"  \n\t}\n}"
+							"raw": "{\n\t\"country\": \"countryTestPost\",\n\t\"brand\": {\n\t\t\"id\": \"1\",\n\t\t\"brand\": \"carsBrandTest\",\n\t\t\"company\": \"carsCompanyTest\"  \n\t}\n}"
 						},
 						"url": {
 							"raw": "{{url}}/cars",
@@ -954,9 +875,10 @@
 									"                {",
 									"                  \"country\": \"countryTestGetExistingCar\",",
 									"                  \"brand\": {",
-									"                  \t\"brand\": \"brandtest\",",
-									"                    \"company\": \"companyTest\"  ",
-									"                  }",
+									"            \t\t\"brandIdCreateNewBrand\": \"1\",",
+									"            \t\t\"brand\": \"carsBrandTest\",",
+									"            \t\t\"company\": \"carsCompanyTest\"  ",
+									"            \t    }",
 									"                }",
 									"            )",
 									"        }",
@@ -1015,8 +937,9 @@
 									"                {\r",
 									"                  \"country\": \"countryTestGetNonExistingCar\",\r",
 									"                  \"brand\": {\r",
-									"                  \t\"brand\": \"brandtest\",\r",
-									"                    \"company\": \"companyTest\"  \r",
+									"                      \"id\": \"1\",\r",
+									"                  \t\"brand\": \"carsBrandtest\",\r",
+									"                    \"company\": \"carsCompanyTest\"  \r",
 									"                  }\r",
 									"                }\r",
 									"            )\r",
@@ -1112,8 +1035,9 @@
 									"                {",
 									"                  \"country\": \"countryTestUpdateExistingCar\",",
 									"                  \"brand\": {",
-									"                  \t\"brand\": \"brandtest\",",
-									"                    \"company\": \"companyTest\"  ",
+									"                      \"id\": \"1\",",
+									"                  \t\"brand\": \"carsBrandtest\",",
+									"                    \"company\": \"carsCompanyTest\"  ",
 									"                  }",
 									"                }",
 									"            )",
@@ -1155,7 +1079,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"country\": \"countryTestUpdateExistingCarUpdated\",\n    \"brand\": {\n        \"brand\": \"brandtest\",\n        \"company\": \"companyTest\"\n    }\n}"
+							"raw": "{\n    \"country\": \"countryTestUpdateExistingCarUpdated\",\n    \"brand\": {\n    \t\"id\": \"1\",\n        \"brand\": \"carsBrrrrandtest\",\n        \"company\": \"carsCompanyTest\"\n    }\n}"
 						},
 						"url": {
 							"raw": "{{url}}/cars/{{carIdUpdateExistingCar}}",
@@ -1200,8 +1124,9 @@
 									"                {\r",
 									"                  \"country\": \"countryTestUpdateNonExistingCar\",\r",
 									"                  \"brand\": {\r",
-									"                  \t\"brand\": \"brandtest\",\r",
-									"                    \"company\": \"companyTest\"  \r",
+									"                      \"id\": \"1\",\r",
+									"                  \t\"brand\": \"carsBrandtest\",\r",
+									"                    \"company\": \"carsCompanyTest\"  \r",
 									"                  }\r",
 									"                }\r",
 									"            )\r",
@@ -1232,7 +1157,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"country\": \"countryTestUpdateNonExistingCarUpdated\",\n    \"brand\": {\n        \"brand\": \"brandtest\",\n        \"company\": \"companyTest\"\n    }\n}"
+							"raw": "{\n    \"country\": \"countryTestUpdateNonExistingCarUpdated\",\n    \"brand\": {\n    \t\"id\": \"1\",\n        \"brand\": \"carsBrandtest\",\n        \"company\": \"carsCompanyTest\"\n    }\n}"
 						},
 						"url": {
 							"raw": "{{url}}/cars/{{carIdUpdateNonExistingCar}}",
@@ -1265,8 +1190,9 @@
 									"                {",
 									"                  \"country\": \"countryTestUpdateExistingCarWithoutAllFields\",",
 									"                  \"brand\": {",
-									"                  \t\"brand\": \"brandtest\",",
-									"                    \"company\": \"companyTest\"  ",
+									"                      \"id\": \"1\",",
+									"                  \t\"brand\": \"carsBrandtest\",",
+									"                    \"company\": \"carsCompanyTest\"  ",
 									"                  }",
 									"                }",
 									"            )",
@@ -1364,7 +1290,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"country\": \"countryTestUpdateExistingCarUpdated\",\n    \"brand\": {\n        \"brand\": \"brandtest\",\n        \"company\": \"companyTest\"\n    }\n}"
+							"raw": "{\n    \"country\": \"countryTestUpdateExistingCarUpdated\",\n    \"brand\": {\n    \t\"id\": \"1\",\n        \"brand\": \"carsBrandtest\",\n        \"company\": \"carsCompanyTest\"\n    }\n}"
 						},
 						"url": {
 							"raw": "{{url}}/cars/0",
@@ -1414,8 +1340,9 @@
 									"                {",
 									"                  \"country\": \"countryTestRemoveExistingCar\",",
 									"                  \"brand\": {",
-									"                  \t\"brand\": \"brandtest\",",
-									"                    \"company\": \"companyTest\"  ",
+									"                      \"id\": \"1\",",
+									"                  \t\"brand\": \"carsBrandtest\",",
+									"                    \"company\": \"carsCompanyTest\"  ",
 									"                  }",
 									"                }",
 									"            )",
@@ -1475,8 +1402,9 @@
 									"                {\r",
 									"                  \"country\": \"countryTestRemoveNonExistingCar\",\r",
 									"                  \"brand\": {\r",
-									"                  \t\"brand\": \"brandtest\",\r",
-									"                    \"company\": \"companyTest\"  \r",
+									"                      \"id\": \"1\",\r",
+									"                  \t\"brand\": \"carsBrandtest\",\r",
+									"                    \"company\": \"carsCompanyTest\"  \r",
 									"                  }\r",
 									"                }\r",
 									"            )\r",
@@ -1562,15 +1490,7 @@
 						"id": "af50a477-90b8-4ec5-bdea-9b5d52af1240",
 						"type": "text/javascript",
 						"exec": [
-							"pm.sendRequest({",
-							"    url: pm.variables.get(\"url\") + \"/brands/\",",
-							"    method: 'POST',",
-							"    header: 'Content-Type:application/json',",
-							"    body: {",
-							"        mode: 'raw',",
-							"        raw: JSON.stringify({ brand: 'brandTest', company: 'companyTest' })",
-							"    }",
-							"});"
+							""
 						]
 					}
 				},
@@ -1612,7 +1532,7 @@
 	],
 	"variable": [
 		{
-			"id": "5b3e5095-7b64-4024-9830-59b22b5ec8cc",
+			"id": "a5bee70e-cede-4850-8d4f-d8de9e4b019b",
 			"key": "url",
 			"value": "http://localhost:8080/car/webapi",
 			"type": "string"

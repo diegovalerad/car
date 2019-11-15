@@ -7,9 +7,11 @@ import javax.ejb.Stateless;
 
 import org.apache.log4j.Logger;
 import org.diego.tutorial.car.databases.jpa.JPAImplBrand;
+import org.diego.tutorial.car.exceptions.BadRequestException;
 import org.diego.tutorial.car.exceptions.DataAlreadyExistsException;
 import org.diego.tutorial.car.exceptions.DataNotFoundException;
 import org.diego.tutorial.car.model.Brand;
+import org.diego.tutorial.car.model.Car;
 
 /**
  * Class that represents the service of Brands, in charge of doing the operations involving brands, 
@@ -20,6 +22,8 @@ import org.diego.tutorial.car.model.Brand;
 public class BrandService {
 	@EJB
 	private JPAImplBrand jpaImplBrand;
+	@EJB
+	private CarService carService;
 	
 	private final static Logger LOGGER = Logger.getLogger(BrandService.class);
 	
@@ -51,10 +55,11 @@ public class BrandService {
 	}
 	
 	/**
-	 * Adds a brand to the system
-	 * @param brand Brand that should be added
-	 * @return Brand added or {@link DataAlreadyExistsException} if the brand already exists (if there is a brand 
+	 * Adds a brand to the system. It throws: <p>
+	 * {@link DataAlreadyExistsException} if the brand already exists (if there is a brand 
 	 * with the same brand and company names)
+	 * @param brand Brand that should be added
+	 * @return Brand added
 	 */
 	public Brand addBrand(Brand brand) {
 		LOGGER.info("Adding the brand '" + brand + "' to the system");
@@ -70,9 +75,10 @@ public class BrandService {
 	}
 	
 	/**
-	 * Retrieves a brand from the database
+	 * Retrieves a brand from the database. It throws: <p>
+	 * {@link DataNotFoundException} if the brand does not exist
 	 * @param id Identifier of the brand
-	 * @return Brand or a {@link DataNotFoundException} if the brand does not exist
+	 * @return Brand
 	 */
 	public Brand getBrand(long id) {
 		LOGGER.info("Getting the brand with ID '" + id + "'");
@@ -86,9 +92,10 @@ public class BrandService {
 	}
 	
 	/**
-	 * Updates a brand with new information
+	 * Updates a brand with new information. It throws: <p>
+	 * {@link DataNotFoundException} if the brand does not exist
 	 * @param brand Object with the new info
-	 * @return Updated brand or {@link DataNotFoundException} if the brand does not exist
+	 * @return Updated brand
 	 */
 	public Brand updateBrand(Brand brand) {
 		LOGGER.info("Trying to update the brand: " + brand);
@@ -101,18 +108,37 @@ public class BrandService {
 	}
 	
 	/**
-	 * Removes a brand
+	 * Removes a brand. It throws: <p>
+	 * <ul>
+	 * <li> {@link DataNotFoundException} if the brand does not exist </li>
+	 * <li> {@link BadRequestException} if the brand has others objects that use it
+	 * </ul>
 	 * @param id Identifier of the brand
-	 * @return Removed brand or {@link DataNotFoundException} if the brand does not exist
+	 * @return Removed brand
 	 */
 	public Brand removeBrand(long id) {
 		LOGGER.info("Trying to remove the brand with ID '" + id + "'");
 		
 		Brand brand = getBrand(id);
 		
+		if (brandIsBeingUsed(id)) {
+			throw new BadRequestException("Trying to remove a brand with ID '" + id + "' that has other objects using it");
+		}
+		
 		Brand removedBrand = jpaImplBrand.delete(brand);
 		
 		return removedBrand;
+	}
+
+	/**
+	 * Method that checks if a brand is being used by another entity
+	 * @param brandId Identifier of the brand that should be checked
+	 * @return Boolean
+	 */
+	private boolean brandIsBeingUsed(long brandId) {
+		List<Car> carsUsedByBrand = carService.getAllCarsFromBrand(brandId);
+		
+		return !carsUsedByBrand.isEmpty();
 	}
 	
 	

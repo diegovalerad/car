@@ -44,7 +44,8 @@ public class CarService {
 	}
 	
 	/**
-	 * Retrieves a requested car given by an identifier.
+	 * Retrieves a requested car given by an identifier. <p>
+	 * Throws a {@link DataNotFoundException} if the car does not exist
 	 * @param id Identifier of the requested car
 	 * @return Requested car
 	 */
@@ -75,6 +76,18 @@ public class CarService {
 	}
 	
 	/**
+	 * Gets all the cars from a brand
+	 * @param id Identifier of the brand
+	 * @return List of cars
+	 */
+	public List<Car> getAllCarsFromBrand(long id){
+		LOGGER.info("Getting all the cars from the brand '" + id + "'");
+		List<Car> carsFromBrand = jpaImpl.getAllCarsFromBrand(id);
+		LOGGER.info("Retrieved all the cars from the brand '" + id + "'");
+		return carsFromBrand;
+	}
+	
+	/**
 	 * Gets all the soft removed cars from the system
 	 * @return Soft removed cars
 	 */
@@ -86,9 +99,14 @@ public class CarService {
 	}
 	
 	/**
-	 * Method that adds a new car to the database
+	 * Method that adds a new car to the database. It throws:
+	 * <p>
+	 * <ul>
+	 * <li> {@link BadRequestException} if the brand of the car was not in the request message or if it was, but in an incorrect format
+	 * <li> {@link DataNotFoundException} if the brand of the car does not exist
+	 * </ul>
 	 * @param car Car that should be added
-	 * @return Car added
+	 * @return Car added 
 	 */
 	public Car addCar(Car car) {
 		LOGGER.info("Adding the car: " + car);
@@ -106,8 +124,11 @@ public class CarService {
 	}
 	
 	/**
-	 * Method that updates an existing car in the database. <p>
-	 * If the car already exists, an {@link DataNotFoundException} exception is thrown.
+	 * Method that updates an existing car in the database. It throws: <p>
+	 * <ul>
+	 * <li>{@link DataNotFoundException} if the car or the brand of the car does not exist</li>
+	 * <li> {@link BadRequestException} if the brand of the car is not valid
+	 * </ul> 
 	 * @param car Car object that should be updated
 	 * @return Car updated
 	 */
@@ -130,8 +151,8 @@ public class CarService {
 	}
 	
 	/**
-	 * Method that soft-removes an existing car from the database. <p>
-	 * If the car does not exists, an {@link DataNotFoundException} exception is thrown.
+	 * Method that soft-removes an existing car from the database. It throws<p>
+	 * {@link DataNotFoundException} if the car does not exist.
 	 * @param id Identifier of the car that should be removed
 	 * @return Car soft-removed
 	 */
@@ -149,8 +170,8 @@ public class CarService {
 	}
 	
 	/**
-	 * Method that completely removes an existing car from the database. <p>
-	 * If the car does not exists, an {@link DataNotFoundException} exception is thrown.
+	 * Method that completely removes an existing car from the database. It throws<p>
+	 *  {@link DataNotFoundException} if the car does not exist
 	 * @param car Car object that should be removed
 	 * @return Car removed
 	 */
@@ -196,12 +217,12 @@ public class CarService {
 	}
 	
 	/**
-	 * Method that checks a brand in the request
-	 * @param brand Given brand or <p>
+	 * Method that checks a brand in the request. It throws <p>
 	 * <ul>
 	 * <li> {@link BadRequestException} if the brand was not in the request message or it was, but in an incorrect format
 	 * <li> {@link DataNotFoundException} if the brand does not exist 
 	 * </ul>
+	 * @param brand Given brand
 	 */
 	private void checkBrand(Brand brand) {
 		LOGGER.info("Checking the brand: " + brand);

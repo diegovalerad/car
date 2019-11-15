@@ -6,9 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.diego.tutorial.car.databases.jpa.JPAImplBrand;
+import org.diego.tutorial.car.exceptions.BadRequestException;
 import org.diego.tutorial.car.exceptions.DataAlreadyExistsException;
 import org.diego.tutorial.car.exceptions.DataNotFoundException;
 import org.diego.tutorial.car.model.Brand;
+import org.diego.tutorial.car.model.Car;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,6 +29,8 @@ public class BrandServiceTest {
 	private BrandService brandService;
 	@Mock
 	private JPAImplBrand jpaImplBrand;
+	@Mock
+	private CarService carService;
 	
 	private long brandId;
 	private String brandName;
@@ -117,6 +121,8 @@ public class BrandServiceTest {
 	public void testRemove() {
 		Mockito.when(jpaImplBrand.get(Brand.class, brandId))
 				.thenReturn(brand);
+		Mockito.when(carService.getAllCarsFromBrand(brandId))
+				.thenReturn(new ArrayList<Car>());
 		Mockito.when(jpaImplBrand.delete(brand))
 				.thenReturn(brand);
 		
@@ -127,6 +133,20 @@ public class BrandServiceTest {
 	public void testRemoveNotExists() {
 		Mockito.when(jpaImplBrand.get(Brand.class, brandId))
 				.thenReturn(null);
+		
+		brandService.removeBrand(brandId);
+	}
+	
+	@Test (expected = BadRequestException.class)
+	public void testRemoveWithOthersUsingTheBrand() {
+		Mockito.when(jpaImplBrand.get(Brand.class, brandId))
+				.thenReturn(brand);
+		
+		Car car = Mockito.mock(Car.class);
+		List<Car> cars = new ArrayList<Car>();
+		cars.add(car);
+		Mockito.when(carService.getAllCarsFromBrand(brandId))
+				.thenReturn(cars);
 		
 		brandService.removeBrand(brandId);
 	}

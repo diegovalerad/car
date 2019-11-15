@@ -205,11 +205,11 @@ public class BrandResource {
 									@PathParam("brandId") long brandId,
 								@Parameter(description = "Brand that should be updated", required = true) 
 									Brand brand){
-		brand.setId(brandId);
 		LOGGER.info("Trying to update the brand with ID '" + brandId + "' with the info: " + brand);
 		
 		GeneralValidationErrorsChecker.checkValidationErrors(brand, "update");	
 		
+		brand.setId(brandId);
 		Brand updatedBrand = brandService.updateBrand(brand);
 		LOGGER.info("Updated brand '" + brand + "'");
 		
@@ -241,6 +241,10 @@ public class BrandResource {
 					@ApiResponse(
 						description = "Brand does not exist",
 						responseCode = "404"
+					),
+					@ApiResponse(
+						description = "Brand has other objects using it",
+						responseCode = "400"
 					)
 			}
 	)
@@ -265,6 +269,7 @@ public class BrandResource {
 	 * @return String that contains the URI of the given brand. 
 	 */
 	private String getUriForSelf(String brandId) {
+		// TODO refactor method
 		String urlSelf = uriInfo.getBaseUriBuilder()
 				.path(BrandResource.class)
 				.path(brandId)
