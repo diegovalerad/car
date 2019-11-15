@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -28,24 +30,35 @@ public class Brand implements Serializable {
 	private static final long serialVersionUID = 3100671061051101142L;
 
 	@Id
-	@Column(nullable = false, updatable = false)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
+
+	@Column(nullable = false)
 	@NotNull(message = "brand cannot be null")
 	private String brand;
-	
+
 	@Column(nullable = false)
 	@NotNull(message = "company cannot be null")
 	private String company;
-	
+
 	@Transient // Links are not stored in the database
 	private List<Link> links = new ArrayList<Link>();
-	
+
 	public Brand() {
-		
+
 	}
-	
+
 	public Brand(String brand, String company) {
 		this.brand = brand;
 		this.company = company;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
 	}
 
 	public String getBrand() {
@@ -63,7 +76,7 @@ public class Brand implements Serializable {
 	public void setCompany(String company) {
 		this.company = company;
 	}
-	
+
 	public List<Link> getLinks() {
 		return links;
 	}
@@ -71,7 +84,7 @@ public class Brand implements Serializable {
 	public void setLinks(List<Link> links) {
 		this.links = links;
 	}
-	
+
 	public void addLink(String url, String rel) {
 		Link link = new Link();
 		link.setLink(url);

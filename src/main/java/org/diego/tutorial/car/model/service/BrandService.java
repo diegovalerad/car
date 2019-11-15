@@ -7,11 +7,9 @@ import javax.ejb.Stateless;
 
 import org.apache.log4j.Logger;
 import org.diego.tutorial.car.databases.jpa.JPAImplBrand;
-import org.diego.tutorial.car.exceptions.BadRequestException;
 import org.diego.tutorial.car.exceptions.DataAlreadyExistsException;
 import org.diego.tutorial.car.exceptions.DataNotFoundException;
 import org.diego.tutorial.car.model.Brand;
-import org.diego.tutorial.car.model.Car;
 
 /**
  * Class that represents the service of Brands, in charge of doing the operations involving brands, 
@@ -22,9 +20,6 @@ import org.diego.tutorial.car.model.Car;
 public class BrandService {
 	@EJB
 	private JPAImplBrand jpaImplBrand;
-	
-	@EJB
-	private CarService carService;
 	
 	private final static Logger LOGGER = Logger.getLogger(BrandService.class);
 	
@@ -44,135 +39,83 @@ public class BrandService {
 	}
 	
 	/**
-	 * Retrieves all the brands from a certain company
-	 * @param company Company which brands are part of.
+	 * Retrieves all the brands that are part of a company
+	 * @param company Company to look for
 	 * @return List of brands
 	 */
 	public List<Brand> getAllBrandsFromCompany(String company) {
-		String companyLowerCase = company.toLowerCase();
-		LOGGER.info("Getting all the brands from the company '" + companyLowerCase + "'");
-		List<Brand> brands = jpaImplBrand.getAllBrandsFromCompany(companyLowerCase);
-		LOGGER.info("All the brands retrieved from the database.");
+		LOGGER.info("Getting all the brands from the company '" + company + "'");
+		List<Brand> brands = jpaImplBrand.getAllBrandsFromCompany(company);
+		LOGGER.info("All the brands from the company '" + company + "' retrieved");
 		return brands;
 	}
 	
 	/**
-	 * Retrieves a requested brand given by its name
-	 * @param brandName Name of the brand
-	 * @return Brand
-	 */
-	public Brand getBrand(String brandName) {
-		brandName = brandName.toLowerCase();
-		LOGGER.info("Getting the brand '" + brandName + "'");
-		Brand brand = jpaImplBrand.get(Brand.class, brandName);
-		if (brand == null)
-			throw new DataNotFoundException("Trying to get a brand which name '" + brandName + "' does not exist");
-		LOGGER.info("Brand retrieved: " + brand);
-		return brand;
-	}
-
-	/**
-	 * Creates a new brand in the system
-	 * @param brand Brand object that should be created
-	 * @return Created brand
+	 * Adds a brand to the system
+	 * @param brand Brand that should be added
+	 * @return Brand added or {@link DataAlreadyExistsException} if the brand already exists (if there is a brand 
+	 * with the same brand and company names)
 	 */
 	public Brand addBrand(Brand brand) {
-		String brandName = brand.getBrand().toLowerCase();
-		brand.setBrand(brandName);
-		if (brandAlreadyExists(brand.getBrand())) {
-			String message = "Trying to add a brand with name: '" + brand.getBrand() + "' that already exists.";
-			LOGGER.info(message);
-			throw new DataAlreadyExistsException(message);
+		LOGGER.info("Adding the brand '" + brand + "' to the system");
+		
+		boolean brandExists = jpaImplBrand.brandNameAndCompanyExists(brand.getBrand(), brand.getCompany());
+		if (brandExists) {
+			throw new DataAlreadyExistsException("Trying to add a brand that already exists");
 		}
+		
 		Brand addedBrand = jpaImplBrand.add(brand);
+		LOGGER.info("Brand retrieved: " + addedBrand);
 		return addedBrand;
 	}
 	
 	/**
-	 * Tries to update an existing brand
-	 * @param brand name of the brand that should be updated
-	 * @param updateBrand object with the new info for the brand
-	 * @return Updated brand
+	 * Retrieves a brand from the database
+	 * @param id Identifier of the brand
+	 * @return Brand or a {@link DataNotFoundException} if the brand does not exist
 	 */
-	public Brand updateBrand(String brand, Brand updateBrand) {
-		String brandNameLowerCase = updateBrand.getBrand().toLowerCase();
-		String brandName2LowerCase = brand.toLowerCase();
-		
-		if (!brandNameLowerCase.equals(brandName2LowerCase)) {
-			String message = "The brand name cannot be updated";
-			LOGGER.info(message);
-			throw new BadRequestException(message);
+	public Brand getBrand(long id) {
+		LOGGER.info("Getting the brand with ID '" + id + "'");
+		Brand brand = jpaImplBrand.get(Brand.class, id);
+		if (brand == null) {
+			LOGGER.info("The brand with ID '" + id + "' does not exist");
+			throw new DataNotFoundException("Trying to get a brand with ID '" + id + "' that does not exist");
 		}
+		LOGGER.info("The brand with ID '" + id + "' exists");
+		return brand;
+	}
+	
+	/**
+	 * Updates a brand with new information
+	 * @param brand Object with the new info
+	 * @return Updated brand or {@link DataNotFoundException} if the brand does not exist
+	 */
+	public Brand updateBrand(Brand brand) {
+		LOGGER.info("Trying to update the brand: " + brand);
 		
-		updateBrand.setBrand(brandNameLowerCase);
-		if (!brandAlreadyExists(updateBrand.getBrand())) {
-			String message = createErrorMessageBrandDoesNotExist("update", updateBrand.getBrand());
-			LOGGER.info(message);
-			throw new DataNotFoundException(message);
-		}
-		Brand updatedBrand = jpaImplBrand.update(updateBrand);
+		getBrand(brand.getId());
+		
+		Brand updatedBrand = jpaImplBrand.update(brand);
+		LOGGER.info("Brand updated: " + updatedBrand);
 		return updatedBrand;
 	}
 	
 	/**
-	 * Tries to remove an existing brand
-	 * @param brandName Brand that should be removed
-	 * @return Removed brand
+	 * Removes a brand
+	 * @param id Identifier of the brand
+	 * @return Removed brand or {@link DataNotFoundException} if the brand does not exist
 	 */
-	public Brand removeBrand(String brandName) {
-		brandName = brandName.toLowerCase();
-		if (!brandAlreadyExists(brandName)) {
-			String message = createErrorMessageBrandDoesNotExist("delete", brandName);
-			LOGGER.info(message);
-			throw new DataNotFoundException(message);
-		}
+	public Brand removeBrand(long id) {
+		LOGGER.info("Trying to remove the brand with ID '" + id + "'");
 		
-		Brand brand = jpaImplBrand.get(Brand.class, brandName);
-		if (brand == null)
-			throw new DataNotFoundException("Trying to get a brand with name '" + brandName + "' that does not exists");
-		
-		if (brandHasCars(brandName)) {
-			throw new BadRequestException("Trying to remove the brand '" + brandName + "' that has cars");
-		}
+		Brand brand = getBrand(id);
 		
 		Brand removedBrand = jpaImplBrand.delete(brand);
+		
 		return removedBrand;
 	}
 	
-	/**
-	 * Checks if a brand already exists
-	 * @param brandName Name of the brand
-	 * @return Boolean
-	 */
-	private boolean brandAlreadyExists(String brandName) {
-		LOGGER.info("Checking if the brand '" + brandName + "' exists");
-		
-		Brand brand = jpaImplBrand.get(Brand.class, brandName); 
-		if (brand == null) {
-			LOGGER.info("The brand '" + brandName + "' does not exist");
-			return false;
-		}
-		LOGGER.info("The brand '" + brandName + "' exists");
-		return true;
-	}
 	
-	/**
-	 * Method that creates a message error, indicating the operation and the name of the brand that
-	 * produced that error.
-	 * @param operation Operation (get/update/add/remove) that produced the error.
-	 * @param brand Name of the brand that produced the error.
-	 * @return String with a message error.
-	 */
-	private String createErrorMessageBrandDoesNotExist(String operation, String brand) {
-		return "Trying to " + operation + " a brand with name '" + brand + "' that does not exist.";
-	}
-	
-	private boolean brandHasCars(String brandName) {
-		LOGGER.info("Checking the number of cars of the brand '" + brandName + "'");
-		List<Car> carsOfBrand = carService.getAllCarsFromBrand(brandName);
-		LOGGER.info("The brand '" + brandName + "' has " + carsOfBrand.size() + " cars");
-		return !carsOfBrand.isEmpty();
-	}
 	
 	
 }

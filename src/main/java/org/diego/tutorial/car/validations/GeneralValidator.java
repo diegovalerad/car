@@ -1,4 +1,4 @@
-package org.diego.tutorial.car.validations.brand;
+package org.diego.tutorial.car.validations;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,35 +10,33 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
 import org.apache.log4j.Logger;
-import org.diego.tutorial.car.model.Brand;
 
 /**
  * Class that validates {@link Brand} objects
  *
  */
-public class BrandValidator {
-	
+public class GeneralValidator {
 	private static ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 	private static Validator validator = factory.getValidator();
-	private final static Logger LOGGER = Logger.getLogger(BrandValidator.class);
+	private final static Logger LOGGER = Logger.getLogger(GeneralValidator.class);
 	
 	/**
-	 * Method that validates a {@link Brand} object
-	 * @param brand Object to validate
+	 * Method that validates an Object
+	 * @param object Object to validate
 	 * @return List of validation errors
 	 */
-	public static List<String> validateBrand(Brand brand) {
-		LOGGER.info("Validating a brand: " + brand);
+	protected static List<String> validateObject(Object object) {
+		LOGGER.info("Validating the object: " + object);
 		
-		Set<ConstraintViolation<Brand>> violations = validator.validate(brand);
+		Set<ConstraintViolation<Object>> violations = validator.validate(object);
 		List<String> validationErrors = new ArrayList<String>();
-		for (ConstraintViolation<Brand> constraintViolation : violations) {
+		for (ConstraintViolation<Object> constraintViolation : violations) {
 			String validationError = constraintViolation.getMessage();
 			validationErrors.add(validationError);
-			LOGGER.debug("Error validating brand: " + validationError);
+			LOGGER.info("Error validating brand: " + validationError);
 		}
 		
-		LOGGER.info("Validation of brand '" + brand + "' finished with " + validationErrors.size() + " errors");
+		LOGGER.info("Validation of object '" + object + "' finished with " + validationErrors.size() + " errors");
 		
 		return validationErrors;
 	}

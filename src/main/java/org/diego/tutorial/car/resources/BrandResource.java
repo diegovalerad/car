@@ -21,10 +21,9 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import org.apache.log4j.Logger;
-import org.diego.tutorial.car.exceptions.BadRequestException;
 import org.diego.tutorial.car.model.Brand;
 import org.diego.tutorial.car.model.service.BrandService;
-import org.diego.tutorial.car.validations.brand.BrandValidator;
+import org.diego.tutorial.car.validations.GeneralValidationErrorsChecker;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -57,19 +56,22 @@ public class BrandResource {
 	 * @return List of brands
 	 */
 	@GET
-	@Operation(summary = "Get all the brands",
+	@Operation(summary = "Gets all the brands",
 			description = "Retrieves all the brands from the system",
 			responses = {
 					@ApiResponse(
-							description = "All brands",
+							description = "All brands retrieved",
 							responseCode = "200",
 							content = @Content(
-									array = @ArraySchema(schema = @Schema(implementation = Brand.class))
+									array = @ArraySchema(
+												schema = @Schema(implementation = Brand.class)
+											)
 				            )
 					),
 			}
 	)
-	public Response getBrands(@QueryParam("company") String company) {
+	public Response getBrands(@Parameter(name = "company", description = "Company of which the brands are part", required = true) 
+								@QueryParam("company") String company) {
 		List<Brand> brands = null;
 		if (company != null && !company.isEmpty()) {
 			LOGGER.info("Retrieving all the brands from the company '" + company + "'");
@@ -91,8 +93,8 @@ public class BrandResource {
 	 * @return Created brand
 	 */
 	@POST
-	@Operation(summary = "Create a brand",
-			description = "Create a brand and store it in the system",
+	@Operation(summary = "Creates a brand",
+			description = "Creates a brand and store it in the system",
 			responses = {
 					@ApiResponse(
 						description = "Brand created", 
@@ -110,23 +112,25 @@ public class BrandResource {
 						responseCode = "400"
 					)
 	})
-	public Response addBrand(@Parameter(description = "new brand", required = true) Brand brand) {
+	public Response addBrand(@Parameter(name = "brand", description = "new brand", required = true) 
+								Brand brand) {
 		LOGGER.info("Trying to create a new brand: " + brand);
 		
-		List<String> validationErrors = BrandValidator.validateBrand(brand);
-		String errorMessage = "Request to create a new brand with non-valid fields";
-		checkValidationErrors(validationErrors, errorMessage);
+		GeneralValidationErrorsChecker.checkValidationErrors(brand, "create");
+		LOGGER.info("Validation errors passed");
 		
 		Brand addedBrand = brandService.addBrand(brand);
 		LOGGER.info("Brand created: " + brand);
 		
-		URI uri = uriInfo.getAbsolutePathBuilder().path(addedBrand.getBrand()).build();
+		URI uri = uriInfo.getAbsolutePathBuilder()
+					.path(String.valueOf(addedBrand.getId()))
+					.build();
 		
-		String urlSelf = getUriForSelf(addedBrand.getBrand());
+		String urlSelf = getUriForSelf(String.valueOf(addedBrand.getId()));
 		addedBrand.addLink(urlSelf, "self");
 		
 		return Response.created(uri)
-				.entity(brand)
+				.entity(addedBrand)
 				.build();
 	}
 	
@@ -136,9 +140,9 @@ public class BrandResource {
 	 * @return Brand
 	 */
 	@GET
-	@Path("/{brandName}")
+	@Path("/{brandId}")
 	@Operation(summary = "Get an existing brand",
-			description = "Get a brand from the database given by its name",
+			description = "Get a brand from the database given by its ID",
 			responses = {
 					@ApiResponse(
 						description = "Brand retrieved",
@@ -154,13 +158,13 @@ public class BrandResource {
 			}
 	)			
 	public Response getBrand(@Parameter(description = "name of the brand", required = true) 
-								@PathParam("brandName") String brandName) {
-		LOGGER.info("Trying to get the brand '" + brandName + "'");
+								@PathParam("brandId") long brandId) {
+		LOGGER.info("Trying to get the brand with ID " + brandId);
 		
-		Brand brand = brandService.getBrand(brandName);
-		LOGGER.info("Brand '" + brandName + "' retrieved");
+		Brand brand = brandService.getBrand(brandId);
+		LOGGER.info("Brand with ID " + brandId + " retrieved");
 		
-		String urlSelf = getUriForSelf(brand.getBrand());
+		String urlSelf = getUriForSelf(String.valueOf(brand.getId()));
 		brand.addLink(urlSelf, "self");
 		
 		return Response.ok()
@@ -170,14 +174,14 @@ public class BrandResource {
 	
 	/**
 	 * Updates a brand in the database
-	 * @param brandName Name of the brand that should be updated
+	 * @param brandId ID of the brand that should be updated
 	 * @param brand Brand with new data
 	 * @return Updated brand
 	 */
 	@PUT
-	@Path("/{brandName}")
-	@Operation(summary = "Update a brand",
-			description = "Update an existing brand",
+	@Path("/{brandId}")
+	@Operation(summary = "Updates a brand",
+			description = "Updates an existing brand",
 			responses = {
 					@ApiResponse(
 						description = "Brand updated",
@@ -197,36 +201,35 @@ public class BrandResource {
 					
 			}
 	)
-	public Response updateBrand(@Parameter(description = "Name of the brand that should be updated", required = true) 
-									@PathParam("brandName") String brandName,
+	public Response updateBrand(@Parameter(description = "ID of the brand that should be updated", required = true) 
+									@PathParam("brandId") long brandId,
 								@Parameter(description = "Brand that should be updated", required = true) 
 									Brand brand){
-		LOGGER.info("Trying to update the brand '" + brand + "'");
+		brand.setId(brandId);
+		LOGGER.info("Trying to update the brand with ID '" + brandId + "' with the info: " + brand);
 		
-		List<String> validationErrors = BrandValidator.validateBrand(brand);
-		String errorMessage = "Request to update a brand with non-valid fields";
-		checkValidationErrors(validationErrors, errorMessage);		
+		GeneralValidationErrorsChecker.checkValidationErrors(brand, "update");	
 		
-		Brand updatedBrand = brandService.updateBrand(brandName, brand);
+		Brand updatedBrand = brandService.updateBrand(brand);
 		LOGGER.info("Updated brand '" + brand + "'");
 		
-		String urlSelf = getUriForSelf(updatedBrand.getBrand());
+		String urlSelf = getUriForSelf(String.valueOf(updatedBrand.getId()));
 		updatedBrand.addLink(urlSelf, "self");
 		
 		return Response.ok()
-				.entity(brand)
+				.entity(updatedBrand)
 				.build();
 	}
 	
 	/**
 	 * Removes a brand from the database
-	 * @param brandName Name of the brand
+	 * @param brandId ID of the brand
 	 * @return Response with the removed brand
 	 */
 	@DELETE
-	@Path("/{brandName}")
-	@Operation(summary = "Delete a brand",
-			description = "Delete a brand from the database",
+	@Path("/{brandId}")
+	@Operation(summary = "Deletes a brand",
+			description = "Deletes a brand from the database",
 			responses = {
 					@ApiResponse(
 						description = "Brand removed",
@@ -241,14 +244,14 @@ public class BrandResource {
 					)
 			}
 	)
-	public Response removeBrand(@Parameter(description = "Name of the brand that should be removed", required = true)
-									@PathParam("brandName") String brandName) {
-		LOGGER.info("Trying to remove the brand '" + brandName + "'");
+	public Response removeBrand(@Parameter(description = "ID of the brand that should be removed", required = true)
+									@PathParam("brandId") long brandId) {
+		LOGGER.info("Trying to remove the brand with ID " + brandId);
 		
-		Brand removedBrand = brandService.removeBrand(brandName);
-		LOGGER.info("Removed brand '" + brandName + "'");
+		Brand removedBrand = brandService.removeBrand(brandId);
+		LOGGER.info("Removed brand with ID " + brandId);
 		
-		String urlSelf = getUriForSelf(removedBrand.getBrand());
+		String urlSelf = getUriForSelf(String.valueOf(removedBrand.getId()));
 		removedBrand.addLink(urlSelf, "self");
 		
 		return Response.ok()
@@ -257,34 +260,17 @@ public class BrandResource {
 	}
 	
 	/**
-	 * Method that gets the URI of the brand with the given brand name.
-	 * @param brandName Name of the brand
+	 * Method that gets the URI of the brand with the given brand ID.
+	 * @param brandName ID of the brand
 	 * @return String that contains the URI of the given brand. 
 	 */
-	private String getUriForSelf(String brandName) {
+	private String getUriForSelf(String brandId) {
 		String urlSelf = uriInfo.getBaseUriBuilder()
 				.path(BrandResource.class)
-				.path(brandName)
+				.path(brandId)
 				.build()
 				.toString();
 		return urlSelf;
-	}
-	
-	/**
-	 * Method that loops though a list of validation errors, throwing a {@link BadRequestException} exception
-	 * in case there is one or more validation errors. This exception includes the list of errors and a 
-	 * descriptive error message.
-	 * @param validationErrors List of possible validation errors
-	 * @param errorMessage Descriptive error message thrown in the {@link BadRequestException} exception next to the list of errors. 
-	 */
-	private void checkValidationErrors(List<String> validationErrors, String errorMessage) {
-		if (!validationErrors.isEmpty()) {
-			String message = errorMessage + ": ";
-			for (String validationError : validationErrors) {
-				message += validationError + " - ";
-			}
-			throw new BadRequestException(message);
-		}
 	}
 	
 }

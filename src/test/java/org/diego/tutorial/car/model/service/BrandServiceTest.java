@@ -1,11 +1,13 @@
 package org.diego.tutorial.car.model.service;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.diego.tutorial.car.databases.jpa.JPAImplBrand;
+import org.diego.tutorial.car.exceptions.DataAlreadyExistsException;
+import org.diego.tutorial.car.exceptions.DataNotFoundException;
 import org.diego.tutorial.car.model.Brand;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,81 +23,128 @@ import org.mockito.junit.MockitoJUnitRunner;
  */
 @RunWith(MockitoJUnitRunner.class)
 public class BrandServiceTest {
-
 	@InjectMocks
 	private BrandService brandService;
 	@Mock
 	private JPAImplBrand jpaImplBrand;
 	
+	private long brandId;
 	private String brandName;
 	private String company;
 	private Brand brand;
+	private List<Brand> brands;
 	
 	@Before
-	public void setUp() {
-		brandName = "brandName";
+	public void setup() {
+		brandId = 1L;
+		brandName = "brand";
 		company = "company";
 		brand = new Brand(brandName, company);
+		brand.setId(brandId);
+		brands = new ArrayList<Brand>();
+		brands.add(brand);
 	}
-	
+
 	@Test
 	public void testGetAllBrands() {
-		List<Brand> brands = new ArrayList<Brand>();
-		
 		Mockito.when(jpaImplBrand.getAll(Brand.class))
 				.thenReturn(brands);
 		
 		assertEquals(brands, brandService.getAllBrands());
 	}
-
+	
 	@Test
 	public void testGetAllBrandsFromCompany() {
-		List<Brand> brands = new ArrayList<Brand>();
-		
 		Mockito.when(jpaImplBrand.getAllBrandsFromCompany(company))
 				.thenReturn(brands);
 		
 		assertEquals(brands, brandService.getAllBrandsFromCompany(company));
 	}
-	
-	@Test
-	public void testGetBrand() {
-		Mockito.when(jpaImplBrand.get(Brand.class, brandName.toLowerCase()))
-				.thenReturn(brand);
-		
-		assertEquals(brand, brandService.getBrand(brandName));
-	}
-	
+
 	@Test
 	public void testAddBrand() {
-		Mockito.when(jpaImplBrand.get(Brand.class, brandName.toLowerCase()))
-				.thenReturn(null);
-		
+		Mockito.when(jpaImplBrand.brandNameAndCompanyExists(brandName, company))
+				.thenReturn(false);
 		Mockito.when(jpaImplBrand.add(brand))
 				.thenReturn(brand);
 		
 		assertEquals(brand, brandService.addBrand(brand));
 	}
 	
+	@Test (expected = DataAlreadyExistsException.class)
+	public void testAddBrandThatExists() {
+		Mockito.when(jpaImplBrand.brandNameAndCompanyExists(brandName, company))
+				.thenReturn(true);
+		
+		brandService.addBrand(brand);
+	}
+	
 	@Test
-	public void testUpdateBrand() {
-		Mockito.when(jpaImplBrand.get(Brand.class, brandName.toLowerCase()))
+	public void testGetBrand() {
+		Mockito.when(jpaImplBrand.get(Brand.class, brandId))
+				.thenReturn(brand);
+		
+		assertEquals(brand, brandService.getBrand(brandId));
+	}
+	
+	@Test (expected = DataNotFoundException.class)
+	public void testGetBrandNotExists() {
+		Mockito.when(jpaImplBrand.get(Brand.class, brandId))
+				.thenReturn(null);
+		
+		brandService.getBrand(brandId);
+	}
+
+	@Test
+	public void testUpdate() {
+		Mockito.when(jpaImplBrand.get(Brand.class, brandId))
 				.thenReturn(brand);
 		Mockito.when(jpaImplBrand.update(brand))
 				.thenReturn(brand);
 		
-		assertEquals(brand, brandService.updateBrand(brandName, brand));
+		assertEquals(brand, brandService.updateBrand(brand));
+	}
+	
+	@Test (expected = DataNotFoundException.class)
+	public void testUpdateNotExists() {
+		Mockito.when(jpaImplBrand.get(Brand.class, brandId))
+				.thenReturn(null);
+		
+		brandService.updateBrand(brand);
 	}
 	
 	@Test
-	public void testRemoveBrand() {
-		Mockito.when(jpaImplBrand.get(Brand.class, brandName.toLowerCase()))
+	public void testRemove() {
+		Mockito.when(jpaImplBrand.get(Brand.class, brandId))
 				.thenReturn(brand);
 		Mockito.when(jpaImplBrand.delete(brand))
 				.thenReturn(brand);
 		
-		assertEquals(brand, brandService.removeBrand(brandName));
+		assertEquals(brand, brandService.removeBrand(brandId));
 	}
+	
+	@Test (expected = DataNotFoundException.class)
+	public void testRemoveNotExists() {
+		Mockito.when(jpaImplBrand.get(Brand.class, brandId))
+				.thenReturn(null);
+		
+		brandService.removeBrand(brandId);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

@@ -11,6 +11,7 @@ import org.diego.tutorial.car.exceptions.BadRequestException;
 import org.diego.tutorial.car.exceptions.DataNotFoundException;
 import org.diego.tutorial.car.model.Brand;
 import org.diego.tutorial.car.model.Car;
+import org.diego.tutorial.car.validations.GeneralValidationErrorsChecker;
 
 /**
  * Class that represents the service of Cars, in charge of doing the operations involving cars, 
@@ -71,19 +72,6 @@ public class CarService {
 		LOGGER.info("All the cars from country '" + country + "' retrieved from the database.");
 		
 		return carsForCountry;
-	}
-	
-	/**
-	 * Retrieves all cars from a certain brand
-	 * @param brand Name of the brand
-	 * @return List of cars
-	 */
-	public List<Car> getAllCarsFromBrand(String brand){
-		LOGGER.info("Getting all the cars from the brand '" + brand + "'.");
-		List<Car> carsFromBrand = jpaImpl.getAllCarsFromBrand(brand);
-		LOGGER.info("All the cars from brand '" + brand + "' retrieved from the database.");
-		
-		return carsFromBrand;
 	}
 	
 	/**
@@ -208,26 +196,24 @@ public class CarService {
 	}
 	
 	/**
-	 * Method that checks if a brand exists
-	 * @param brand Given brand
+	 * Method that checks a brand in the request
+	 * @param brand Given brand or <p>
+	 * <ul>
+	 * <li> {@link BadRequestException} if the brand was not in the request message or it was, but in an incorrect format
+	 * <li> {@link DataNotFoundException} if the brand does not exist 
+	 * </ul>
 	 */
 	private void checkBrand(Brand brand) {
 		LOGGER.info("Checking the brand: " + brand);
 		String message = null;
 		if (brand == null) {
 			message = "The brand is a required field";
-		}else {
-			try {
-				brand.setBrand(brand.getBrand().toLowerCase());
-				brandService.getBrand(brand.getBrand());
-			} catch (DataNotFoundException e) {
-				message = "The brand must exist";
-			}
-		}
-		if (message != null) {
-			LOGGER.info("Error checking the brand: " + message);
 			throw new BadRequestException(message);
 		}
+		GeneralValidationErrorsChecker.checkValidationErrors(brand, "get");
+		
+		brandService.getBrand(brand.getId());
+		
 		LOGGER.info("Checking of the brand " + brand + " finished");
 	}
 	
