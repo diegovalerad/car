@@ -6,6 +6,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -78,6 +79,11 @@ public class CountryResource {
 					.build();
 	}
 	
+	/**
+	 * Tries to add a country
+	 * @param country Country to be added
+	 * @return Response with the added country
+	 */
 	@POST
 	@Operation(summary = "Tries to add a country",
 				description = "Adds a country to the system",
@@ -119,6 +125,11 @@ public class CountryResource {
 					.build();
 	}
 	
+	/**
+	 * Tries to get a country
+	 * @param countryId ID of the country
+	 * @return Response with the country
+	 */
 	@GET
 	@Path("/{countryId}")
 	@Operation(summary = "Tries to get a country",
@@ -163,6 +174,12 @@ public class CountryResource {
 				.build();
 	}
 	
+	/**
+	 * Tries to update a country
+	 * @param countryId ID of the country
+	 * @param country Updated information
+	 * @return Response with the updated country
+	 */
 	@PUT
 	@Path("/{countryId}")
 	@Operation(summary = "Tries to update a country",
@@ -192,6 +209,13 @@ public class CountryResource {
 								@Parameter(name = "country", description = "Country with the updated information")
 									Country country) {
 		LOGGER.info("Trying to update the country with ID: " + countryId + " with the new information: " + country);
+		
+		if (countryId <= 0) {
+			String message = "The ID of the country cannot be 0 or less";
+			LOGGER.info(message);
+			throw new BadRequestException(message);
+		}
+		
 		GeneralValidationErrorsChecker.checkValidationErrors(country, "update");
 		LOGGER.info("Validations passed");
 		
@@ -204,6 +228,52 @@ public class CountryResource {
 		
 		return Response.ok()
 				.entity(updatedCountry)
+				.build();
+	}
+	
+	/**
+	 * Tries to remove a country
+	 * @param countryId ID of the country
+	 * @return Response with the removed country
+	 */
+	@DELETE
+	@Path("/{countryId}")
+	@Operation(summary = "Tries to remove a country",
+				description = "Removes a country from the system",
+				responses = {
+					@ApiResponse(
+							description = "Country removed",
+							responseCode = "200",
+							content = @Content(
+									array = @ArraySchema(
+											schema = @Schema(implementation = Country.class)
+									)
+				            )
+					),
+					@ApiResponse(
+							description = "Country not found",
+							responseCode = "404"
+					),
+					@ApiResponse(
+							description = "Trying to remove a country while other objects are using it, or a country with a non-valid ID",
+							responseCode = "400"
+					)
+				}
+	)
+	public Response removeCountry(@Parameter(name = "countryId", description = "ID of the country that should be removed")
+									@PathParam("countryId") long countryId) {
+		LOGGER.info("Trying to remove a country with ID: " + countryId);
+		if (countryId <= 0) {
+			String message = "The ID of the country cannot be 0 or less";
+			LOGGER.info(message);
+			throw new BadRequestException(message);
+		}
+		
+		Country removedCountry = countryService.removeCountry(countryId);
+		LOGGER.info("Country with ID '" + countryId + "' removed");
+		
+		return Response.ok()
+				.entity(removedCountry)
 				.build();
 	}
 	
