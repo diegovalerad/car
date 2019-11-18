@@ -48,6 +48,12 @@ public class Country implements Serializable {
 	public Country() {
 
 	}
+	
+	public Country(long id, String countryName, String countryAbbreviation) {
+		this.id = id;
+		this.countryName = countryName;
+		this.countryAbbreviation = countryAbbreviation;
+	}
 
 	public long getId() {
 		return id;
@@ -94,7 +100,7 @@ public class Country implements Serializable {
 	
 	@Override
 	public String toString() {
-		return "Country [countryName: " + countryName + ", countryAbbreviation: " + countryAbbreviation + ", "
+		return "Country [id: " + id + ", countryName: " + countryName + ", countryAbbreviation: " + countryAbbreviation + ", "
 				+ "links: " + links + "]";
 	}
 

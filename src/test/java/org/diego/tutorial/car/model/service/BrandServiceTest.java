@@ -43,8 +43,7 @@ public class BrandServiceTest {
 		brandId = 1L;
 		brandName = "brand";
 		company = "company";
-		brand = new Brand(brandName, company);
-		brand.setId(brandId);
+		brand = new Brand(brandId, brandName, company);
 		brands = new ArrayList<Brand>();
 		brands.add(brand);
 	}

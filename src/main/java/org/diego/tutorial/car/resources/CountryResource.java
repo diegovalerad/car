@@ -101,6 +101,10 @@ public class CountryResource {
 							description = "Trying to add a country with invalid fields",
 							responseCode = "400"
 					),
+					@ApiResponse(
+							description = "Trying to add a country that already exist",
+							responseCode = "409"
+					)
 				}
 	)
 	public Response addCountry(@Parameter(name = "country", description = "country that should be added", required = true)

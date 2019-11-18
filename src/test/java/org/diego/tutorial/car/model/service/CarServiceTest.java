@@ -14,6 +14,7 @@ import org.diego.tutorial.car.exceptions.BadRequestException;
 import org.diego.tutorial.car.exceptions.DataNotFoundException;
 import org.diego.tutorial.car.model.Brand;
 import org.diego.tutorial.car.model.Car;
+import org.diego.tutorial.car.model.Country;
 import org.diego.tutorial.car.validations.GeneralValidator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,6 +39,8 @@ public class CarServiceTest {
 	private JPAImplCar jpaImpl;
 	@Mock
 	private BrandService brandService;
+	@Mock
+	private CountryService countryService;
 	
 	private void mockValidationErrors() throws Exception {
 		List<String> validationErrors = new ArrayList<String>();
@@ -80,8 +83,8 @@ public class CarServiceTest {
 	@Test
 	public void testGetAllCarsFromCountry() {
 		List<Car> cars = new ArrayList<Car>();
-		String countrySpain = "spain";
-		String countryFrance = "france";
+		Country countrySpain = new Country(1L, "spain", "esp");
+		Country countryFrance = new Country(2L, "france", "fr");
 		
 		Car carSpain = Mockito.mock(Car.class);
 		carSpain.setCountry(countrySpain);
@@ -94,10 +97,10 @@ public class CarServiceTest {
 		List<Car> carsExpect = new ArrayList<Car>();
 		carsExpect.add(carSpain);
 		
-		Mockito.when(jpaImpl.getAllCarsFromCountry(countrySpain))
+		Mockito.when(jpaImpl.getAllCarsFromCountry(countrySpain.getCountryName()))
 				.thenReturn(carsExpect);
 		
-		assertEquals(carsExpect, carService.getAllCarsFromCountry(countrySpain));
+		assertEquals(carsExpect, carService.getAllCarsFromCountry(countrySpain.getCountryName()));
 	}
 	
 	@Test
@@ -105,6 +108,8 @@ public class CarServiceTest {
 		Car car = new Car();
 		Brand brand = Mockito.mock(Brand.class);
 		car.setBrand(brand);
+		Country country = Mockito.mock(Country.class);
+		car.setCountry(country);
 		
 		mockValidationErrors();
 		
@@ -156,6 +161,8 @@ public class CarServiceTest {
 		car.setId(id);
 		Brand brand = Mockito.mock(Brand.class);
 		car.setBrand(brand);
+		Country country = Mockito.mock(Country.class);
+		car.setCountry(country);
 		
 		Mockito.when(jpaImpl.get(Car.class, id))
 				.thenReturn(car);

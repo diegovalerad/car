@@ -542,6 +542,11 @@
 								"exec": [
 									"pm.test(\"Status code is 400\", function () {",
 									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.sendRequest({",
+									"    url: pm.variables.get(\"url\") + \"/cars/\" + pm.globals.get(\"brandIdRemoveExistingBrandWithCarsCar\"),",
+									"    method: 'DELETE'",
 									"});"
 								],
 								"type": "text/javascript"
@@ -561,7 +566,11 @@
 									"        raw: JSON.stringify({ brand: 'brandRemoveExistingBrandWithCars', company: 'company' })\r",
 									"    }\r",
 									"}, function (err, res) {\r",
-									"    pm.globals.set(\"brandIdRemoveExistingBrandWithCars\", res.json().id);\r",
+									"    if (res.status === \"Conflict\"){\r",
+									"        pm.globals.set(\"brandIdRemoveExistingBrandWithCars\", \"1\");\r",
+									"    }else{\r",
+									"        pm.globals.set(\"brandIdRemoveExistingBrandWithCars\", res.json().id);\r",
+									"    }\r",
 									"    \r",
 									"    pm.sendRequest({\r",
 									"        url: pm.variables.get(\"url\") + \"/cars/\",\r",
@@ -571,15 +580,17 @@
 									"            mode: 'raw',\r",
 									"            raw: JSON.stringify(\r",
 									"                {\r",
-									"                \t\"country\": \"countryTestPost\",\r",
+									"                \t\"country\": {\r",
+									"                \t\t\"id\": \"1\"\r",
+									"                \t},\r",
 									"                \t\"brand\": {\r",
-									"                \t    \"id\": pm.globals.get(\"brandIdRemoveExistingBrandWithCars\"),\r",
-									"                \t\t\"brand\": \"brandremoveexistingbrandwithcars\",\r",
-									"                \t\t\"company\": \"companyTest\"  \r",
+									"                \t\t\"id\": pm.globals.get(\"brandIdRemoveExistingBrandWithCars\")\r",
 									"                \t}\r",
-									"                }    \r",
+									"                }  \r",
 									"            )\r",
 									"        }\r",
+									"    }, function (err, res){\r",
+									"        pm.globals.set(\"brandIdRemoveExistingBrandWithCarsCar\", res.json().id);\r",
 									"    })\r",
 									"});"
 								],
@@ -746,43 +757,6 @@
 					"response": []
 				},
 				{
-					"name": "Get cars from non existing country",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"id": "60441e2b-73a5-4986-a150-ccdd454b9163",
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/cars?country={{carCountry}}{{carCountry}}",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"cars"
-							],
-							"query": [
-								{
-									"key": "country",
-									"value": "{{carCountry}}{{carCountry}}"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Create new car",
 					"event": [
 						{
@@ -826,7 +800,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"country\": \"countryTestPost\",\n\t\"brand\": {\n\t\t\"id\": \"1\",\n\t\t\"brand\": \"carsBrandTest\",\n\t\t\"company\": \"carsCompanyTest\"  \n\t}\n}"
+							"raw": "{\n\t\"country\": {\n\t\t\"id\": \"1\"\n\t},\n\t\"brand\": {\n\t\t\"id\": \"1\"\n\t}\n}"
 						},
 						"url": {
 							"raw": "{{url}}/cars",
@@ -873,12 +847,12 @@
 									"            mode: 'raw',",
 									"            raw: JSON.stringify(",
 									"                {",
-									"                  \"country\": \"countryTestGetExistingCar\",",
-									"                  \"brand\": {",
-									"            \t\t\"brandIdCreateNewBrand\": \"1\",",
-									"            \t\t\"brand\": \"carsBrandTest\",",
-									"            \t\t\"company\": \"carsCompanyTest\"  ",
-									"            \t    }",
+									"                \t\"country\": {",
+									"                \t\t\"id\": \"1\"",
+									"                \t},",
+									"                \t\"brand\": {",
+									"                \t\t\"id\": \"1\"",
+									"                \t}",
 									"                }",
 									"            )",
 									"        }",
@@ -935,12 +909,12 @@
 									"            mode: 'raw',\r",
 									"            raw: JSON.stringify(\r",
 									"                {\r",
-									"                  \"country\": \"countryTestGetNonExistingCar\",\r",
-									"                  \"brand\": {\r",
-									"                      \"id\": \"1\",\r",
-									"                  \t\"brand\": \"carsBrandtest\",\r",
-									"                    \"company\": \"carsCompanyTest\"  \r",
-									"                  }\r",
+									"                \t\"country\": {\r",
+									"                \t\t\"id\": \"1\"\r",
+									"                \t},\r",
+									"                \t\"brand\": {\r",
+									"                \t\t\"id\": \"1\"\r",
+									"                \t}\r",
 									"                }\r",
 									"            )\r",
 									"        }\r",
@@ -948,10 +922,8 @@
 									"        pm.globals.set(\"carIdGetNonExistingCar\", res.json().id);\r",
 									"    \r",
 									"        pm.sendRequest({\r",
-									"        url: pm.variables.get(\"url\") + \"/cars/\" + pm.globals.get(\"carIdGetNonExistingCar\"),\r",
-									"        method: 'DELETE'\r",
-									"        }, function (err, res) {\r",
-									"            \r",
+									"            url: pm.variables.get(\"url\") + \"/cars/\" + pm.globals.get(\"carIdGetNonExistingCar\"),\r",
+									"            method: 'DELETE'\r",
 									"        });\r",
 									"    });"
 								],
@@ -1033,12 +1005,12 @@
 									"            mode: 'raw',",
 									"            raw: JSON.stringify(",
 									"                {",
-									"                  \"country\": \"countryTestUpdateExistingCar\",",
-									"                  \"brand\": {",
-									"                      \"id\": \"1\",",
-									"                  \t\"brand\": \"carsBrandtest\",",
-									"                    \"company\": \"carsCompanyTest\"  ",
-									"                  }",
+									"                \t\"country\": {",
+									"                \t\t\"id\": \"1\"",
+									"                \t},",
+									"                \t\"brand\": {",
+									"                \t\t\"id\": \"1\"",
+									"                \t}",
 									"                }",
 									"            )",
 									"        }",
@@ -1079,7 +1051,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"country\": \"countryTestUpdateExistingCarUpdated\",\n    \"brand\": {\n    \t\"id\": \"1\",\n        \"brand\": \"carsBrrrrandtest\",\n        \"company\": \"carsCompanyTest\"\n    }\n}"
+							"raw": "{\r\n\t\"country\": {\r\n    \t\"id\": \"1\"\r\n    },\r\n\t\"brand\": {\r\n    \t\"id\": \"1\"\r\n\t}\r\n}"
 						},
 						"url": {
 							"raw": "{{url}}/cars/{{carIdUpdateExistingCar}}",
@@ -1122,12 +1094,12 @@
 									"            mode: 'raw',\r",
 									"            raw: JSON.stringify(\r",
 									"                {\r",
-									"                  \"country\": \"countryTestUpdateNonExistingCar\",\r",
-									"                  \"brand\": {\r",
-									"                      \"id\": \"1\",\r",
-									"                  \t\"brand\": \"carsBrandtest\",\r",
-									"                    \"company\": \"carsCompanyTest\"  \r",
-									"                  }\r",
+									"                \t\"country\": {\r",
+									"                    \t\"id\": \"1\"\r",
+									"                    },\r",
+									"                \t\"brand\": {\r",
+									"                    \t\"id\": \"1\"\r",
+									"                \t}\r",
 									"                }\r",
 									"            )\r",
 									"        }\r",
@@ -1135,10 +1107,8 @@
 									"        pm.globals.set(\"carIdUpdateNonExistingCar\", res.json().id);\r",
 									"    \r",
 									"        pm.sendRequest({\r",
-									"        url: pm.variables.get(\"url\") + \"/cars/\" + pm.globals.get(\"carIdUpdateNonExistingCar\"),\r",
-									"        method: 'DELETE'\r",
-									"        }, function (err, res) {\r",
-									"            \r",
+									"            url: pm.variables.get(\"url\") + \"/cars/\" + pm.globals.get(\"carIdUpdateNonExistingCar\"),\r",
+									"            method: 'DELETE'\r",
 									"        });\r",
 									"    });"
 								],
@@ -1157,7 +1127,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"country\": \"countryTestUpdateNonExistingCarUpdated\",\n    \"brand\": {\n    \t\"id\": \"1\",\n        \"brand\": \"carsBrandtest\",\n        \"company\": \"carsCompanyTest\"\n    }\n}"
+							"raw": "{\r\n\t\"country\": {\r\n    \t\"id\": \"1\"\r\n    },\r\n\t\"brand\": {\r\n    \t\"id\": \"1\"\r\n\t}\r\n}"
 						},
 						"url": {
 							"raw": "{{url}}/cars/{{carIdUpdateNonExistingCar}}",
@@ -1173,55 +1143,47 @@
 					"response": []
 				},
 				{
-					"name": "Update existing car without all required fields",
+					"name": "Update car without all fields",
 					"event": [
 						{
-							"listen": "prerequest",
+							"listen": "test",
 							"script": {
-								"id": "4439c061-0ccf-4ffb-8da8-549fb001f32f",
+								"id": "072a84f7-557b-4fcf-8bf0-fa7ab6335b05",
 								"exec": [
-									"pm.sendRequest({",
-									"        url: pm.variables.get(\"url\") + \"/cars/\",",
-									"        method: 'POST',",
-									"        header: 'Content-Type:application/json',",
-									"        body: {",
-									"            mode: 'raw',",
-									"            raw: JSON.stringify(",
-									"                {",
-									"                  \"country\": \"countryTestUpdateExistingCarWithoutAllFields\",",
-									"                  \"brand\": {",
-									"                      \"id\": \"1\",",
-									"                  \t\"brand\": \"carsBrandtest\",",
-									"                    \"company\": \"carsCompanyTest\"  ",
-									"                  }",
-									"                }",
-									"            )",
-									"        }",
-									"    }, function (err, res) {",
-									"        pm.globals.set(\"carIdUpdateExistingCarWithoutAllFields\", res.json().id);",
-									"    }",
-									");"
+									"pm.test(\"Not found, Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});"
 								],
 								"type": "text/javascript"
 							}
 						},
 						{
-							"listen": "test",
+							"listen": "prerequest",
 							"script": {
-								"id": "fd42428c-4ff9-4add-b8d6-054a5e687f33",
+								"id": "12246e95-f3cb-478a-bd2c-b482dd15d835",
 								"exec": [
-									"pm.test(\"Status code is 400\", function () {",
-									"    pm.response.to.have.status(400);",
-									"});",
-									"",
-									"pm.test(\"Body matches string\", function () {",
-									"    pm.expect(pm.response.text()).to.include(\"Request to update car with non valid fields\");",
-									"});",
-									"",
-									"pm.sendRequest({",
-									"    url: pm.variables.get(\"url\") + \"/cars/\" + pm.globals.get(\"carIdUpdateExistingCarWithoutAllFields\"),",
-									"    method: 'DELETE'",
-									"});"
+									"pm.sendRequest({\r",
+									"        url: pm.variables.get(\"url\") + \"/cars/\",\r",
+									"        method: 'POST',\r",
+									"        header: 'Content-Type:application/json',\r",
+									"        body: {\r",
+									"            mode: 'raw',\r",
+									"            raw: JSON.stringify(\r",
+									"                {\r",
+									"                \t\"country\": {\r",
+									"                    \t\"id\": \"1\"\r",
+									"                    },\r",
+									"                \t\"brand\": {\r",
+									"                    \t\"id\": \"1\"\r",
+									"                \t}\r",
+									"                }\r",
+									"            )\r",
+									"        }\r",
+									"    }, function (err, res) {\r",
+									"        pm.globals.set(\"carIdUpdateCarWithoutAllFields\", res.json().id);\r",
+									"    \r",
+									"        \r",
+									"    });"
 								],
 								"type": "text/javascript"
 							}
@@ -1238,16 +1200,16 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"country\": \"countryUpdated\"\r\n}"
+							"raw": "{\r\n\t\"country\": {\r\n    \t\"id\": \"1\"\r\n    }\r\n}"
 						},
 						"url": {
-							"raw": "{{url}}/cars/{{carIdUpdateExistingCarWithoutAllFields}}",
+							"raw": "{{url}}/cars/{{carIdUpdateCarWithoutAllFields}}",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"cars",
-								"{{carIdUpdateExistingCarWithoutAllFields}}"
+								"{{carIdUpdateCarWithoutAllFields}}"
 							]
 						}
 					},
@@ -1290,7 +1252,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"country\": \"countryTestUpdateExistingCarUpdated\",\n    \"brand\": {\n    \t\"id\": \"1\",\n        \"brand\": \"carsBrandtest\",\n        \"company\": \"carsCompanyTest\"\n    }\n}"
+							"raw": "{\r\n\t\"country\": {\r\n    \t\"id\": \"1\"\r\n    },\r\n\t\"brand\": {\r\n    \t\"id\": \"1\"\r\n\t}\r\n}"
 						},
 						"url": {
 							"raw": "{{url}}/cars/0",
@@ -1338,12 +1300,12 @@
 									"            mode: 'raw',",
 									"            raw: JSON.stringify(",
 									"                {",
-									"                  \"country\": \"countryTestRemoveExistingCar\",",
-									"                  \"brand\": {",
-									"                      \"id\": \"1\",",
-									"                  \t\"brand\": \"carsBrandtest\",",
-									"                    \"company\": \"carsCompanyTest\"  ",
-									"                  }",
+									"                \t\"country\": {",
+									"                    \t\"id\": \"1\"",
+									"                    },",
+									"                \t\"brand\": {",
+									"                    \t\"id\": \"1\"",
+									"                \t}",
 									"                }",
 									"            )",
 									"        }",
@@ -1400,12 +1362,12 @@
 									"            mode: 'raw',\r",
 									"            raw: JSON.stringify(\r",
 									"                {\r",
-									"                  \"country\": \"countryTestRemoveNonExistingCar\",\r",
-									"                  \"brand\": {\r",
-									"                      \"id\": \"1\",\r",
-									"                  \t\"brand\": \"carsBrandtest\",\r",
-									"                    \"company\": \"carsCompanyTest\"  \r",
-									"                  }\r",
+									"                \t\"country\": {\r",
+									"                    \t\"id\": \"1\"\r",
+									"                    },\r",
+									"                \t\"brand\": {\r",
+									"                    \t\"id\": \"1\"\r",
+									"                \t}\r",
 									"                }\r",
 									"            )\r",
 									"        }\r",
@@ -1413,10 +1375,8 @@
 									"        pm.globals.set(\"carIdRemoveNonExistingCar\", res.json().id);\r",
 									"    \r",
 									"        pm.sendRequest({\r",
-									"        url: pm.variables.get(\"url\") + \"/cars/\" + pm.globals.get(\"carIdRemoveNonExistingCar\"),\r",
-									"        method: 'DELETE'\r",
-									"        }, function (err, res) {\r",
-									"            \r",
+									"            url: pm.variables.get(\"url\") + \"/cars/\" + pm.globals.get(\"carIdRemoveNonExistingCar\"),\r",
+									"            method: 'DELETE'\r",
 									"        });\r",
 									"    });"
 								],
@@ -1490,7 +1450,71 @@
 						"id": "af50a477-90b8-4ec5-bdea-9b5d52af1240",
 						"type": "text/javascript",
 						"exec": [
-							""
+							"pm.sendRequest({",
+							"    url: pm.variables.get(\"url\") + \"/brands/\" + \"{{carsBrandId}}\",",
+							"    method: 'GET',",
+							"    header: 'Content-Type:application/json',",
+							"}, function (err, res) {",
+							"    if (res.code === 200){",
+							"        pm.globals.set(\"carsBrandId\", res.json().id);",
+							"        pm.globals.set(\"carsBrandBrand\", res.json().brand);",
+							"        pm.globals.set(\"carsBrandCompany\", res.json().company);",
+							"    }else{",
+							"        pm.sendRequest({",
+							"        url: pm.variables.get(\"url\") + \"/brands/\",",
+							"        method: 'POST',",
+							"        header: 'Content-Type:application/json',",
+							"        body: {",
+							"            mode: 'raw',",
+							"            raw: JSON.stringify(",
+							"                {",
+							"                \t\"brand\": \"carsBrandBrand\",",
+							"                \t\"company\": \"carsBrandCompany\"",
+							"                }    ",
+							"            )",
+							"        }",
+							"        }, function (err, res){",
+							"            pm.globals.set(\"carsBrandId\", res.json().id);",
+							"            pm.globals.set(\"carsBrandBrand\", res.json().brand);",
+							"            pm.globals.set(\"carsBrandCompany\", res.json().company);",
+							"        });",
+							"    }",
+							"});",
+							"",
+							"",
+							"",
+							"",
+							"",
+							"pm.sendRequest({",
+							"    url: pm.variables.get(\"url\") + \"/countries/\" + \"{{carsCountryId}}\",",
+							"    method: 'GET',",
+							"    header: 'Content-Type:application/json',",
+							"}, function (err, res) {",
+							"    if (res.code === 200){",
+							"        pm.globals.set(\"carsCountryId\", res.json().id);",
+							"        pm.globals.set(\"carsCountryName\", res.json().countryName);",
+							"        pm.globals.set(\"carsCountryAbbreviation\", res.json().countryAbbreviation);",
+							"    }else{",
+							"        pm.sendRequest({",
+							"        url: pm.variables.get(\"url\") + \"/countries/\",",
+							"        method: 'POST',",
+							"        header: 'Content-Type:application/json',",
+							"        body: {",
+							"            mode: 'raw',",
+							"            raw: JSON.stringify(",
+							"                {",
+							"                \t\"countryName\": \"carsCountryName\",",
+							"                \t\"countryAbbreviation\": \"carsCountryAbbreviation\"",
+							"                }    ",
+							"            )",
+							"        }",
+							"        }, function (err, res){",
+							"            pm.globals.set(\"carsCountryId\", res.json().id);",
+							"            pm.globals.set(\"carsCountryName\", res.json().countryName);",
+							"            pm.globals.set(\"carsCountryAbbreviation\", res.json().countryAbbreviation);",
+							"        });",
+							"    }",
+							"});"
 						]
 					}
 				},
@@ -1503,6 +1527,823 @@
 							""
 						]
 					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Country",
+			"item": [
+				{
+					"name": "Get all countries",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "166b8108-5c29-4f64-b33f-b5fd3d6ba251",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/countries/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"countries",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create country",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1f2a3737-6300-43aa-b6cc-fca1eaf0d77e",
+								"exec": [
+									"pm.test(\"Created, Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"var jsonData = pm.response.json();",
+									"",
+									"pm.sendRequest({",
+									"    url: pm.variables.get(\"url\") + \"/countries/\" + jsonData.id,",
+									"    method: 'DELETE'",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"countryName\" : \"countryNameCreateCountry\",\n\t\"countryAbbreviation\": \"countryAbbreviationCreateCountry\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/countries/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"countries",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create country invalid fields",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1f2a3737-6300-43aa-b6cc-fca1eaf0d77e",
+								"exec": [
+									"pm.test(\"Created, Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"countryName\" : \"countryNameCreateCountry\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/countries/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"countries",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create country already exists",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1f2a3737-6300-43aa-b6cc-fca1eaf0d77e",
+								"exec": [
+									"pm.test(\"Created, Status code is 409\", function () {",
+									"    pm.response.to.have.status(409);",
+									"});",
+									"",
+									"pm.sendRequest({",
+									"    url: pm.variables.get(\"url\") + \"/countries/\" + pm.globals.get(\"countryIdCreateExistingCountry\"),",
+									"    method: 'DELETE'",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "ad955f6e-5748-47e8-9973-7bf8689f839c",
+								"exec": [
+									"pm.sendRequest({",
+									"    url: pm.variables.get(\"url\") + \"/countries/\",",
+									"    method: 'POST',",
+									"    header: 'Content-Type:application/json',",
+									"    body: {",
+									"        mode: 'raw',",
+									"        raw: JSON.stringify(",
+									"            {",
+									"                \"countryName\" : \"countryNameCreateCountry\",",
+									"\t            \"countryAbbreviation\": \"countryAbbreviationCreateCountry\"",
+									"            }    ",
+									"        )",
+									"    }",
+									"}, function (err, res) {",
+									"        pm.globals.set(\"countryIdCreateExistingCountry\", res.json().id);",
+									"}",
+									"",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"countryName\" : \"countryNameCreateCountry\",\n\t\"countryAbbreviation\": \"countryAbbreviationCreateCountry\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/countries/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"countries",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get existing country",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "7c19e7b1-a952-432b-a9db-c21ad85092c7",
+								"exec": [
+									"pm.sendRequest({",
+									"    url: pm.variables.get(\"url\") + \"/countries/\",",
+									"    method: 'POST',",
+									"    header: 'Content-Type:application/json',",
+									"    body: {",
+									"        mode: 'raw',",
+									"        raw: JSON.stringify(",
+									"            {",
+									"                \"countryName\" : \"countryName\",",
+									"\t            \"countryAbbreviation\": \"countryAbbreviation\"",
+									"            }    ",
+									"        )",
+									"    }",
+									"}, function (err, res) {",
+									"        pm.globals.set(\"countryIdGetExistingCountry\", res.json().id);",
+									"}",
+									"",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "193295bd-8cb1-4eb1-bba6-cdbd2ba4fe99",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.sendRequest({",
+									"    url: pm.variables.get(\"url\") + \"/countries/\" + pm.globals.get(\"countryIdGetExistingCountry\"),",
+									"    method: 'DELETE'",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/countries/{{countryIdGetExistingCountry}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"countries",
+								"{{countryIdGetExistingCountry}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get non existing country",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "7c19e7b1-a952-432b-a9db-c21ad85092c7",
+								"exec": [
+									"pm.sendRequest({",
+									"    url: pm.variables.get(\"url\") + \"/countries/\",",
+									"    method: 'POST',",
+									"    header: 'Content-Type:application/json',",
+									"    body: {",
+									"        mode: 'raw',",
+									"        raw: JSON.stringify(",
+									"            {",
+									"                \"countryName\" : \"countryName\",",
+									"\t            \"countryAbbreviation\": \"countryAbbreviation\"",
+									"            }    ",
+									"        )",
+									"    }",
+									"}, function (err, res) {",
+									"        pm.globals.set(\"countryIdGetNonExistingCountry\", res.json().id);",
+									"        ",
+									"        pm.sendRequest({",
+									"            url: pm.variables.get(\"url\") + \"/countries/\" + pm.globals.get(\"countryIdGetNonExistingCountry\"),",
+									"            method: 'DELETE'",
+									"        });",
+									"}",
+									"",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "193295bd-8cb1-4eb1-bba6-cdbd2ba4fe99",
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/countries/{{countryIdGetNonExistingCountry}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"countries",
+								"{{countryIdGetNonExistingCountry}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get non valid country",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "7c19e7b1-a952-432b-a9db-c21ad85092c7",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "193295bd-8cb1-4eb1-bba6-cdbd2ba4fe99",
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/countries/0",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"countries",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update existing country",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "4439c061-0ccf-4ffb-8da8-549fb001f32f",
+								"exec": [
+									"pm.sendRequest({",
+									"        url: pm.variables.get(\"url\") + \"/countries/\",",
+									"        method: 'POST',",
+									"        header: 'Content-Type:application/json',",
+									"        body: {",
+									"            mode: 'raw',",
+									"            raw: JSON.stringify(",
+									"                {",
+									"                \t\"countryName\" : \"countryName\",",
+									"                \t\"countryAbbreviation\": \"countryAbbreviation\"",
+									"                }",
+									"            )",
+									"        }",
+									"    }, function (err, res) {",
+									"        pm.globals.set(\"countryIdUpdateExistingCountry\", res.json().id);",
+									"    }",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "fd42428c-4ff9-4add-b8d6-054a5e687f33",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.sendRequest({",
+									"    url: pm.variables.get(\"url\") + \"/countries/\" + pm.globals.get(\"countryIdUpdateExistingCountry\"),",
+									"    method: 'DELETE'",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"countryName\" : \"countryNameUpdated\",\n\t\"countryAbbreviation\": \"countryAbbreviationUpdated\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/countries/{{countryIdUpdateExistingCountry}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"countries",
+								"{{countryIdUpdateExistingCountry}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update non existing country",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "4439c061-0ccf-4ffb-8da8-549fb001f32f",
+								"exec": [
+									"pm.sendRequest({",
+									"        url: pm.variables.get(\"url\") + \"/countries/\",",
+									"        method: 'POST',",
+									"        header: 'Content-Type:application/json',",
+									"        body: {",
+									"            mode: 'raw',",
+									"            raw: JSON.stringify(",
+									"                {",
+									"                \t\"countryName\" : \"countryName\",",
+									"                \t\"countryAbbreviation\": \"countryAbbreviation\"",
+									"                }",
+									"            )",
+									"        }",
+									"    }, function (err, res) {",
+									"        pm.globals.set(\"countryIdUpdateNonExistingCountry\", res.json().id);",
+									"        ",
+									"        pm.sendRequest({",
+									"            url: pm.variables.get(\"url\") + \"/countries/\" + pm.globals.get(\"countryIdUpdateNonExistingCountry\"),",
+									"            method: 'DELETE'",
+									"        });",
+									"    }",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "fd42428c-4ff9-4add-b8d6-054a5e687f33",
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"pm.sendRequest({",
+									"    url: pm.variables.get(\"url\") + \"/countries/\" + pm.globals.get(\"countryIdUpdateNonExistingCountry\"),",
+									"    method: 'DELETE'",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"countryName\" : \"countryNameUpdated\",\n\t\"countryAbbreviation\": \"countryAbbreviationUpdated\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/countries/{{countryIdUpdateNonExistingCountry}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"countries",
+								"{{countryIdUpdateNonExistingCountry}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update non valid id country",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "4439c061-0ccf-4ffb-8da8-549fb001f32f",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "fd42428c-4ff9-4add-b8d6-054a5e687f33",
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"countryName\" : \"countryNameUpdated\",\n\t\"countryAbbreviation\": \"countryAbbreviationUpdated\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/countries/0",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"countries",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update country with nonvalid fields",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "4439c061-0ccf-4ffb-8da8-549fb001f32f",
+								"exec": [
+									"pm.sendRequest({",
+									"        url: pm.variables.get(\"url\") + \"/countries/\",",
+									"        method: 'POST',",
+									"        header: 'Content-Type:application/json',",
+									"        body: {",
+									"            mode: 'raw',",
+									"            raw: JSON.stringify(",
+									"                {",
+									"                \t\"countryName\" : \"countryName\",",
+									"                \t\"countryAbbreviation\": \"countryAbbreviation\"",
+									"                }",
+									"            )",
+									"        }",
+									"    }, function (err, res) {",
+									"        pm.globals.set(\"countryIdUpdateNonValidCountry\", res.json().id);",
+									"    }",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "fd42428c-4ff9-4add-b8d6-054a5e687f33",
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.sendRequest({",
+									"    url: pm.variables.get(\"url\") + \"/countries/\" + pm.globals.get(\"countryIdUpdateNonValidCountry\"),",
+									"    method: 'DELETE'",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"countryName\" : \"countryNameUpdated\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/countries/{{countryIdUpdateNonValidCountry}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"countries",
+								"{{countryIdUpdateNonValidCountry}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove existing country",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1f05691c-87e5-4e85-9af5-b0dc6a034b26",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.sendRequest({",
+									"    url: pm.variables.get(\"url\") + \"/countries/\" + pm.globals.get(\"carIdRemoveExistingCountry\"),",
+									"    method: 'DELETE'",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "8bb97c9e-b599-4081-9f21-7743f7208edb",
+								"exec": [
+									"pm.sendRequest({",
+									"        url: pm.variables.get(\"url\") + \"/countries/\",",
+									"        method: 'POST',",
+									"        header: 'Content-Type:application/json',",
+									"        body: {",
+									"            mode: 'raw',",
+									"            raw: JSON.stringify(",
+									"                {",
+									"                \t\"countryName\" : \"countryName\",",
+									"                \t\"countryAbbreviation\": \"countryAbbreviation\"",
+									"                }",
+									"            )",
+									"        }",
+									"    }, function (err, res) {",
+									"        pm.globals.set(\"carIdRemoveExistingCountry\", res.json().id);",
+									"    }",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/countries/{{carIdRemoveExistingCountry}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"countries",
+								"{{carIdRemoveExistingCountry}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove non existing country",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1f05691c-87e5-4e85-9af5-b0dc6a034b26",
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "8bb97c9e-b599-4081-9f21-7743f7208edb",
+								"exec": [
+									"pm.sendRequest({",
+									"        url: pm.variables.get(\"url\") + \"/countries/\",",
+									"        method: 'POST',",
+									"        header: 'Content-Type:application/json',",
+									"        body: {",
+									"            mode: 'raw',",
+									"            raw: JSON.stringify(",
+									"                {",
+									"                \t\"countryName\" : \"countryName\",",
+									"                \t\"countryAbbreviation\": \"countryAbbreviation\"",
+									"                }",
+									"            )",
+									"        }",
+									"    }, function (err, res) {",
+									"        pm.globals.set(\"carIdRemoveNonExistingCountry\", res.json().id);",
+									"        ",
+									"        pm.sendRequest({",
+									"            url: pm.variables.get(\"url\") + \"/countries/\" + pm.globals.get(\"carIdRemoveNonExistingCountry\"),",
+									"            method: 'DELETE'",
+									"        });",
+									"    }",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/countries/{{carIdRemoveNonExistingCountry}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"countries",
+								"{{carIdRemoveNonExistingCountry}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove country with non valid id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1f05691c-87e5-4e85-9af5-b0dc6a034b26",
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "8bb97c9e-b599-4081-9f21-7743f7208edb",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/countries/0",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"countries",
+								"0"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}
@@ -1532,7 +2373,7 @@
 	],
 	"variable": [
 		{
-			"id": "a5bee70e-cede-4850-8d4f-d8de9e4b019b",
+			"id": "bbef0388-5e2f-44b4-846a-0ad309e7c1f6",
 			"key": "url",
 			"value": "http://localhost:8080/car/webapi",
 			"type": "string"

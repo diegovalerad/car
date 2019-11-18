@@ -15,6 +15,7 @@ import javax.ws.rs.core.UriInfo;
 
 import org.diego.tutorial.car.model.Brand;
 import org.diego.tutorial.car.model.Car;
+import org.diego.tutorial.car.model.Country;
 import org.diego.tutorial.car.model.service.CarService;
 import org.diego.tutorial.car.validations.car.CarValidator;
 import org.junit.Before;
@@ -55,6 +56,7 @@ public class CarResourceTest {
 		Mockito.when(uriInfo.getBaseUriBuilder()).thenReturn(uriBuilder);
         Mockito.when(uriBuilder.path(CarResource.class)).thenReturn(uriBuilder);
         Mockito.when(uriBuilder.path(BrandResource.class)).thenReturn(uriBuilder);
+        Mockito.when(uriBuilder.path(CountryResource.class)).thenReturn(uriBuilder);
         Mockito.when(uriBuilder.path(Mockito.anyString())).thenReturn(uriBuilder);
         Mockito.when(uriBuilder.build()).thenReturn(new URI("www.abc.es"));
         Mockito.when(uriBuilder.toString()).thenReturn("http://www.prueba.es");
@@ -93,7 +95,7 @@ public class CarResourceTest {
 		List<Car> cars = new ArrayList<Car>();
 		Car car = Mockito.mock(Car.class);
 		String country = "spain";
-		car.setCountry(country);
+		car.setCountry(Mockito.mock(Country.class));
 		cars.add(car);
 		
 		Mockito.when(carService.getAllCarsFromCountry(country))
@@ -106,8 +108,10 @@ public class CarResourceTest {
 	public void testAddCar() throws Exception {
         Car car = new Car();
 		car.setId(8L);
-		Brand brand = new Brand("brand", "company");
+		Brand brand = new Brand(1L, "brand", "company");
 		car.setBrand(brand);
+		Country country = new Country(1L, "country", "countryAbbrev");
+		car.setCountry(country);
 		
 		Mockito.when(uriInfo.getAbsolutePathBuilder())
 				.thenReturn(uriBuilder);
@@ -127,8 +131,10 @@ public class CarResourceTest {
 		Car car = new Car();
 		long carId = 8L;
 		car.setId(carId);
-		Brand brand = new Brand("brand", "company");
+		Brand brand = new Brand(1L, "brand", "company");
 		car.setBrand(brand);
+		Country country = new Country(1L, "country", "countryAbbrev");
+		car.setCountry(country);
 		
 		Mockito.when(carService.getCar(carId))
 				.thenReturn(car);
@@ -143,8 +149,10 @@ public class CarResourceTest {
 		Car car = new Car();
 		Long carId = 8L;
 		car.setId(carId);
-		Brand brand = new Brand("brand", "company");
+		Brand brand = new Brand(1L, "brand", "company");
 		car.setBrand(brand);
+		Country country = new Country(1L, "country", "countryAbbrev");
+		car.setCountry(country);
 		
 		Mockito.when(carService.updateCar(car))
 				.thenReturn(car);
@@ -159,8 +167,10 @@ public class CarResourceTest {
 		Car car = new Car();
 		Long carId = 8L;
 		car.setId(carId);
-		Brand brand = new Brand("brand", "company");
+		Brand brand = new Brand(1L, "brand", "company");
 		car.setBrand(brand);
+		Country country = new Country(1L, "country", "countryAbbrev");
+		car.setCountry(country);
 		
 		Mockito.when(carService.softRemoveCar(carId))
 				.thenReturn(car);

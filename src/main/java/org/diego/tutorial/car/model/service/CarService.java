@@ -11,7 +11,7 @@ import org.diego.tutorial.car.exceptions.BadRequestException;
 import org.diego.tutorial.car.exceptions.DataNotFoundException;
 import org.diego.tutorial.car.model.Brand;
 import org.diego.tutorial.car.model.Car;
-import org.diego.tutorial.car.validations.GeneralValidationErrorsChecker;
+import org.diego.tutorial.car.model.Country;
 
 /**
  * Class that represents the service of Cars, in charge of doing the operations involving cars, 
@@ -25,6 +25,8 @@ public class CarService {
 	
 	@EJB
 	private BrandService brandService;
+	@EJB
+	private CountryService countryService;
 	
 	private final static Logger LOGGER = Logger.getLogger(CarService.class);
 	
@@ -110,7 +112,10 @@ public class CarService {
 	 */
 	public Car addCar(Car car) {
 		LOGGER.info("Adding the car: " + car);
-		checkBrand(car.getBrand());
+		Brand brand = checkBrand(car.getBrand());
+		car.setBrand(brand);
+		Country country = checkCountry(car.getCountry());
+		car.setCountry(country);
 		
 		car.setCreatedAt(new Date());
 		car.setLastUpdated(new Date());
@@ -141,6 +146,7 @@ public class CarService {
 		}
 		
 		checkBrand(car.getBrand());
+		checkCountry(car.getCountry());
 		
 		Car carOld = getCar(idCar);
 		car.setCreatedAt(carOld.getCreatedAt());
@@ -223,19 +229,46 @@ public class CarService {
 	 * <li> {@link DataNotFoundException} if the brand does not exist 
 	 * </ul>
 	 * @param brand Given brand
+	 * @return brand from the database
 	 */
-	private void checkBrand(Brand brand) {
+	private Brand checkBrand(Brand brand) {
 		LOGGER.info("Checking the brand: " + brand);
 		String message = null;
 		if (brand == null) {
 			message = "The brand is a required field";
 			throw new BadRequestException(message);
 		}
-		GeneralValidationErrorsChecker.checkValidationErrors(brand, "get");
 		
-		brandService.getBrand(brand.getId());
+		Brand brandRetrieved = brandService.getBrand(brand.getId());
 		
 		LOGGER.info("Checking of the brand " + brand + " finished");
+		return brandRetrieved;
 	}
+	
+	/**
+	 * Method that checks a country in the request. It throws: <p>
+	 * <ul>
+	 * <li> {@link BadRequestException} if the country was not in the request message or it was, but in an incorrect format
+	 * <li> {@link DataNotFoundException} if the country does not exist 
+	 * </ul>
+	 * @param country Given country
+	 */
+	private Country checkCountry(Country country) {
+		LOGGER.info("Checking the country: " + country);
+		if (country == null) {
+			String message = "The country is a required field";
+			throw new BadRequestException(message);
+		}
+		
+		Country countryRetrieved = countryService.getCountry(country.getId());
+		
+		LOGGER.info("Checking of the country '" + country + "' finished");
+		
+		return countryRetrieved;
+	}
+
+	
+	
+	
 	
 }

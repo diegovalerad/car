@@ -48,7 +48,8 @@ public class Brand implements Serializable {
 
 	}
 
-	public Brand(String brand, String company) {
+	public Brand(Long id, String brand, String company) {
+		this.id = id;
 		this.brand = brand;
 		this.company = company;
 	}

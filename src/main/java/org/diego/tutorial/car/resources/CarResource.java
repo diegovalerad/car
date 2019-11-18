@@ -263,34 +263,24 @@ public class CarResource {
 	 * @param car Car that should have the links added.
 	 */
 	private void addAllLinks(Car car) {
-		String urlSelf = getUriForSelf(car.getId());
+		String urlSelf = getUriForObject(CarResource.class, car.getId());
 		car.addLink(urlSelf, "self");
-		String urlBrand = getUriForBrand(car.getBrand().getId());
+		String urlBrand = getUriForObject(BrandResource.class, car.getBrand().getId());
 		car.addLink(urlBrand, "brand");
+		String urlCountry = getUriForObject(CountryResource.class, car.getCountry().getId());
+		car.addLink(urlCountry, "country");
 	}
 	
 	/**
-	 * Method that gets the URI of the car with the given ID.
-	 * @param id Identifier of the car
-	 * @return String that contains the URI of the given car. 
+	 * Method that gets the URI to an object with a given ID. <p>
+	 * @param <T> Generic type
+	 * @param classType Class type of the resource class where the object is in
+	 * @param id Identifier
+	 * @return URI in a String. The format is: /baseUri/ClassType/id
 	 */
-	private String getUriForSelf(long id) {
+	private <T> String getUriForObject(Class<T> classType, long id) {
 		String urlSelf = uriInfo.getBaseUriBuilder()
-				.path(CarResource.class)
-				.path(String.valueOf(id))
-				.build()
-				.toString();
-		return urlSelf;
-	}
-	
-	/**
-	 * Method that gets the URI of the brand of the car with the given brand.
-	 * @param brandName Name of the brand
-	 * @return String that contains the URI of the given brand. 
-	 */
-	private String getUriForBrand(long id) {
-		String urlSelf = uriInfo.getBaseUriBuilder()
-				.path(BrandResource.class)
+				.path(classType)
 				.path(String.valueOf(id))
 				.build()
 				.toString();

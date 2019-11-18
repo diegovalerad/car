@@ -1,5 +1,6 @@
 package org.diego.tutorial.car.databases.jpa;
 
+import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
@@ -9,6 +10,7 @@ import org.diego.tutorial.car.model.Country;
  * Implementation of the JPA persistence with specific
  * country methods
  */
+@Stateless
 public class JPAImplCountry extends JPAImpl {
 
 	/**

@@ -49,9 +49,9 @@ public class Car implements Serializable {
 	@NotNull(message = "Registration date cannot be null")
 	private Date registration;
 	
-	@Column(nullable = false)
 	@NotNull(message = "Country cannot be null", groups = AddAndUpdateChecks.class)
-	private String country;
+	@ManyToOne(optional = false)
+	private Country country;
 	
 	@Column(nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
@@ -72,7 +72,7 @@ public class Car implements Serializable {
 	public Car() {
 	}
 
-	public Car(long id, Brand brand, Date registration, String country, Date createdAt, Date lastUpdated) {
+	public Car(long id, Brand brand, Date registration, Country country, Date createdAt, Date lastUpdated) {
 		this.id = id;
 		this.brand = brand;
 		this.registration = registration;
@@ -106,11 +106,11 @@ public class Car implements Serializable {
 		this.registration = registration;
 	}
 
-	public String getCountry() {
+	public Country getCountry() {
 		return country;
 	}
 
-	public void setCountry(String country) {
+	public void setCountry(Country country) {
 		this.country = country;
 	}
 
