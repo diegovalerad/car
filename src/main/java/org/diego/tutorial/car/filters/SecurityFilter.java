@@ -7,14 +7,13 @@ import java.util.StringTokenizer;
 
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
-import javax.ws.rs.ext.Provider;
 
 /**
  * Class that provides a basic authentication security, through filtering 
  * all requests 
  *
  */
-@Provider
+//@Provider
 public class SecurityFilter implements ContainerRequestFilter {
 
 	private static final String AUTHORIZATION_HEADER_KEY = "Authorization";
@@ -40,6 +39,8 @@ public class SecurityFilter implements ContainerRequestFilter {
 			}
 			// TODO authentication incompleted
 		}
+		
+		
 	}
 
 	/**
