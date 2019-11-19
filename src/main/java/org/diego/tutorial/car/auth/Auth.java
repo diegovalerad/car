@@ -2,7 +2,10 @@ package org.diego.tutorial.car.auth;
 
 import org.apache.log4j.Logger;
 import org.diego.tutorial.car.auth.jwt.JWT;
+import org.diego.tutorial.car.exceptions.UnauthorizedException;
+import org.diego.tutorial.car.model.Roles;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 
 /**
@@ -13,17 +16,31 @@ public class Auth {
 	private final static Logger LOGGER = Logger.getLogger(Auth.class);
 	
 	/**
-	 * Checks if a token is valid
+	 * Checks if a token is valid. If it is valid, then the method of the request is checked;
+	 * only users with admin {@link Roles} can modify information.
 	 * @param token Token to check
-	 * @return Boolean
+	 * @param method Method of the request.
 	 */
-	public static boolean checkToken(String token) {
-		LOGGER.info("Checking the token '" + token + "'");
+	public static void checkToken(String token, String method) {
+		LOGGER.info("Checking the token '" + token + "', method: '" + method + "'");
+		Claims claims = null;
 		try {
-			JWT.decodeJWT(token);
-			return true;
+			claims = JWT.decodeJWT(token);
 		} catch (JwtException e) {
-			return false;
+			String message = "The request did not have a valid authorization header"; 
+			LOGGER.info(message);
+			throw new UnauthorizedException(message);
+		}
+		
+		String roleString = (String) claims.get("role"); 
+		Roles role = Roles.valueOf(roleString);
+		
+		if (role.equals(Roles.USER)) {
+			if (!method.equals("GET")) {
+				String message = "The user does not have enough privileges"; 
+				LOGGER.info(message);
+				throw new UnauthorizedException(message);
+			}
 		}
 	}
 }

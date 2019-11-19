@@ -50,12 +50,8 @@ public class AuthFilter implements ContainerRequestFilter  {
 			LOGGER.info(message);
 			throw new UnauthorizedException(message + ", " + errorMessage);
 		}else {
-			boolean isAuth = Auth.checkToken(token);
-			if (!isAuth) {
-				String message = "The request did not have a valid authorization header"; 
-				LOGGER.info(message);
-				throw new UnauthorizedException(message);
-			}
+			String method = requestContext.getRequest().getMethod();
+			Auth.checkToken(token, method);
 		}
 		
 		
