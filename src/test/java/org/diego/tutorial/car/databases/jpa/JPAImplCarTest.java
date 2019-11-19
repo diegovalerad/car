@@ -85,6 +85,7 @@ public class JPAImplCarTest {
 				.thenReturn(carsFromCountry);
 		
 		assertEquals(carsFromCountry, jpaImplCar.getAllCarsFromCountry("country"));
+		Mockito.verify(em).createQuery(cq);
 	}
 
 	@Test
@@ -101,6 +102,7 @@ public class JPAImplCarTest {
 				.thenReturn(carsSoftRemoved);
 		
 		assertEquals(carsSoftRemoved, jpaImplCar.getAllSoftRemovedCars());
+		Mockito.verify(em).createQuery(query, Car.class);
 	} 
 	
 	@Test
@@ -116,6 +118,7 @@ public class JPAImplCarTest {
 				.thenReturn(carsFromBrand);
 		
 		assertEquals(carsFromBrand, jpaImplCar.getAllCarsFromBrand(1L));
+		Mockito.verify(em).createQuery(cq);
 	}
 
 }

@@ -1,12 +1,9 @@
 package org.diego.tutorial.car.timers;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import org.diego.tutorial.car.model.Brand;
 import org.diego.tutorial.car.model.Car;
-import org.diego.tutorial.car.model.Country;
 import org.diego.tutorial.car.model.service.CarService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,14 +29,7 @@ public class SoftRemovedCarsTimerTest {
 		List<Car> softRemovedCars = new ArrayList<Car>();
 		
 		for (int i = 0; i < 10; i++) {
-			long id = (long) (i + 1);
-			Date registration, createdAt, lastUpdated;
-			registration = createdAt = lastUpdated = new Date();
-			
-			Brand brand = new Brand(id, "brand" + i, "company" + i);
-			Country country = new Country(id, "countryName", "countryAbbreviation");
-			
-			Car car = new Car(id, brand, registration, country, createdAt, lastUpdated);
+			Car car = Mockito.mock(Car.class);
 			softRemovedCars.add(car);
 			
 			Mockito.when(carService.removeCar(car))
@@ -51,6 +41,9 @@ public class SoftRemovedCarsTimerTest {
 		
 		carsTimer.check();
 		
+		for (Car car : softRemovedCars) {
+			Mockito.verify(carService).removeCar(car);
+		}
 	}
 
 }

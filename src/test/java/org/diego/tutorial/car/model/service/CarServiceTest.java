@@ -66,6 +66,8 @@ public class CarServiceTest {
 				.thenReturn(cars);
 		
 		assertEquals(cars, carService.getAllCars());
+		
+		Mockito.verify(jpaImpl).getAll(Car.class);
 	}
 	
 	@Test
@@ -78,6 +80,8 @@ public class CarServiceTest {
 				.thenReturn(car);
 		
 		assertEquals(car, carService.getCar(id));
+		
+		Mockito.verify(jpaImpl).get(Car.class, id);
 	}
 	
 	@Test
@@ -101,6 +105,8 @@ public class CarServiceTest {
 				.thenReturn(carsExpect);
 		
 		assertEquals(carsExpect, carService.getAllCarsFromCountry(countrySpain.getCountryName()));
+		
+		Mockito.verify(jpaImpl).getAllCarsFromCountry(countrySpain.getCountryName());
 	}
 	
 	@Test
@@ -117,6 +123,8 @@ public class CarServiceTest {
 				.thenReturn(car);
 		
 		assertEquals(car, carService.addCar(car));
+		
+		Mockito.verify(jpaImpl).add(car);
 	}
 	
 	@Test (expected = BadRequestException.class)
@@ -152,6 +160,8 @@ public class CarServiceTest {
 				.thenThrow(DataNotFoundException.class);
 		
 		carService.addCar(car);
+		
+		Mockito.verify(brandService).getBrand(brand.getId());
 	}
 	
 	@Test
@@ -173,6 +183,9 @@ public class CarServiceTest {
 				.thenReturn(car);
 		
 		assertEquals(car, carService.updateCar(car));
+		
+		Mockito.verify(jpaImpl).get(Car.class, id);
+		Mockito.verify(jpaImpl).update(car);
 	}
 	
 	@Test
@@ -186,6 +199,8 @@ public class CarServiceTest {
 		
 		assertEquals(car, carService.softRemoveCar(id));
 		assertEquals(true, car.isSoftRemoved());
+		
+		Mockito.verify(jpaImpl).get(Car.class, id);
 	}
 	
 	@Test
@@ -200,5 +215,8 @@ public class CarServiceTest {
 				.thenReturn(car);
 		
 		assertEquals(car, carService.removeCar(car));
+		
+		Mockito.verify(jpaImpl).get(Car.class, id);
+		Mockito.verify(jpaImpl).delete(car);
 	}
 }

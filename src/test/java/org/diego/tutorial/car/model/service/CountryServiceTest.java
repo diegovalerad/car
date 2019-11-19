@@ -74,6 +74,7 @@ public class CountryServiceTest {
 				.thenReturn(true);
 		
 		countryService.addCountry(country);
+		Mockito.verify(jpaImplCountry).countryAlreadyExists(countryName);
 	}
 	
 	@Test
@@ -82,6 +83,7 @@ public class CountryServiceTest {
 				.thenReturn(country);
 		
 		assertEquals(country, countryService.getCountry(countryId));
+		Mockito.verify(jpaImplCountry).get(Country.class, countryId);
 	}
 	
 	@Test (expected = DataNotFoundException.class)
@@ -90,6 +92,7 @@ public class CountryServiceTest {
 				.thenReturn(null);
 
 		countryService.getCountry(countryId);
+		Mockito.verify(jpaImplCountry).get(Country.class, countryId);
 	}
 	
 	@Test
@@ -100,6 +103,8 @@ public class CountryServiceTest {
 				.thenReturn(country);
 		
 		assertEquals(country, countryService.updateCountry(country));
+		Mockito.verify(jpaImplCountry).get(Country.class, countryId);
+		Mockito.verify(jpaImplCountry).update(country);
 	}
 	
 	@Test (expected = DataNotFoundException.class)
@@ -108,6 +113,7 @@ public class CountryServiceTest {
 				.thenReturn(null);
 		
 		countryService.updateCountry(country);
+		Mockito.verify(jpaImplCountry).get(Country.class, countryId);
 	}
 	
 	@Test
@@ -120,6 +126,10 @@ public class CountryServiceTest {
 				.thenReturn(country);
 		
 		assertEquals(country, countryService.removeCountry(countryId));
+		
+		Mockito.verify(jpaImplCountry).get(Country.class, countryId);
+		Mockito.verify(carService).getAllCarsFromCountry(countryName);
+		Mockito.verify(jpaImplCountry).delete(country);
 	}
 	
 	@Test (expected = DataNotFoundException.class)
@@ -128,6 +138,7 @@ public class CountryServiceTest {
 				.thenReturn(null);
 
 		countryService.removeCountry(countryId);
+		Mockito.verify(jpaImplCountry).get(Country.class, countryId);
 	}
 	
 	@Test (expected = BadRequestException.class)
@@ -140,6 +151,8 @@ public class CountryServiceTest {
 				.thenReturn(cars);
 		
 		countryService.removeCountry(countryId);
+		Mockito.verify(jpaImplCountry).get(Country.class, countryId);
+		Mockito.verify(carService).getAllCarsFromCountry(countryName);
 	}
 	
 	

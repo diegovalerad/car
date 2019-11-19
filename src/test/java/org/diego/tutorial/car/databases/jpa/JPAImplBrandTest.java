@@ -86,6 +86,7 @@ public class JPAImplBrandTest {
 				.thenReturn(brandsFromCompany);
 		
 		assertEquals(brandsFromCompany, jpaImplBrand.getAllBrandsFromCompany(company));
+		Mockito.verify(em).createQuery(cq);
 	}
 	
 	@Test 
@@ -99,6 +100,7 @@ public class JPAImplBrandTest {
 				.thenReturn(new Brand());
 		
 		assertEquals(true, jpaImplBrand.brandNameAndCompanyExists(brandName, company));
+		Mockito.verify(em).createQuery(cq);
 	}
 	
 	@Test 
@@ -112,6 +114,7 @@ public class JPAImplBrandTest {
 				.thenThrow(NoResultException.class);
 		
 		assertEquals(false, jpaImplBrand.brandNameAndCompanyExists(brandName, company));
+		Mockito.verify(em).createQuery(cq);
 	}
 
 }

@@ -140,10 +140,6 @@ public class CarService {
 	public Car updateCar(Car car) {
 		LOGGER.info("Updating the car: " + car);
 		long idCar = car.getId();
-		if (idCar <= 0 || !carAlreadyExists(idCar)) {
-			LOGGER.warn("The car that it is trying to get updated does not exist.");
-			throw new DataNotFoundException(createErrorMessageCarDoesNotExist("update", idCar));
-		}
 		
 		checkBrand(car.getBrand());
 		checkCountry(car.getCountry());
@@ -158,16 +154,15 @@ public class CarService {
 	
 	/**
 	 * Method that soft-removes an existing car from the database. It throws<p>
-	 * {@link DataNotFoundException} if the car does not exist.
+	 * <ul>
+	 *  <li> {@link DataNotFoundException} if the car does not exist.</li>
+	 *  <li> {@link BadRequestException} if the ID of the car is non valid (zero or less) </li>
+	 * </ul>
 	 * @param id Identifier of the car that should be removed
 	 * @return Car soft-removed
 	 */
 	public Car softRemoveCar(long id) {
 		LOGGER.info("Soft-removing the car with ID: " + id);
-		if (id <= 0 || !carAlreadyExists(id)) {
-			LOGGER.warn("The car that it is trying to be soft-removed does not exist.");
-			throw new DataNotFoundException(createErrorMessageCarDoesNotExist("soft-remove", id));
-		}
 		
 		Car carSoftRemoved = getCar(id);
 		carSoftRemoved.setSoftRemoved(true);
@@ -177,51 +172,21 @@ public class CarService {
 	
 	/**
 	 * Method that completely removes an existing car from the database. It throws<p>
-	 *  {@link DataNotFoundException} if the car does not exist
+	 * <ul>
+	 *  <li> {@link DataNotFoundException} if the car does not exist.</li>
+	 * </ul>
 	 * @param car Car object that should be removed
 	 * @return Car removed
 	 */
 	public Car removeCar(Car car) {
 		long id = car.getId();
 		LOGGER.info("Removing the car with ID: " + id);
-		if (id <= 0 || !carAlreadyExists(id)) {
-			LOGGER.warn("The car that it is trying to be removed does not exist.");
-			throw new DataNotFoundException(createErrorMessageCarDoesNotExist("remove", id));
-		}
 		
 		Car carRemoved = jpaImpl.delete(car);
 		LOGGER.info("The car with ID: " + id + " was removed from the database");
 		return carRemoved;
 	}
-	
-	/**
-	 * Method that checks if a car given by an identifier exists in the database
-	 * @param id Identifier of the car
-	 * @return Boolean indicating if the car exists.
-	 */
-	private boolean carAlreadyExists(long id) {
-		LOGGER.info("Checking if the car with ID: " + id + " exists.");
-		
-		Car car = jpaImpl.get(Car.class, id);
-		if (car == null) {
-			LOGGER.info("The car with ID: " + id + " does not exist.");
-			return false;
-		}
-		LOGGER.info("The car with ID: " + id + " exists.");
-		return true;
-	}
-	
-	/**
-	 * Method that creates a message error, indicating the operation and the ID of the car that
-	 * produced that error.
-	 * @param operation Operation (get/update/add/remove) that produced the error.
-	 * @param id Identifier of the car that produced the error.
-	 * @return String with a message error.
-	 */
-	private String createErrorMessageCarDoesNotExist(String operation, long id) {
-		return "Trying to " + operation + " a car with ID: " + id + " that does not exist.";
-	}
-	
+
 	/**
 	 * Method that checks a brand in the request. It throws <p>
 	 * <ul>

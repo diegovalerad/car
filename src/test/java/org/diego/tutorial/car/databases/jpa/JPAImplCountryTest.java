@@ -78,6 +78,7 @@ public class JPAImplCountryTest {
 				.thenReturn(country);
 		
 		assertEquals(true, jpaImplCountry.countryAlreadyExists(countryName));
+		Mockito.verify(em).createQuery(cq);
 	}
 	
 	@Test
@@ -92,6 +93,7 @@ public class JPAImplCountryTest {
 				.thenThrow(NoResultException.class);
 		
 		assertEquals(false, jpaImplCountry.countryAlreadyExists(countryName));
+		Mockito.verify(em).createQuery(cq);
 	}
 
 }

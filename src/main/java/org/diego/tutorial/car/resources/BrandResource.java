@@ -21,6 +21,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import org.apache.log4j.Logger;
+import org.diego.tutorial.car.exceptions.BadRequestException;
 import org.diego.tutorial.car.model.Brand;
 import org.diego.tutorial.car.model.service.BrandService;
 import org.diego.tutorial.car.validations.GeneralValidationErrorsChecker;
@@ -154,12 +155,21 @@ public class BrandResource {
 					@ApiResponse(
 						description = "Brand does not exist",
 						responseCode = "404"
+					),
+					@ApiResponse(
+						description = "ID not valid",
+						responseCode = "400"
 					)
 			}
 	)			
 	public Response getBrand(@Parameter(description = "name of the brand", required = true) 
 								@PathParam("brandId") long brandId) {
 		LOGGER.info("Trying to get the brand with ID " + brandId);
+		
+		if (brandId <= 0) {
+			LOGGER.warn("Non valid identifier.");
+			throw new BadRequestException("Trying to get a brand with a non valid ID");
+		}
 		
 		Brand brand = brandService.getBrand(brandId);
 		LOGGER.info("Brand with ID " + brandId + " retrieved");
@@ -207,6 +217,11 @@ public class BrandResource {
 									Brand brand){
 		LOGGER.info("Trying to update the brand with ID '" + brandId + "' with the info: " + brand);
 		
+		if (brandId <= 0) {
+			LOGGER.warn("Non valid identifier.");
+			throw new BadRequestException("Trying to update a brand with a non valid ID");
+		}
+		
 		GeneralValidationErrorsChecker.checkValidationErrors(brand, "update");	
 		
 		brand.setId(brandId);
@@ -251,6 +266,11 @@ public class BrandResource {
 	public Response removeBrand(@Parameter(description = "ID of the brand that should be removed", required = true)
 									@PathParam("brandId") long brandId) {
 		LOGGER.info("Trying to remove the brand with ID " + brandId);
+		
+		if (brandId <= 0) {
+			LOGGER.warn("Non valid identifier.");
+			throw new BadRequestException("Trying to remove a brand with a non valid ID");
+		}
 		
 		Brand removedBrand = brandService.removeBrand(brandId);
 		LOGGER.info("Removed brand with ID " + brandId);

@@ -54,6 +54,7 @@ public class BrandServiceTest {
 				.thenReturn(brands);
 		
 		assertEquals(brands, brandService.getAllBrands());
+		Mockito.verify(jpaImplBrand).getAll(Brand.class);
 	}
 	
 	@Test
@@ -62,6 +63,7 @@ public class BrandServiceTest {
 				.thenReturn(brands);
 		
 		assertEquals(brands, brandService.getAllBrandsFromCompany(company));
+		Mockito.verify(jpaImplBrand).getAllBrandsFromCompany(company);
 	}
 
 	@Test
@@ -72,6 +74,8 @@ public class BrandServiceTest {
 				.thenReturn(brand);
 		
 		assertEquals(brand, brandService.addBrand(brand));
+		Mockito.verify(jpaImplBrand).brandNameAndCompanyExists(brandName, company);
+		Mockito.verify(jpaImplBrand).add(brand);
 	}
 	
 	@Test (expected = DataAlreadyExistsException.class)
@@ -80,6 +84,7 @@ public class BrandServiceTest {
 				.thenReturn(true);
 		
 		brandService.addBrand(brand);
+		Mockito.verify(jpaImplBrand).brandNameAndCompanyExists(brandName, company);
 	}
 	
 	@Test
@@ -88,6 +93,7 @@ public class BrandServiceTest {
 				.thenReturn(brand);
 		
 		assertEquals(brand, brandService.getBrand(brandId));
+		Mockito.verify(jpaImplBrand).get(Brand.class, brandId);
 	}
 	
 	@Test (expected = DataNotFoundException.class)
@@ -96,6 +102,7 @@ public class BrandServiceTest {
 				.thenReturn(null);
 		
 		brandService.getBrand(brandId);
+		Mockito.verify(jpaImplBrand).get(Brand.class, brandId);
 	}
 
 	@Test
@@ -106,6 +113,8 @@ public class BrandServiceTest {
 				.thenReturn(brand);
 		
 		assertEquals(brand, brandService.updateBrand(brand));
+		Mockito.verify(jpaImplBrand).get(Brand.class, brandId);
+		Mockito.verify(jpaImplBrand).update(brand);
 	}
 	
 	@Test (expected = DataNotFoundException.class)
@@ -114,6 +123,7 @@ public class BrandServiceTest {
 				.thenReturn(null);
 		
 		brandService.updateBrand(brand);
+		Mockito.verify(jpaImplBrand).get(Brand.class, brandId);
 	}
 	
 	@Test
@@ -126,6 +136,9 @@ public class BrandServiceTest {
 				.thenReturn(brand);
 		
 		assertEquals(brand, brandService.removeBrand(brandId));
+		Mockito.verify(jpaImplBrand).get(Brand.class, brandId);
+		Mockito.verify(carService).getAllCarsFromBrand(brandId);
+		Mockito.verify(jpaImplBrand).delete(brand);
 	}
 	
 	@Test (expected = DataNotFoundException.class)
@@ -134,6 +147,7 @@ public class BrandServiceTest {
 				.thenReturn(null);
 		
 		brandService.removeBrand(brandId);
+		Mockito.verify(jpaImplBrand).get(Brand.class, brandId);
 	}
 	
 	@Test (expected = BadRequestException.class)
@@ -148,6 +162,8 @@ public class BrandServiceTest {
 				.thenReturn(cars);
 		
 		brandService.removeBrand(brandId);
+		Mockito.verify(jpaImplBrand).get(Brand.class, brandId);
+		Mockito.verify(carService).getAllCarsFromBrand(brandId);
 	}
 	
 	

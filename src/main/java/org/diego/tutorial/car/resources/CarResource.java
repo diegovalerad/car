@@ -146,12 +146,22 @@ public class CarResource {
 				@ApiResponse(
 						description = "Car not found",
 						responseCode = "404"
+				),
+				@ApiResponse(
+						description = "ID not valid",
+						responseCode = "400"
 				)
 			}
 	)
 	public Response getCar(@Parameter(description = "id of the car that should be retrieved", required = true) 
 							@PathParam("id") long id) {
 		LOGGER.info("Trying to get the car with ID '" + id + "'");
+		
+		if (id <= 0) {
+			LOGGER.warn("Non valid identifier.");
+			throw new BadRequestException("Trying to get a car with a non valid ID");
+		}
+		
 		String errorMessage = "Request to get a car with non valid ID: " + id;
 		checkValidationErrors(id, errorMessage);
 		
@@ -198,6 +208,11 @@ public class CarResource {
 		car.setId(id);
 		
 		LOGGER.info("Trying to update the car with ID '" + id + "' with the info: " + car);
+		
+		if (id <= 0) {
+			LOGGER.warn("Non valid identifier.");
+			throw new BadRequestException("Trying to update a car with a non valid ID");
+		}
 		
 		List<String> validationErrors = CarValidator.validateAddAndUpdate(car);
 		String errorMessage = "Request to update car with non valid fields";
@@ -246,6 +261,11 @@ public class CarResource {
 		String errorMessage = "Request to soft-delete a car with non valid ID: " + id;
 		
 		LOGGER.info("Trying to remove the car with ID '" + id + "'");
+		
+		if (id <= 0) {
+			LOGGER.warn("Non valid identifier.");
+			throw new BadRequestException("Trying to soft-remove a car with a non valid ID");
+		}
 		
 		checkValidationErrors(id, errorMessage);
 		
