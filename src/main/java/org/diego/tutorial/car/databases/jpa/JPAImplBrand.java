@@ -5,6 +5,11 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.ParameterExpression;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import org.diego.tutorial.car.model.Brand;
 
@@ -21,13 +26,22 @@ public class JPAImplBrand extends JPAImpl {
 	 * @return List of brands
 	 */
 	public List<Brand> getAllBrandsFromCompany(String company){
-		String query = "SELECT brand FROM Brand brand WHERE brand.company='" + company + "'";
-		TypedQuery<Brand> createQuery = em.createQuery(query, Brand.class);
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Brand> cq = cb.createQuery(Brand.class);
 		
-		List<Brand> brandsFromCompany = createQuery.getResultList();
+		Root<Brand> brands = cq.from(Brand.class);
+		ParameterExpression<String> paramCompany = cb.parameter(String.class);
+		Predicate predCompany = cb.equal(brands.get("company"), paramCompany);
+		
+		cq.select(brands)
+			.where(predCompany);
+		
+		TypedQuery<Brand> typedQuery = em.createQuery(cq);
+		typedQuery.setParameter(paramCompany, company);
+		List<Brand> brandsFromCompany = typedQuery.getResultList();
 		return brandsFromCompany;
 	}
-
+	
 	/**
 	 * Checks if exists a brand with the brand name and company specified
 	 * @param brand Name of the brand
@@ -35,14 +49,27 @@ public class JPAImplBrand extends JPAImpl {
 	 * @return Boolean
 	 */
 	public boolean brandNameAndCompanyExists(String brand, String company) {
-		String query = "SELECT brand "
-						+ "FROM Brand brand "
-						+ "WHERE brand.company='" + company + "' "
-								+ "AND brand.brand='" + brand + "'";
-		TypedQuery<Brand> createQuery = em.createQuery(query, Brand.class);
-	
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Brand> cq = cb.createQuery(Brand.class);
+		
+		Root<Brand> brands = cq.from(Brand.class);
+		
+		ParameterExpression<String> paramCompany = cb.parameter(String.class);
+		Predicate predCompany = cb.equal(brands.get("company"), paramCompany);
+		ParameterExpression<String> paramBrand = cb.parameter(String.class);
+		Predicate predBrand = cb.equal(brands.get("brand"), paramBrand);
+		
+		Predicate predCompanyAndBrand = cb.and(predCompany, predBrand);
+		
+		cq.select(brands)
+			.where(predCompanyAndBrand);
+		
+		TypedQuery<Brand> typedQuery = em.createQuery(cq);
+		typedQuery.setParameter(paramCompany, company);
+		typedQuery.setParameter(paramBrand, brand);
+
 		try {
-			createQuery.getSingleResult();
+			typedQuery.getSingleResult();
 			return true;
 		} catch (NoResultException e) {
 			return false;
