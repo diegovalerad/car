@@ -2,6 +2,8 @@ package org.diego.tutorial.car.auth.jwt;
 
 import static org.junit.Assert.*;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import org.diego.tutorial.car.auth.jwt.JWT;
@@ -16,11 +18,14 @@ public class JWTTest {
 	@Test
 	public void testCreateAndDecode() {
 		String jwtId = UUID.randomUUID().toString();
-		String jwtIssuer = "JWTTest";
-        String jwtSubject = "Subject";
+		String jwtIssuer = "Everis";
+        String jwtSubject = null;
         int jwtTimeToLive = 800000;
         
-        String jwt = JWT.createJWT(jwtId, jwtIssuer, jwtSubject, jwtTimeToLive);
+        Map<String, Object> claimsMap = new HashMap<String, Object>();
+        claimsMap.put("role", "admin");
+        
+        String jwt = JWT.createJWT(jwtId, jwtIssuer, jwtSubject, jwtTimeToLive, claimsMap);
         
         Claims claims = JWT.decodeJWT(jwt);
         
@@ -44,7 +49,10 @@ public class JWTTest {
         String jwtSubject = "Subject";
         int jwtTimeToLive = 8000000;
         
-        String jwt = JWT.createJWT(jwtId, jwtIssuer, jwtSubject, jwtTimeToLive);
+        Map<String, Object> claimsMap = new HashMap<String, Object>();
+        claimsMap.put("role", "admin");
+        
+        String jwt = JWT.createJWT(jwtId, jwtIssuer, jwtSubject, jwtTimeToLive, claimsMap);
         
         StringBuilder tamperedJwt = new StringBuilder(jwt);
         tamperedJwt.setCharAt(22, 'D');

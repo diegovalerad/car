@@ -5,11 +5,14 @@ import javax.xml.bind.DatatypeConverter;
 
 import org.apache.log4j.Logger;
 
+import java.io.IOException;
 import java.security.Key;
 
 import io.jsonwebtoken.*;
 
 import java.util.Date;
+import java.util.Map;
+import java.util.Properties;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.Claims;
@@ -19,12 +22,18 @@ import io.jsonwebtoken.Claims;
  *
  */
 public class JWT {
-	private static String SECRET_KEY = "secret_keysecret_keysecret_keysecret_keysecret_keysecret_keysecret_keysecret_keysecret_keysecret_keysecret_keysecret_keysecret_keysecret_keysecret_keysecret_keysecret_keysecret_keysecret_keysecret_keysecret_keysecret_keysecret_keysecret_keysecret_keysecret_keysecret_keysecret_keysecret_keysecret_keysecret_keysecret_keysecret_keysecret_keysecret_key";
+	private static String SECRET_KEY = null;
 	
 	private final static Logger LOGGER = Logger.getLogger(JWT.class);
 	
-	public static String createJWT(String id, String issuer, String subject, long ttlInMillis) {
+	public static String createJWT(String id, String issuer, String subject, long ttlInMillis, Map<String, Object> claims) {
 		LOGGER.info("Creating jwt");
+		
+		if (SECRET_KEY == null)
+			readSecretKey();
+		
+		LOGGER.info("Secret_key: " + SECRET_KEY);
+		
 		
 		SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 		
@@ -34,10 +43,14 @@ public class JWT {
 		byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(SECRET_KEY);
 		Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
 		
+		Header<?> header = Jwts.header();
+		header.setType("JWT");
+		
 		JwtBuilder builder = Jwts.builder().setId(id)
                 .setIssuedAt(now)
                 .setSubject(subject)
                 .setIssuer(issuer)
+                .setHeader((Map<String, Object>) header)
                 .signWith(signingKey, signatureAlgorithm);
 		
 		if (ttlInMillis >= 0) {
@@ -45,6 +58,10 @@ public class JWT {
             Date exp = new Date(expMillis);
             builder.setExpiration(exp);
         }
+		
+		builder.addClaims(claims);
+		
+		
 		
 		LOGGER.info("jwt created: " + builder.compact());
 		
@@ -55,6 +72,9 @@ public class JWT {
 	public static Claims decodeJWT(String jwt) {
 		LOGGER.info("Decoding jwt: '" + jwt + "'");
 		
+		if (SECRET_KEY == null)
+			readSecretKey();
+		
 		Jws<Claims> jws = null;
 		
 		jws = Jwts.parser()
@@ -63,5 +83,19 @@ public class JWT {
 	    
 	    // we can safely trust the JWT
 	    return jws.getBody();
+	}
+	
+	/**
+	 * Method that reads the secret key and stores it in the variable
+	 */
+	private static void readSecretKey() {
+		LOGGER.info("Trying to read the secret key");
+		Properties props = new Properties();
+		try {
+			props.load(JWT.class.getResourceAsStream("/application.properties"));
+			SECRET_KEY = props.getProperty("auth_secret_key");
+		} catch (IOException e) {
+			LOGGER.debug("Error trying to read the secret key: " + e.getMessage());
+		}
 	}
 }
