@@ -26,6 +26,7 @@ public class JPAImplBrand extends JPAImpl {
 	 * @return List of brands
 	 */
 	public List<Brand> getAllBrandsFromCompany(String company){
+		// SELECT brand FROM Brand brand WHERE brand.company='company'
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Brand> cq = cb.createQuery(Brand.class);
 		
@@ -49,6 +50,13 @@ public class JPAImplBrand extends JPAImpl {
 	 * @return Boolean
 	 */
 	public boolean brandNameAndCompanyExists(String brand, String company) {
+		/*
+		SELECT brand
+		FROM Brand brand
+		WHERE brand.company='company'
+				AND brand.brand='brand'
+		*/
+		
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Brand> cq = cb.createQuery(Brand.class);
 		

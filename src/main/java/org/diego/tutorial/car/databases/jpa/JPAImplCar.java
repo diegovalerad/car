@@ -4,8 +4,14 @@ import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.ParameterExpression;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import org.diego.tutorial.car.model.Car;
+import org.diego.tutorial.car.model.Country;
 
 /**
  * Implementation of the JPA persistence with specific
@@ -20,12 +26,31 @@ public class JPAImplCar extends JPAImpl {
 	 * @return List of cars from the country searched
 	 */
 	public List<Car> getAllCarsFromCountry(String country){
-		String query = "SELECT car "
-					+ "FROM Car car "
-					+ "WHERE car.country = (SELECT country "
-											+ "FROM Country country "
-											+ "WHERE country.countryName = '" + country  + "')";
-		TypedQuery<Car> createQuery = em.createQuery(query, Car.class);
+		/*
+		SELECT car 
+		FROM Car car
+		WHERE car.country = (SELECT country
+							FROM Country country
+							WHERE country.countryName = 'country')
+		*/
+		
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Car> cq = cb.createQuery(Car.class);
+		
+		Root<Car> cars = cq.from(Car.class);
+		Root<Country> countries = cq.from(Country.class);
+		
+		ParameterExpression<String> paramCountry = cb.parameter(String.class);
+		Predicate countryRestriction = cb.and(
+				cb.equal(countries.get("countryName"), paramCountry),
+				cb.equal(cars.get("country").get("id"), countries.get("id"))
+		);
+		
+		cq.select(cars)
+			.where(countryRestriction);
+		
+		TypedQuery<Car> createQuery = em.createQuery(cq);
+		createQuery.setParameter(paramCountry, country);
 		
 		List<Car> carsFromCountry = createQuery.getResultList();
 		return carsFromCountry;
@@ -51,10 +76,22 @@ public class JPAImplCar extends JPAImpl {
 	 * @return List of cars
 	 */
 	public List<Car> getAllCarsFromBrand(long id) {
-		String query = "SELECT car FROM Car car WHERE car.brand='" + id + "'";
+		// SELECT car FROM Car car WHERE car.brand='id'
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Car> cq = cb.createQuery(Car.class);
 		
-		TypedQuery<Car> createQuery = em.createQuery(query, Car.class);
-		List<Car> carsFromBrand = createQuery.getResultList();
+		Root<Car> cars = cq.from(Car.class);
+		
+		ParameterExpression<Long> paramId = cb.parameter(Long.class);
+		Predicate predId = cb.equal(cars.get("brand").get("id"), paramId);
+		
+		cq.select(cars)
+			.where(predId);
+		
+		TypedQuery<Car> typedQuery = em.createQuery(cq);
+		typedQuery.setParameter(paramId, id);
+		
+		List<Car> carsFromBrand = typedQuery.getResultList();
 		return carsFromBrand;
 	}
 }

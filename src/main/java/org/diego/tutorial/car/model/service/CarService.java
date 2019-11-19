@@ -85,7 +85,7 @@ public class CarService {
 	public List<Car> getAllCarsFromBrand(long id){
 		LOGGER.info("Getting all the cars from the brand '" + id + "'");
 		List<Car> carsFromBrand = jpaImpl.getAllCarsFromBrand(id);
-		LOGGER.info("Retrieved all the cars from the brand '" + id + "'");
+		LOGGER.info("Retrieved " + carsFromBrand.size() + " cars from the brand '" + id + "");
 		return carsFromBrand;
 	}
 	
