@@ -7,12 +7,17 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.diego.tutorial.car.auth.jwt.JWT;
+import org.diego.tutorial.car.model.Roles;
 import org.junit.Test;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.SignatureException;
 
+/**
+ * Set of unit tests for the {@link JWT} class
+ *
+ */
 public class JWTTest {
 
 	@Test
@@ -23,7 +28,7 @@ public class JWTTest {
         int jwtTimeToLive = 800000;
         
         Map<String, Object> claimsMap = new HashMap<String, Object>();
-        claimsMap.put("role", "admin");
+        claimsMap.put("role", Roles.ADMIN.toString());
         
         String jwt = JWT.createJWT(jwtId, jwtIssuer, jwtSubject, jwtTimeToLive, claimsMap);
         
@@ -50,7 +55,8 @@ public class JWTTest {
         int jwtTimeToLive = 8000000;
         
         Map<String, Object> claimsMap = new HashMap<String, Object>();
-        claimsMap.put("role", "admin");
+        Roles role = Roles.ADMIN;
+        claimsMap.put("role", role.toString());
         
         String jwt = JWT.createJWT(jwtId, jwtIssuer, jwtSubject, jwtTimeToLive, claimsMap);
         

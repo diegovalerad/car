@@ -43,14 +43,10 @@ public class JWT {
 		byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(SECRET_KEY);
 		Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
 		
-		Header<?> header = Jwts.header();
-		header.setType("JWT");
-		
 		JwtBuilder builder = Jwts.builder().setId(id)
                 .setIssuedAt(now)
                 .setSubject(subject)
                 .setIssuer(issuer)
-                .setHeader((Map<String, Object>) header)
                 .signWith(signingKey, signatureAlgorithm);
 		
 		if (ttlInMillis >= 0) {
@@ -60,8 +56,6 @@ public class JWT {
         }
 		
 		builder.addClaims(claims);
-		
-		
 		
 		LOGGER.info("jwt created: " + builder.compact());
 		
