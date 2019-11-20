@@ -146,12 +146,22 @@ public class CarResource {
 				@ApiResponse(
 						description = "Car not found",
 						responseCode = "404"
+				),
+				@ApiResponse(
+						description = "ID not valid",
+						responseCode = "400"
 				)
 			}
 	)
 	public Response getCar(@Parameter(description = "id of the car that should be retrieved", required = true) 
 							@PathParam("id") long id) {
 		LOGGER.info("Trying to get the car with ID '" + id + "'");
+		
+		if (id <= 0) {
+			LOGGER.warn("Non valid identifier.");
+			throw new BadRequestException("Trying to get a car with a non valid ID");
+		}
+		
 		String errorMessage = "Request to get a car with non valid ID: " + id;
 		checkValidationErrors(id, errorMessage);
 		
@@ -198,6 +208,11 @@ public class CarResource {
 		car.setId(id);
 		
 		LOGGER.info("Trying to update the car with ID '" + id + "' with the info: " + car);
+		
+		if (id <= 0) {
+			LOGGER.warn("Non valid identifier.");
+			throw new BadRequestException("Trying to update a car with a non valid ID");
+		}
 		
 		List<String> validationErrors = CarValidator.validateAddAndUpdate(car);
 		String errorMessage = "Request to update car with non valid fields";
@@ -247,6 +262,11 @@ public class CarResource {
 		
 		LOGGER.info("Trying to remove the car with ID '" + id + "'");
 		
+		if (id <= 0) {
+			LOGGER.warn("Non valid identifier.");
+			throw new BadRequestException("Trying to soft-remove a car with a non valid ID");
+		}
+		
 		checkValidationErrors(id, errorMessage);
 		
 		Car car = carService.softRemoveCar(id);
@@ -263,34 +283,24 @@ public class CarResource {
 	 * @param car Car that should have the links added.
 	 */
 	private void addAllLinks(Car car) {
-		String urlSelf = getUriForSelf(car.getId());
+		String urlSelf = getUriForObject(CarResource.class, car.getId());
 		car.addLink(urlSelf, "self");
-		String urlBrand = getUriForBrand(car.getBrand().getId());
+		String urlBrand = getUriForObject(BrandResource.class, car.getBrand().getId());
 		car.addLink(urlBrand, "brand");
+		String urlCountry = getUriForObject(CountryResource.class, car.getCountry().getId());
+		car.addLink(urlCountry, "country");
 	}
 	
 	/**
-	 * Method that gets the URI of the car with the given ID.
-	 * @param id Identifier of the car
-	 * @return String that contains the URI of the given car. 
+	 * Method that gets the URI to an object with a given ID. <p>
+	 * @param <T> Generic type
+	 * @param classType Class type of the resource class where the object is in
+	 * @param id Identifier
+	 * @return URI in a String. The format is: /baseUri/ClassType/id
 	 */
-	private String getUriForSelf(long id) {
+	private <T> String getUriForObject(Class<T> classType, long id) {
 		String urlSelf = uriInfo.getBaseUriBuilder()
-				.path(CarResource.class)
-				.path(String.valueOf(id))
-				.build()
-				.toString();
-		return urlSelf;
-	}
-	
-	/**
-	 * Method that gets the URI of the brand of the car with the given brand.
-	 * @param brandName Name of the brand
-	 * @return String that contains the URI of the given brand. 
-	 */
-	private String getUriForBrand(long id) {
-		String urlSelf = uriInfo.getBaseUriBuilder()
-				.path(BrandResource.class)
+				.path(classType)
 				.path(String.valueOf(id))
 				.build()
 				.toString();

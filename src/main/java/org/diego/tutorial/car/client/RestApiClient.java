@@ -14,6 +14,7 @@ import javax.ws.rs.core.Response.Status;
 
 import org.diego.tutorial.car.model.Brand;
 import org.diego.tutorial.car.model.Car;
+import org.diego.tutorial.car.model.Country;
 
 public class RestApiClient {
 
@@ -26,9 +27,12 @@ public class RestApiClient {
 
 		getCar(singleCarTarget, 1);
 
-		Brand brand = new Brand("brand", "company");
+		Brand brand = new Brand(1L, "brand", "company");
+		Country country = new Country();
+		country.setCountryName("countryName");
+		country.setCountryAbbreviation("countryAbbreviation");
 		
-		Car carPost = new Car(4, brand, new Date(), "countryClient", new Date(), new Date());
+		Car carPost = new Car(4, brand, new Date(), country, new Date(), new Date());
 		addCar(carsTarget, carPost);
 		
 		getCarsByCountry(carsTarget, "countryClient");

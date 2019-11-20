@@ -16,42 +16,43 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Entity that represents a persistence domain object. This entity is persisted
- * in database through the creation of a table "brand", where every property in
+ * in database through the creation of a table "country", where every property in
  * that table is a field in this class.
  *
  */
 @XmlRootElement
 @Entity
-@Table(name = "brand")
-public class Brand implements Serializable {
+@Table(name = "country")
+public class Country implements Serializable {
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 3100671061051101142L;
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
 	@Column(nullable = false)
-	@NotNull(message = "brand cannot be null")
-	private String brand;
+	@NotNull(message = "The name of the country cannot be null")
+	private String countryName;
 
 	@Column(nullable = false)
-	@NotNull(message = "company cannot be null")
-	private String company;
+	@NotNull(message = "The abbreviation of the country cannot be null")
+	private String countryAbbreviation;
 
 	@Transient // Links are not stored in the database
 	private List<Link> links = new ArrayList<Link>();
 
-	public Brand() {
+	public Country() {
 
 	}
-
-	public Brand(Long id, String brand, String company) {
+	
+	public Country(long id, String countryName, String countryAbbreviation) {
 		this.id = id;
-		this.brand = brand;
-		this.company = company;
+		this.countryName = countryName;
+		this.countryAbbreviation = countryAbbreviation;
 	}
 
 	public long getId() {
@@ -62,20 +63,20 @@ public class Brand implements Serializable {
 		this.id = id;
 	}
 
-	public String getBrand() {
-		return brand;
+	public String getCountryName() {
+		return countryName;
 	}
 
-	public void setBrand(String brand) {
-		this.brand = brand;
+	public void setCountryName(String countryName) {
+		this.countryName = countryName;
 	}
 
-	public String getCompany() {
-		return company;
+	public String getCountryAbbreviation() {
+		return countryAbbreviation;
 	}
 
-	public void setCompany(String company) {
-		this.company = company;
+	public void setCountryAbbreviation(String countryAbbreviation) {
+		this.countryAbbreviation = countryAbbreviation;
 	}
 
 	public List<Link> getLinks() {
@@ -96,9 +97,11 @@ public class Brand implements Serializable {
 	public void removeLinks() {
 		links.clear();
 	}
-
+	
 	@Override
 	public String toString() {
-		return "Brand [brand: " + brand + ", company: " + company + ", links: " + links + "]";
+		return "Country [id: " + id + ", countryName: " + countryName + ", countryAbbreviation: " + countryAbbreviation + ", "
+				+ "links: " + links + "]";
 	}
+
 }
