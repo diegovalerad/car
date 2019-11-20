@@ -7,9 +7,19 @@ import javax.persistence.TypedQuery;
 
 import org.diego.tutorial.car.model.Car;
 
+/**
+ * Implementation of the JPA persistence with specific
+ * car methods
+ */
 @Stateless
 public class JPAImplCar extends JPAImpl {
-	public List<Car> getAllCarsForCountry(String country){
+	/**
+	 * Method that retrieves all the car objects from the database, that are
+	 * from a certain country.
+	 * @param country Country searched
+	 * @return List of cars from the country searched
+	 */
+	public List<Car> getAllCarsFromCountry(String country){
 		String countryLowerCase = country.toLowerCase();
 		
 		String query = "SELECT car FROM Car car WHERE car.country='" + countryLowerCase + "'";
@@ -17,5 +27,18 @@ public class JPAImplCar extends JPAImpl {
 		
 		List<Car> carsFromCountry = createQuery.getResultList();
 		return carsFromCountry;
+	}
+
+	/**
+	 * Method that queries the database and retrieves all the soft removed cars. A 
+	 * soft removed car is a car with a flag that the car should be removed.
+	 * @return List of soft removed cars.
+	 */
+	public List<Car> getAllSoftRemovedCars() {
+		String query = "SELECT car FROM Car car WHERE car.softRemoved='true'";
+		
+		TypedQuery<Car> createQuery = em.createQuery(query, Car.class);
+		List<Car> softRemovedCars = createQuery.getResultList();
+		return softRemovedCars;
 	}
 }

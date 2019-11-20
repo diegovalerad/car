@@ -1,0 +1,20 @@
+{
+    "scannerClass": "io.swagger.v3.oas.integration.GenericOpenApiScanner",
+    "resourcePackages": [
+        "org.diego.tutorial.car.resources"
+    ],
+    "readAllResources" : false,
+    "prettyPrint" : true,
+    "cacheTTL": 0,
+    "openAPI": {
+        "info": {
+            "version": "0.0.1",
+            "title": "Car REST service",
+            "description": "REST service that provides the necessary operations to create, get, update and remove cars from the system.",
+            "contact": {
+                "email": "diego.valera.duran@everis.com",
+                "name": "Diego Valera"
+            }
+        }
+    }
+}

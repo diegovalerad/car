@@ -5,20 +5,28 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
+import org.apache.log4j.Logger;
 import org.diego.tutorial.car.model.ErrorMessage;
 
+/**
+ * Exception mapper that maps a any non-mapped exception to a {@link Response}, 
+ * with an INTERNAL SERVER ERROR status code.
+ * 
+ */
 @Provider
 public class GenericExceptionMapper implements ExceptionMapper<Throwable> {
+	
+	private final static Logger LOGGER = Logger.getLogger(GenericExceptionMapper.class);
 
 	@Override
 	public Response toResponse(Throwable exception) {
 		String errorMessage = exception.getMessage();
 		int errorCode = Status.INTERNAL_SERVER_ERROR.getStatusCode();
-		String documentation = "everis";
+		String documentation = "Contact to Everis if this error persists.";
 		ErrorMessage error = new ErrorMessage(errorMessage, errorCode, documentation);
 		
-		System.out.println("errorMessage: " + errorMessage);
-		System.out.println("\n\n\n\n\n\n");
+		LOGGER.warn("Something went wrong!", exception);
+		LOGGER.info("A response with the error is being created by the GenericExceptionMapper");
 		
 		return Response.status(errorCode)
 					.entity(error)
