@@ -52,15 +52,7 @@ public class JPAImplTest {
 		Mockito.when(em.find(Mockito.any(), Mockito.anyLong()))
 				.thenReturn(car);
 		
-		assertEquals(car, jpaImpl.get(Car.class, 0));
-	}
-	
-	@Test(expected = DataNotFoundException.class)
-	public void testGetDataNotFound() {
-		Mockito.when(em.find(Mockito.any(), Mockito.anyLong()))
-				.thenReturn(null);
-		
-		jpaImpl.get(Car.class, 0);
+		assertEquals(car, jpaImpl.get(Car.class, 0L));
 	}
 	
 	@Test

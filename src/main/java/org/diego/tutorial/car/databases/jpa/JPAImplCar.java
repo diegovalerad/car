@@ -20,9 +20,7 @@ public class JPAImplCar extends JPAImpl {
 	 * @return List of cars from the country searched
 	 */
 	public List<Car> getAllCarsFromCountry(String country){
-		String countryLowerCase = country.toLowerCase();
-		
-		String query = "SELECT car FROM Car car WHERE car.country='" + countryLowerCase + "'";
+		String query = "SELECT car FROM Car car WHERE car.country='" + country + "'";
 		TypedQuery<Car> createQuery = em.createQuery(query, Car.class);
 		
 		List<Car> carsFromCountry = createQuery.getResultList();
@@ -40,5 +38,19 @@ public class JPAImplCar extends JPAImpl {
 		TypedQuery<Car> createQuery = em.createQuery(query, Car.class);
 		List<Car> softRemovedCars = createQuery.getResultList();
 		return softRemovedCars;
+	}
+
+	/**
+	 * Method that queries the database and retrieves all the cars from
+	 * a certain brand
+	 * @param id ID of the brand
+	 * @return List of cars
+	 */
+	public List<Car> getAllCarsFromBrand(long id) {
+		String query = "SELECT car FROM Car car WHERE car.brand='" + id + "'";
+		
+		TypedQuery<Car> createQuery = em.createQuery(query, Car.class);
+		List<Car> carsFromBrand = createQuery.getResultList();
+		return carsFromBrand;
 	}
 }

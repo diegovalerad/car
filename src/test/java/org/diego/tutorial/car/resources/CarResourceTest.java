@@ -13,9 +13,10 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
+import org.diego.tutorial.car.model.Brand;
 import org.diego.tutorial.car.model.Car;
 import org.diego.tutorial.car.model.service.CarService;
-import org.diego.tutorial.car.validations.CarValidator;
+import org.diego.tutorial.car.validations.car.CarValidator;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,9 +34,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Validation.class, CarValidator.class})
 public class CarResourceTest {
-	
-	//TODO Fix tests of this class. All of them fails.
-	
 	@InjectMocks
 	private CarResource carResource;
 	@Mock
@@ -56,6 +54,7 @@ public class CarResourceTest {
 		
 		Mockito.when(uriInfo.getBaseUriBuilder()).thenReturn(uriBuilder);
         Mockito.when(uriBuilder.path(CarResource.class)).thenReturn(uriBuilder);
+        Mockito.when(uriBuilder.path(BrandResource.class)).thenReturn(uriBuilder);
         Mockito.when(uriBuilder.path(Mockito.anyString())).thenReturn(uriBuilder);
         Mockito.when(uriBuilder.build()).thenReturn(new URI("www.abc.es"));
         Mockito.when(uriBuilder.toString()).thenReturn("http://www.prueba.es");
@@ -105,11 +104,15 @@ public class CarResourceTest {
 	
 	@Test
 	public void testAddCar() throws Exception {
-        Car car = Mockito.mock(Car.class);
+        Car car = new Car();
 		car.setId(8L);
+		Brand brand = new Brand("brand", "company");
+		car.setBrand(brand);
 		
-		Mockito.when(uriInfo.getAbsolutePathBuilder()).thenReturn(uriBuilder);
-        Mockito.when(uriBuilder.path(Mockito.anyString())).thenReturn(uriBuilder);
+		Mockito.when(uriInfo.getAbsolutePathBuilder())
+				.thenReturn(uriBuilder);
+        Mockito.when(uriBuilder.path(Mockito.anyString()))
+        		.thenReturn(uriBuilder);
         
 		Mockito.when(carService.addCar(car))
 				.thenReturn(car);
@@ -121,9 +124,11 @@ public class CarResourceTest {
 	
 	@Test
 	public void testGetCar() throws Exception {
-		Car car = Mockito.mock(Car.class);
+		Car car = new Car();
 		long carId = 8L;
 		car.setId(carId);
+		Brand brand = new Brand("brand", "company");
+		car.setBrand(brand);
 		
 		Mockito.when(carService.getCar(carId))
 				.thenReturn(car);
@@ -135,9 +140,11 @@ public class CarResourceTest {
 	
 	@Test
 	public void testUpdateCar() {
-		Car car = Mockito.mock(Car.class);
+		Car car = new Car();
 		Long carId = 8L;
 		car.setId(carId);
+		Brand brand = new Brand("brand", "company");
+		car.setBrand(brand);
 		
 		Mockito.when(carService.updateCar(car))
 				.thenReturn(car);
@@ -149,9 +156,11 @@ public class CarResourceTest {
 	
 	@Test
 	public void testDeleteCar() {
-		Car car = Mockito.mock(Car.class);
+		Car car = new Car();
 		Long carId = 8L;
 		car.setId(carId);
+		Brand brand = new Brand("brand", "company");
+		car.setBrand(brand);
 		
 		Mockito.when(carService.softRemoveCar(carId))
 				.thenReturn(car);

@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -18,7 +19,7 @@ import javax.ws.rs.DefaultValue;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.diego.tutorial.car.validations.AddAndUpdateChecks;
+import org.diego.tutorial.car.validations.car.AddAndUpdateChecks;
 
 /**
  * Entity that represents a persistence domain object. This entity is persisted 
@@ -39,9 +40,9 @@ public class Car implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
-	@Column(nullable = false)
 	@NotNull(message = "Brand cannot be null", groups = AddAndUpdateChecks.class)
-	private String brand;
+	@ManyToOne(optional = false)
+	private Brand brand;
 	
 	@Column(nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
@@ -71,7 +72,7 @@ public class Car implements Serializable {
 	public Car() {
 	}
 
-	public Car(long id, String brand, Date registration, String country, Date createdAt, Date lastUpdated) {
+	public Car(long id, Brand brand, Date registration, String country, Date createdAt, Date lastUpdated) {
 		this.id = id;
 		this.brand = brand;
 		this.registration = registration;
@@ -89,11 +90,11 @@ public class Car implements Serializable {
 		this.id = id;
 	}
 
-	public String getBrand() {
+	public Brand getBrand() {
 		return brand;
 	}
 
-	public void setBrand(String brand) {
+	public void setBrand(Brand brand) {
 		this.brand = brand;
 	}
 
@@ -159,6 +160,7 @@ public class Car implements Serializable {
 	@Override
 	public String toString() {
 		return "Car [id: " + id + ", brand: " + brand + ", country: " + country + ", registration: " + registration
-				+ ", createdAt: " + createdAt + ", lastUpdated: " + lastUpdated + ", softRemoved: " + softRemoved + "]";
+				+ ", createdAt: " + createdAt + ", lastUpdated: " + lastUpdated + ", links: " + links
+				+ ", softRemoved: " + softRemoved + "]";
 	}
 }
