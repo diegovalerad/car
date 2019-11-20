@@ -17,7 +17,10 @@ public class Auth {
 	
 	/**
 	 * Checks if a token is valid. If it is valid, then the method of the request is checked;
-	 * only users with admin {@link Roles} can modify information.
+	 * only users with admin {@link Roles} can modify information. It throws: <p>
+	 * <ul>
+	 * <li> {@link UnauthorizedException} if the auth header is not valid or if the user does not have enough privileges. 
+	 * </ul>
 	 * @param token Token to check
 	 * @param method Method of the request.
 	 */

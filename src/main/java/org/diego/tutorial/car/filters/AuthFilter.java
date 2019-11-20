@@ -20,8 +20,8 @@ public class AuthFilter implements ContainerRequestFilter  {
 
 	private final static Logger LOGGER = Logger.getLogger(AuthFilter.class);
 	
-	private static final String AUTHORIZATION_HEADER_KEY = "Authorization";
-	private static final String AUTHORIZATION_HEADER_TYPE = "Bearer";
+	public static final String AUTHORIZATION_HEADER_KEY = "Authorization";
+	public static final String AUTHORIZATION_HEADER_TYPE = "Bearer";
 	
 	@Override
 	public void filter(ContainerRequestContext requestContext) throws IOException {
@@ -52,6 +52,7 @@ public class AuthFilter implements ContainerRequestFilter  {
 		}else {
 			String method = requestContext.getRequest().getMethod();
 			Auth.checkToken(token, method);
+			LOGGER.info("Auth checked");
 		}
 		
 		
