@@ -43,6 +43,7 @@ public class JPAImplTest {
 				.thenReturn(cars);
 		
 		assertEquals(cars, jpaImpl.getAll(Car.class));
+		Mockito.verify(em).createQuery(Mockito.anyString(), Mockito.any());
 	}
 	
 	@Test
@@ -52,15 +53,8 @@ public class JPAImplTest {
 		Mockito.when(em.find(Mockito.any(), Mockito.anyLong()))
 				.thenReturn(car);
 		
-		assertEquals(car, jpaImpl.get(Car.class, 0));
-	}
-	
-	@Test(expected = DataNotFoundException.class)
-	public void testGetDataNotFound() {
-		Mockito.when(em.find(Mockito.any(), Mockito.anyLong()))
-				.thenReturn(null);
-		
-		jpaImpl.get(Car.class, 0);
+		assertEquals(car, jpaImpl.get(Car.class, 0L));
+		Mockito.verify(em).find(Mockito.any(), Mockito.anyLong());
 	}
 	
 	@Test
@@ -76,6 +70,8 @@ public class JPAImplTest {
 		Mockito.verify(em).persist(carExpected);
 		
 		assertEquals(carExpected, carPersisted);
+		
+		Mockito.verify(em).persist(carExpected);
 	}
 	
 	@Test(expected = DataNotFoundException.class)
@@ -89,6 +85,8 @@ public class JPAImplTest {
 		
 		jpaImpl.add(carExpected);
 		jpaImpl.add(carExpected);
+		
+		Mockito.verify(em).persist(carExpected);
 	}
 	
 	@Test
@@ -103,6 +101,8 @@ public class JPAImplTest {
 				.merge(carExpected);
 		
 		assertEquals(carExpected, carActual);
+		
+		Mockito.verify(em).merge(carExpected);
 	}
 	
 	@Test
@@ -115,6 +115,8 @@ public class JPAImplTest {
 				.remove(carExpected);
 		
 		assertEquals(carExpected, carActual);
+		
+		Mockito.verify(em).remove(carExpected);
 	}
 
 }

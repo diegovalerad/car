@@ -7,8 +7,11 @@ import javax.ejb.Stateless;
 
 import org.apache.log4j.Logger;
 import org.diego.tutorial.car.databases.jpa.JPAImplCar;
+import org.diego.tutorial.car.exceptions.BadRequestException;
 import org.diego.tutorial.car.exceptions.DataNotFoundException;
+import org.diego.tutorial.car.model.Brand;
 import org.diego.tutorial.car.model.Car;
+import org.diego.tutorial.car.model.Country;
 
 /**
  * Class that represents the service of Cars, in charge of doing the operations involving cars, 
@@ -19,6 +22,11 @@ import org.diego.tutorial.car.model.Car;
 public class CarService {
 	@EJB
 	private JPAImplCar jpaImpl;
+	
+	@EJB
+	private BrandService brandService;
+	@EJB
+	private CountryService countryService;
 	
 	private final static Logger LOGGER = Logger.getLogger(CarService.class);
 	
@@ -38,14 +46,19 @@ public class CarService {
 	}
 	
 	/**
-	 * Retrieves a requested car given by an identifier.
+	 * Retrieves a requested car given by an identifier. <p>
+	 * Throws a {@link DataNotFoundException} if the car does not exist
 	 * @param id Identifier of the requested car
 	 * @return Requested car
 	 */
 	public Car getCar(long id) {
 		LOGGER.info("Getting the car with ID " + id + " from the database.");
 		Car car = null;
+		
 		car = jpaImpl.get(Car.class, id);
+		if (car == null || (car.isSoftRemoved()))
+			throw new DataNotFoundException("Trying to get a car with ID '" + id + "' that does not exists");
+		
 		LOGGER.info("The car with ID " + id + " was retrieved from the database.");
 		
 		return car;
@@ -65,6 +78,18 @@ public class CarService {
 	}
 	
 	/**
+	 * Gets all the cars from a brand
+	 * @param id Identifier of the brand
+	 * @return List of cars
+	 */
+	public List<Car> getAllCarsFromBrand(long id){
+		LOGGER.info("Getting all the cars from the brand '" + id + "'");
+		List<Car> carsFromBrand = jpaImpl.getAllCarsFromBrand(id);
+		LOGGER.info("Retrieved " + carsFromBrand.size() + " cars from the brand '" + id + "");
+		return carsFromBrand;
+	}
+	
+	/**
 	 * Gets all the soft removed cars from the system
 	 * @return Soft removed cars
 	 */
@@ -76,15 +101,25 @@ public class CarService {
 	}
 	
 	/**
-	 * Method that adds a new car to the database
+	 * Method that adds a new car to the database. It throws:
+	 * <p>
+	 * <ul>
+	 * <li> {@link BadRequestException} if the brand of the car was not in the request message or if it was, but in an incorrect format
+	 * <li> {@link DataNotFoundException} if the brand of the car does not exist
+	 * </ul>
 	 * @param car Car that should be added
-	 * @return Car added
+	 * @return Car added 
 	 */
 	public Car addCar(Car car) {
+		LOGGER.info("Adding the car: " + car);
+		Brand brand = checkBrand(car.getBrand());
+		car.setBrand(brand);
+		Country country = checkCountry(car.getCountry());
+		car.setCountry(country);
+		
 		car.setCreatedAt(new Date());
 		car.setLastUpdated(new Date());
 		car.setRegistration(new Date());
-		LOGGER.info("Adding the car: " + car);
 		
 		Car carAdded = jpaImpl.add(car);
 		
@@ -94,18 +129,21 @@ public class CarService {
 	}
 	
 	/**
-	 * Method that updates an existing car in the database. <p>
-	 * If the car already exists, an {@link DataNotFoundException} exception is thrown.
+	 * Method that updates an existing car in the database. It throws: <p>
+	 * <ul>
+	 * <li>{@link DataNotFoundException} if the car or the brand of the car does not exist</li>
+	 * <li> {@link BadRequestException} if the brand of the car is not valid
+	 * </ul> 
 	 * @param car Car object that should be updated
 	 * @return Car updated
 	 */
 	public Car updateCar(Car car) {
 		LOGGER.info("Updating the car: " + car);
 		long idCar = car.getId();
-		if (idCar <= 0 || !carAlreadyExists(idCar)) {
-			LOGGER.warn("The car that it is trying to get updated does not exist.");
-			throw new DataNotFoundException(createErrorMessageCarDoesNotExist("update", idCar));
-		}
+		
+		checkBrand(car.getBrand());
+		checkCountry(car.getCountry());
+		
 		Car carOld = getCar(idCar);
 		car.setCreatedAt(carOld.getCreatedAt());
 		car.setRegistration(carOld.getRegistration());
@@ -115,17 +153,16 @@ public class CarService {
 	}
 	
 	/**
-	 * Method that soft-removes an existing car from the database. <p>
-	 * If the car does not exists, an {@link DataNotFoundException} exception is thrown.
+	 * Method that soft-removes an existing car from the database. It throws<p>
+	 * <ul>
+	 *  <li> {@link DataNotFoundException} if the car does not exist.</li>
+	 *  <li> {@link BadRequestException} if the ID of the car is non valid (zero or less) </li>
+	 * </ul>
 	 * @param id Identifier of the car that should be removed
 	 * @return Car soft-removed
 	 */
 	public Car softRemoveCar(long id) {
 		LOGGER.info("Soft-removing the car with ID: " + id);
-		if (id <= 0 || !carAlreadyExists(id)) {
-			LOGGER.warn("The car that it is trying to be soft-removed does not exist.");
-			throw new DataNotFoundException(createErrorMessageCarDoesNotExist("soft-remove", id));
-		}
 		
 		Car carSoftRemoved = getCar(id);
 		carSoftRemoved.setSoftRemoved(true);
@@ -134,50 +171,69 @@ public class CarService {
 	}
 	
 	/**
-	 * Method that completely removes an existing car from the database. <p>
-	 * If the car does not exists, an {@link DataNotFoundException} exception is thrown.
+	 * Method that completely removes an existing car from the database. It throws<p>
+	 * <ul>
+	 *  <li> {@link DataNotFoundException} if the car does not exist.</li>
+	 * </ul>
 	 * @param car Car object that should be removed
 	 * @return Car removed
 	 */
 	public Car removeCar(Car car) {
 		long id = car.getId();
 		LOGGER.info("Removing the car with ID: " + id);
-		if (id <= 0 || !carAlreadyExists(id)) {
-			LOGGER.warn("The car that it is trying to be removed does not exist.");
-			throw new DataNotFoundException(createErrorMessageCarDoesNotExist("remove", id));
-		}
 		
 		Car carRemoved = jpaImpl.delete(car);
 		LOGGER.info("The car with ID: " + id + " was removed from the database");
 		return carRemoved;
 	}
-	
+
 	/**
-	 * Method that checks if a car given by an identifier exists in the database
-	 * @param id Identifier of the car
-	 * @return Boolean indicating if the car exists.
+	 * Method that checks a brand in the request. It throws <p>
+	 * <ul>
+	 * <li> {@link BadRequestException} if the brand was not in the request message or it was, but in an incorrect format
+	 * <li> {@link DataNotFoundException} if the brand does not exist 
+	 * </ul>
+	 * @param brand Given brand
+	 * @return brand from the database
 	 */
-	private boolean carAlreadyExists(long id) {
-		LOGGER.info("Checking if the car with ID: " + id + " exists.");
-		try {
-			jpaImpl.get(Car.class, id);
-			LOGGER.info("The car with ID: " + id + " exists.");
-			return true;
-		} catch (DataNotFoundException e) {
-			LOGGER.info("The car with ID: " + id + " does not exist.");
-			return false;
+	private Brand checkBrand(Brand brand) {
+		LOGGER.info("Checking the brand: " + brand);
+		String message = null;
+		if (brand == null) {
+			message = "The brand is a required field";
+			throw new BadRequestException(message);
 		}
+		
+		Brand brandRetrieved = brandService.getBrand(brand.getId());
+		
+		LOGGER.info("Checking of the brand " + brand + " finished");
+		return brandRetrieved;
 	}
 	
 	/**
-	 * Method that creates a message error, indicating the operation and the ID of the car that
-	 * produced that error.
-	 * @param operation Operation (get/update/add/remove) that produced the error.
-	 * @param id Identifier of the car that produced the error.
-	 * @return String with a message error.
+	 * Method that checks a country in the request. It throws: <p>
+	 * <ul>
+	 * <li> {@link BadRequestException} if the country was not in the request message or it was, but in an incorrect format
+	 * <li> {@link DataNotFoundException} if the country does not exist 
+	 * </ul>
+	 * @param country Given country
 	 */
-	private String createErrorMessageCarDoesNotExist(String operation, long id) {
-		return "Trying to " + operation + " a car with ID: " + id + " that does not exist.";
+	private Country checkCountry(Country country) {
+		LOGGER.info("Checking the country: " + country);
+		if (country == null) {
+			String message = "The country is a required field";
+			throw new BadRequestException(message);
+		}
+		
+		Country countryRetrieved = countryService.getCountry(country.getId());
+		
+		LOGGER.info("Checking of the country '" + country + "' finished");
+		
+		return countryRetrieved;
 	}
+
+	
+	
+	
 	
 }

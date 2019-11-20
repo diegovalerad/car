@@ -20,11 +20,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import org.apache.log4j.Logger;
 import org.diego.tutorial.car.exceptions.BadRequestException;
 import org.diego.tutorial.car.model.Car;
 import org.diego.tutorial.car.model.service.CarService;
-import org.diego.tutorial.car.validations.CarValidator;
-
+import org.diego.tutorial.car.validations.car.CarValidator;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -47,6 +47,8 @@ public class CarResource {
 	private CarService carService;
 	private @Context UriInfo uriInfo;
 	
+	private final static Logger LOGGER = Logger.getLogger(CarResource.class);
+	
 	/**
 	 * Method that retrieves all the cars from the database. <p>
 	 * Optionally, the country param can be provided.
@@ -58,7 +60,7 @@ public class CarResource {
 			description = "Retrieves all the cars from the system",
 			responses = {
 					@ApiResponse(
-							description = "Cars",
+							description = "Cars retrieved",
 							responseCode = "200",
 							content = @Content(
 									array = @ArraySchema(schema = @Schema(implementation = Car.class))
@@ -67,10 +69,13 @@ public class CarResource {
 	public Response getCars(@QueryParam("country") String country){
 		List<Car> cars = null;
 		if (country != null && !country.isEmpty()) { // If "country" in the query
+			LOGGER.info("Trying to get all the cars from the country '" + country + "'");
 			cars = carService.getAllCarsFromCountry(country);
 		}else{
+			LOGGER.info("Trying to get all the cars");
 			cars = carService.getAllCars();
 		}
+		LOGGER.info("All the cars retrieved");
 		// Mapping the List in a generic entity to be able to return it
 		GenericEntity<List<Car>> carsGeneric = new GenericEntity<List<Car>>(cars) {};
 		return Response.ok()
@@ -85,16 +90,27 @@ public class CarResource {
 	 */
 	@POST
 	@Operation(summary = "Create a car",
-	description = "Create a car and store it in the system",
-	responses = {
-			@ApiResponse(
-					description = "Car", 
-					responseCode = "201",
-					content = @Content(
-                    schema = @Schema(implementation = Car.class)
-		            )),
-	})
-	public Response addCar(@Parameter(description = "updated car object", required = true) Car car) {
+			description = "Create a car and store it in the system",
+			responses = {
+					@ApiResponse(
+						description = "Car created", 
+						responseCode = "201",
+						content = @Content(
+									schema = @Schema(implementation = Car.class)
+								)
+						),
+					@ApiResponse( 
+						description = "Creating a car with non valid fields",
+						responseCode = "400"
+					),
+					@ApiResponse( 
+						description = "Not found the brand of the car",
+						responseCode = "404"
+					)
+			}
+	)
+	public Response addCar(@Parameter(description = "new car object", required = true) Car car) {
+		LOGGER.info("Trying to create a car: " + car);
 		List<String> validationErrors = CarValidator.validateAddAndUpdate(car);
 		String errorMessage = "Request to add a car with non valid fields";
 		checkValidationErrors(validationErrors, errorMessage);
@@ -103,8 +119,7 @@ public class CarResource {
 		String newId = String.valueOf(carAdded.getId());
 		URI uri = uriInfo.getAbsolutePathBuilder().path(newId).build();
 		
-		String urlSelf = getUriForSelf(carAdded.getId());
-		car.addLink(urlSelf, "self");
+		addAllLinks(carAdded);
 		
 		return Response.created(uri)
 					.entity(carAdded)
@@ -119,23 +134,39 @@ public class CarResource {
 	@GET
 	@Path("/{id}")
 	@Operation(summary = "Get a car",
-	description = "Get a car given by an ID from the system",
-	responses = {
-			@ApiResponse(
-					description = "Car", 
-					responseCode = "200",
-					content = @Content(
-                    schema = @Schema(implementation = Car.class)
-		            )),
-			@ApiResponse(responseCode = "404", description = "Car not found"),
-	})
-	public Response getCar(@Parameter(description = "id of the car that should be retrieved", required = true) @PathParam("id") long id) {
+			description = "Get a car given by an ID from the system",
+			responses = {
+				@ApiResponse(
+						description = "Car retrieved", 
+						responseCode = "200",
+						content = @Content(
+								schema = @Schema(implementation = Car.class)
+			            )
+				),
+				@ApiResponse(
+						description = "Car not found",
+						responseCode = "404"
+				),
+				@ApiResponse(
+						description = "ID not valid",
+						responseCode = "400"
+				)
+			}
+	)
+	public Response getCar(@Parameter(description = "id of the car that should be retrieved", required = true) 
+							@PathParam("id") long id) {
+		LOGGER.info("Trying to get the car with ID '" + id + "'");
+		
+		if (id <= 0) {
+			LOGGER.warn("Non valid identifier.");
+			throw new BadRequestException("Trying to get a car with a non valid ID");
+		}
+		
 		String errorMessage = "Request to get a car with non valid ID: " + id;
 		checkValidationErrors(id, errorMessage);
 		
 		Car car = carService.getCar(id);
-		String urlSelf = getUriForSelf(id);
-		car.addLink(urlSelf, "self");
+		addAllLinks(car);
 		
 		return Response.ok()
 						.entity(car)
@@ -151,19 +182,37 @@ public class CarResource {
 	@PUT
 	@Path("/{id}")
 	@Operation(summary = "Update a car",
-	description = "Update a car from the system",
-	responses = {
-			@ApiResponse(
-					description = "Car", 
-					responseCode = "200",
-					content = @Content(
-                    schema = @Schema(implementation = Car.class)
-		            )),
-			@ApiResponse(responseCode = "404", description = "Car not found"),
-	})
-	public Response updateCar(@Parameter(description = "id of the car that should be updated", required = true) @PathParam("id") long id,
-			@Parameter(description = "updated car object", required = true) Car car) {
+			description = "Update a car from the system",
+			responses = {
+				@ApiResponse(
+						description = "Car updated", 
+						responseCode = "200",
+						content = @Content(
+								schema = @Schema(implementation = Car.class)
+			            )
+				),
+				@ApiResponse(
+						description = "Car not found",
+						responseCode = "404"
+				),
+				@ApiResponse(
+						description = "Non valid fields",
+						responseCode = "400"
+				)
+			}
+	)
+	public Response updateCar(@Parameter(description = "id of the car that should be updated", required = true) 
+								@PathParam("id") long id,
+							@Parameter(description = "updated car object", required = true) 
+								Car car) {
 		car.setId(id);
+		
+		LOGGER.info("Trying to update the car with ID '" + id + "' with the info: " + car);
+		
+		if (id <= 0) {
+			LOGGER.warn("Non valid identifier.");
+			throw new BadRequestException("Trying to update a car with a non valid ID");
+		}
 		
 		List<String> validationErrors = CarValidator.validateAddAndUpdate(car);
 		String errorMessage = "Request to update car with non valid fields";
@@ -171,8 +220,7 @@ public class CarResource {
 		
 		Car carUpdated = carService.updateCar(car);
 		
-		String urlSelf = getUriForSelf(id);
-		car.addLink(urlSelf, "self");
+		addAllLinks(carUpdated);
 		
 		return Response.ok()
 					.entity(carUpdated)
@@ -189,25 +237,41 @@ public class CarResource {
 	@DELETE
 	@Path("/{id}")
 	@Operation(summary = "Delete a car",
-	description = "Soft-delete a car given by an ID from the system. The car will be completely "
-			+ "removed from the system after a certain period of time.",
-	responses = {
-			@ApiResponse(
-					description = "Car", 
-					responseCode = "200",
-					content = @Content(
-                    schema = @Schema(implementation = Car.class)
-		            )),
-			@ApiResponse(responseCode = "404", description = "Car not found"),
-	})
+			description = "Soft-delete a car given by an ID from the system. The car will be completely "
+						+ "removed from the system after a certain period of time.",
+			responses = {
+					@ApiResponse(
+							description = "Car", 
+							responseCode = "200",
+							content = @Content(
+									schema = @Schema(implementation = Car.class)
+				            )
+					),
+					@ApiResponse(
+							description = "Car not found", 
+							responseCode = "404"
+					),
+					@ApiResponse(
+							description = "Non valid parameters", 
+							responseCode = "400"
+					)
+			}
+	)
 	public Response deleteCar(@Parameter(description = "id of the car that should be removed", required = true) @PathParam("id") long id) {
 		String errorMessage = "Request to soft-delete a car with non valid ID: " + id;
+		
+		LOGGER.info("Trying to remove the car with ID '" + id + "'");
+		
+		if (id <= 0) {
+			LOGGER.warn("Non valid identifier.");
+			throw new BadRequestException("Trying to soft-remove a car with a non valid ID");
+		}
+		
 		checkValidationErrors(id, errorMessage);
 		
 		Car car = carService.softRemoveCar(id);
 		
-		String urlSelf = getUriForSelf(id);
-		car.addLink(urlSelf, "self");
+		addAllLinks(car);
 		
 		return Response.ok()
 					.entity(car)
@@ -215,13 +279,28 @@ public class CarResource {
 	}
 	
 	/**
-	 * Method that gets the URI of the car with the given ID.
-	 * @param id Identifier of the car
-	 * @return String that contains the URI of the given car. 
+	 * Method that adds all the links related to a car
+	 * @param car Car that should have the links added.
 	 */
-	private String getUriForSelf(long id) {
+	private void addAllLinks(Car car) {
+		String urlSelf = getUriForObject(CarResource.class, car.getId());
+		car.addLink(urlSelf, "self");
+		String urlBrand = getUriForObject(BrandResource.class, car.getBrand().getId());
+		car.addLink(urlBrand, "brand");
+		String urlCountry = getUriForObject(CountryResource.class, car.getCountry().getId());
+		car.addLink(urlCountry, "country");
+	}
+	
+	/**
+	 * Method that gets the URI to an object with a given ID. <p>
+	 * @param <T> Generic type
+	 * @param classType Class type of the resource class where the object is in
+	 * @param id Identifier
+	 * @return URI in a String. The format is: /baseUri/ClassType/id
+	 */
+	private <T> String getUriForObject(Class<T> classType, long id) {
 		String urlSelf = uriInfo.getBaseUriBuilder()
-				.path(CarResource.class)
+				.path(classType)
 				.path(String.valueOf(id))
 				.build()
 				.toString();
@@ -236,13 +315,16 @@ public class CarResource {
 	 * @param errorMessage Descriptive error message thrown in the {@link BadRequestException} exception next to the list of errors. 
 	 */
 	private void checkValidationErrors(List<String> validationErrors, String errorMessage) {
+		LOGGER.info("Checking validation errors");
 		if (!validationErrors.isEmpty()) {
 			String message = errorMessage + ": ";
 			for (String validationError : validationErrors) {
+				LOGGER.info("Validation error: " + validationError);
 				message += validationError + " - ";
 			}
 			throw new BadRequestException(message);
 		}
+		LOGGER.info("Validation errors checked without errors");
 	}
 	
 	/**
@@ -253,7 +335,9 @@ public class CarResource {
 	 * @param errorMessage Descriptive error message thrown in the {@link BadRequestException} exception. 
 	 */
 	private void checkValidationErrors(long id, String errorMessage) {
+		LOGGER.info("Checking validation errors");
 		if (id <= 0) {
+			LOGGER.info("ID is less or equal to 0");
 			throw new BadRequestException(errorMessage);
 		}
 	}
