@@ -216,7 +216,6 @@ public class CarServiceTest {
 		
 		assertEquals(car, carService.removeCar(car));
 		
-		Mockito.verify(jpaImpl).get(Car.class, id);
 		Mockito.verify(jpaImpl).delete(car);
 	}
 }
