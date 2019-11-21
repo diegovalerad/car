@@ -1,7 +1,8 @@
 {
 	"info": {
-		"_postman_id": "836f664c-08e2-4a87-a0aa-b2b1b03e749c",
+		"_postman_id": "88c40aa0-304d-4077-8df5-d13d361a1064",
 		"name": "carsApp",
+		"description": "Set of integration tests for the car backend application",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -54,7 +55,11 @@
 									"",
 									"pm.sendRequest({",
 									"    url: pm.variables.get(\"url\") + \"/brands/\" + pm.globals.get(\"brandIdGetBrandsFromCompany\"),",
-									"    method: 'DELETE'",
+									"    method: 'DELETE',",
+									"    header: {",
+									"        'Content-Type': 'application/json',",
+									"        'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")",
+									"    },",
 									"});"
 								],
 								"type": "text/javascript"
@@ -68,7 +73,10 @@
 									"pm.sendRequest({\r",
 									"    url: pm.variables.get(\"url\") + \"/brands/\",\r",
 									"    method: 'POST',\r",
-									"    header: 'Content-Type:application/json',\r",
+									"    header: {\r",
+									"        'Content-Type': 'application/json',\r",
+									"        'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")\r",
+									"    },\r",
 									"    body: {\r",
 									"        mode: 'raw',\r",
 									"        raw: JSON.stringify({ brand: 'brandNameGetBrandsFromCompany', company: 'company' })\r",
@@ -121,7 +129,11 @@
 									"",
 									"pm.sendRequest({",
 									"    url: pm.variables.get(\"url\") + \"/brands/\" + pm.globals.get(\"brandIdCreateNewBrand\"),",
-									"    method: 'DELETE'",
+									"    method: 'DELETE',",
+									"    header: {",
+									"        'Content-Type': 'application/json',",
+									"        'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")",
+									"    },",
 									"});"
 								],
 								"type": "text/javascript"
@@ -167,7 +179,11 @@
 									"",
 									"pm.sendRequest({",
 									"    url: pm.variables.get(\"url\") + \"/brands/\" + pm.globals.get(\"brandIdGetExistingBrand\"),",
-									"    method: 'DELETE'",
+									"    method: 'DELETE',",
+									"    header: {",
+									"        'Content-Type': 'application/json',",
+									"        'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")",
+									"    },",
 									"});"
 								],
 								"type": "text/javascript"
@@ -181,7 +197,10 @@
 									"pm.sendRequest({\r",
 									"    url: pm.variables.get(\"url\") + \"/brands/\",\r",
 									"    method: 'POST',\r",
-									"    header: 'Content-Type:application/json',\r",
+									"    header: {\r",
+									"        'Content-Type': 'application/json',\r",
+									"        'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")\r",
+									"    },\r",
 									"    body: {\r",
 									"        mode: 'raw',\r",
 									"        raw: JSON.stringify({ brand: 'brandGetExistingBrand', company: 'company' })\r",
@@ -240,7 +259,10 @@
 									"pm.sendRequest({\r",
 									"    url: pm.variables.get(\"url\") + \"/brands/\",\r",
 									"    method: 'POST',\r",
-									"    header: 'Content-Type:application/json',\r",
+									"    header: {\r",
+									"        'Content-Type': 'application/json',\r",
+									"        'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")\r",
+									"    },\r",
 									"    body: {\r",
 									"        mode: 'raw',\r",
 									"        raw: JSON.stringify({ brand: 'brandGetNonExistingBrand', company: 'company' })\r",
@@ -250,9 +272,13 @@
 									"    \r",
 									"    pm.sendRequest({\r",
 									"    url: pm.variables.get(\"url\") + \"/brands/\" + pm.globals.get(\"brandIdGetNonExistingBrand\"),\r",
-									"    method: 'DELETE'\r",
+									"    method: 'DELETE',\r",
+									"    header: {\r",
+									"        'Content-Type': 'application/json',\r",
+									"        'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")\r",
+									"    }\r",
 									"    });\r",
-									"})"
+									"});"
 								],
 								"type": "text/javascript"
 							}
@@ -285,7 +311,10 @@
 									"pm.sendRequest({\r",
 									"    url: pm.variables.get(\"url\") + \"/brands/\",\r",
 									"    method: 'POST',\r",
-									"    header: 'Content-Type:application/json',\r",
+									"    header: {\r",
+									"        'Content-Type': 'application/json',\r",
+									"        'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")\r",
+									"    },\r",
 									"    body: {\r",
 									"        mode: 'raw',\r",
 									"        raw: JSON.stringify({ brand: 'brandUpdateExistingBrand', company: 'company' })\r",
@@ -308,7 +337,11 @@
 									"",
 									"pm.sendRequest({",
 									"    url: pm.variables.get(\"url\") + \"/brands/\" + pm.globals.get(\"brandIdUpdateExistingBrand\"),",
-									"    method: 'DELETE'",
+									"    method: 'DELETE',",
+									"    header: {",
+									"        'Content-Type': 'application/json',",
+									"        'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")",
+									"    },",
 									"});"
 								],
 								"type": "text/javascript"
@@ -352,7 +385,10 @@
 									"pm.sendRequest({\r",
 									"    url: pm.variables.get(\"url\") + \"/brands/\",\r",
 									"    method: 'POST',\r",
-									"    header: 'Content-Type:application/json',\r",
+									"    header: {\r",
+									"        'Content-Type': 'application/json',\r",
+									"        'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")\r",
+									"    },\r",
 									"    body: {\r",
 									"        mode: 'raw',\r",
 									"        raw: JSON.stringify({ brand: 'brandUpdateExistingBrandWithNonValidFields', company: 'company' })\r",
@@ -375,7 +411,11 @@
 									"",
 									"pm.sendRequest({",
 									"    url: pm.variables.get(\"url\") + \"/brands/\" + pm.globals.get(\"brandIdUpdateExistingBrandWithNonValidFields\"),",
-									"    method: 'DELETE'",
+									"    method: 'DELETE',",
+									"    header: {",
+									"        'Content-Type': 'application/json',",
+									"        'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")",
+									"    },",
 									"});"
 								],
 								"type": "text/javascript"
@@ -431,7 +471,10 @@
 									"pm.sendRequest({\r",
 									"    url: pm.variables.get(\"url\") + \"/brands/\",\r",
 									"    method: 'POST',\r",
-									"    header: 'Content-Type:application/json',\r",
+									"    header: {\r",
+									"        'Content-Type': 'application/json',\r",
+									"        'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")\r",
+									"    },\r",
 									"    body: {\r",
 									"        mode: 'raw',\r",
 									"        raw: JSON.stringify({ brand: 'brandUpdateNonExistingBrand', company: 'company' })\r",
@@ -441,7 +484,11 @@
 									"    \r",
 									"    pm.sendRequest({\r",
 									"    url: pm.variables.get(\"url\") + \"/brands/\" + pm.globals.get(\"brandIdUpdateNonExistingBrand\"),\r",
-									"    method: 'DELETE'\r",
+									"    method: 'DELETE',\r",
+									"    header: {\r",
+									"        'Content-Type': 'application/json',\r",
+									"        'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")\r",
+									"    },\r",
 									"    });\r",
 									"})"
 								],
@@ -489,7 +536,11 @@
 									"",
 									"pm.sendRequest({",
 									"    url: pm.variables.get(\"url\") + \"/brands/\" + pm.globals.get(\"brandIdRemoveExistingBrand\"),",
-									"    method: 'DELETE'",
+									"    method: 'DELETE',",
+									"    header: {",
+									"        'Content-Type': 'application/json',",
+									"        'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")",
+									"    },",
 									"});"
 								],
 								"type": "text/javascript"
@@ -503,7 +554,10 @@
 									"pm.sendRequest({\r",
 									"    url: pm.variables.get(\"url\") + \"/brands/\",\r",
 									"    method: 'POST',\r",
-									"    header: 'Content-Type:application/json',\r",
+									"    header: {\r",
+									"        'Content-Type': 'application/json',\r",
+									"        'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")\r",
+									"    },\r",
 									"    body: {\r",
 									"        mode: 'raw',\r",
 									"        raw: JSON.stringify({ brand: 'brandRemoveExistingBrand', company: 'company' })\r",
@@ -546,7 +600,11 @@
 									"",
 									"pm.sendRequest({",
 									"    url: pm.variables.get(\"url\") + \"/cars/\" + pm.globals.get(\"brandsRemoveExistingBrandWithCarsCarId\"),",
-									"    method: 'DELETE'",
+									"    method: 'DELETE',",
+									"    header: {",
+									"        'Content-Type': 'application/json',",
+									"        'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")",
+									"    },",
 									"});"
 								],
 								"type": "text/javascript"
@@ -560,7 +618,10 @@
 									"pm.sendRequest({\r",
 									"            url: pm.variables.get(\"url\") + \"/cars/\",\r",
 									"            method: 'POST',\r",
-									"            header: 'Content-Type:application/json',\r",
+									"            header: {\r",
+									"                'Content-Type': 'application/json',\r",
+									"                'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")\r",
+									"            },\r",
 									"            body: {\r",
 									"                mode: 'raw',\r",
 									"                raw: JSON.stringify(\r",
@@ -621,7 +682,10 @@
 									"pm.sendRequest({\r",
 									"    url: pm.variables.get(\"url\") + \"/brands/\",\r",
 									"    method: 'POST',\r",
-									"    header: 'Content-Type:application/json',\r",
+									"    header: {\r",
+									"        'Content-Type': 'application/json',\r",
+									"        'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")\r",
+									"    },\r",
 									"    body: {\r",
 									"        mode: 'raw',\r",
 									"        raw: JSON.stringify({ brand: 'brandRemoveNonExistingBrand', company: 'company' })\r",
@@ -631,9 +695,13 @@
 									"    \r",
 									"    pm.sendRequest({\r",
 									"    url: pm.variables.get(\"url\") + \"/brands/\" + pm.globals.get(\"brandIdRemoveNonExistingBrand\"),\r",
-									"    method: 'DELETE'\r",
+									"    method: 'DELETE',\r",
+									"    header: {\r",
+									"        'Content-Type': 'application/json',\r",
+									"        'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")\r",
+									"    },\r",
 									"    });\r",
-									"})"
+									"});"
 								],
 								"type": "text/javascript"
 							}
@@ -654,6 +722,29 @@
 						}
 					},
 					"response": []
+				}
+			],
+			"description": "Set of integration test where it is checked the CRUD operations about brands",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "f0aa21af-8f96-4c72-9a3c-ac1bda39aec4",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "3f3610d0-3745-4c8a-82d3-ea6d5e533605",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
 				}
 			],
 			"protocolProfileBehavior": {}
@@ -756,7 +847,11 @@
 									"",
 									"pm.sendRequest({",
 									"    url: pm.variables.get(\"url\") + \"/cars/\" + jsonData.id,",
-									"    method: 'DELETE'",
+									"    method: 'DELETE',",
+									"    header: {",
+									"        'Content-Type': 'application/json',",
+									"        'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")",
+									"    },",
 									"});"
 								],
 								"type": "text/javascript"
@@ -812,7 +907,11 @@
 									"",
 									"pm.sendRequest({",
 									"    url: pm.variables.get(\"url\") + \"/cars/\" + pm.globals.get(\"carIdGetExistingCar\"),",
-									"    method: 'DELETE'",
+									"    method: 'DELETE',",
+									"    header: {",
+									"        'Content-Type': 'application/json',",
+									"        'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")",
+									"    },",
 									"});"
 								],
 								"type": "text/javascript"
@@ -826,7 +925,10 @@
 									"pm.sendRequest({",
 									"        url: pm.variables.get(\"url\") + \"/cars/\",",
 									"        method: 'POST',",
-									"        header: 'Content-Type:application/json',",
+									"        header: {",
+									"            'Content-Type': 'application/json',",
+									"            'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")",
+									"        },",
 									"        body: {",
 									"            mode: 'raw',",
 									"            raw: JSON.stringify(",
@@ -888,7 +990,10 @@
 									"pm.sendRequest({\r",
 									"        url: pm.variables.get(\"url\") + \"/cars/\",\r",
 									"        method: 'POST',\r",
-									"        header: 'Content-Type:application/json',\r",
+									"        header: {\r",
+									"            'Content-Type': 'application/json',\r",
+									"            'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")\r",
+									"        },\r",
 									"        body: {\r",
 									"            mode: 'raw',\r",
 									"            raw: JSON.stringify(\r",
@@ -907,7 +1012,11 @@
 									"    \r",
 									"        pm.sendRequest({\r",
 									"            url: pm.variables.get(\"url\") + \"/cars/\" + pm.globals.get(\"carIdGetNonExistingCar\"),\r",
-									"            method: 'DELETE'\r",
+									"            method: 'DELETE',\r",
+									"            header: {\r",
+									"                'Content-Type': 'application/json',\r",
+									"                'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")\r",
+									"            },\r",
 									"        });\r",
 									"    });"
 								],
@@ -984,7 +1093,10 @@
 									"pm.sendRequest({",
 									"        url: pm.variables.get(\"url\") + \"/cars/\",",
 									"        method: 'POST',",
-									"        header: 'Content-Type:application/json',",
+									"        header: {",
+									"            'Content-Type': 'application/json',",
+									"            'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")",
+									"        },",
 									"        body: {",
 									"            mode: 'raw',",
 									"            raw: JSON.stringify(",
@@ -1017,7 +1129,11 @@
 									"",
 									"pm.sendRequest({",
 									"    url: pm.variables.get(\"url\") + \"/cars/\" + pm.globals.get(\"carIdUpdateExistingCar\"),",
-									"    method: 'DELETE'",
+									"    method: 'DELETE',",
+									"    header: {",
+									"        'Content-Type': 'application/json',",
+									"        'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")",
+									"    },",
 									"});"
 								],
 								"type": "text/javascript"
@@ -1073,7 +1189,10 @@
 									"pm.sendRequest({\r",
 									"        url: pm.variables.get(\"url\") + \"/cars/\",\r",
 									"        method: 'POST',\r",
-									"        header: 'Content-Type:application/json',\r",
+									"        header: {\r",
+									"            'Content-Type': 'application/json',\r",
+									"            'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")\r",
+									"        },\r",
 									"        body: {\r",
 									"            mode: 'raw',\r",
 									"            raw: JSON.stringify(\r",
@@ -1092,7 +1211,11 @@
 									"    \r",
 									"        pm.sendRequest({\r",
 									"            url: pm.variables.get(\"url\") + \"/cars/\" + pm.globals.get(\"carIdUpdateNonExistingCar\"),\r",
-									"            method: 'DELETE'\r",
+									"            method: 'DELETE',\r",
+									"            header: {\r",
+									"                'Content-Type': 'application/json',\r",
+									"                'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")\r",
+									"            },\r",
 									"        });\r",
 									"    });"
 								],
@@ -1140,7 +1263,11 @@
 									"",
 									"pm.sendRequest({",
 									"    url: pm.variables.get(\"url\") + \"/cars/\" + pm.globals.get(\"carIdUpdateCarWithoutAllFields\"),",
-									"    method: 'DELETE'",
+									"    method: 'DELETE',",
+									"    header: {",
+									"        'Content-Type': 'application/json',",
+									"        'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")",
+									"    },",
 									"});"
 								],
 								"type": "text/javascript"
@@ -1154,7 +1281,10 @@
 									"pm.sendRequest({\r",
 									"        url: pm.variables.get(\"url\") + \"/cars/\",\r",
 									"        method: 'POST',\r",
-									"        header: 'Content-Type:application/json',\r",
+									"        header: {\r",
+									"            'Content-Type': 'application/json',\r",
+									"            'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")\r",
+									"        },\r",
 									"        body: {\r",
 									"            mode: 'raw',\r",
 									"            raw: JSON.stringify(\r",
@@ -1270,7 +1400,11 @@
 									"",
 									"pm.sendRequest({",
 									"    url: pm.variables.get(\"url\") + \"/cars/\" + pm.globals.get(\"carIdRemoveExistingCar\"),",
-									"    method: 'DELETE'",
+									"    method: 'DELETE',",
+									"    header: {",
+									"        'Content-Type': 'application/json',",
+									"        'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")",
+									"    },",
 									"});"
 								],
 								"type": "text/javascript"
@@ -1284,7 +1418,10 @@
 									"pm.sendRequest({",
 									"        url: pm.variables.get(\"url\") + \"/cars/\",",
 									"        method: 'POST',",
-									"        header: 'Content-Type:application/json',",
+									"        header: {",
+									"            'Content-Type': 'application/json',",
+									"            'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")",
+									"        },",
 									"        body: {",
 									"            mode: 'raw',",
 									"            raw: JSON.stringify(",
@@ -1346,7 +1483,10 @@
 									"pm.sendRequest({\r",
 									"        url: pm.variables.get(\"url\") + \"/cars/\",\r",
 									"        method: 'POST',\r",
-									"        header: 'Content-Type:application/json',\r",
+									"        header: {\r",
+									"            'Content-Type': 'application/json',\r",
+									"            'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")\r",
+									"        },\r",
 									"        body: {\r",
 									"            mode: 'raw',\r",
 									"            raw: JSON.stringify(\r",
@@ -1365,7 +1505,11 @@
 									"    \r",
 									"        pm.sendRequest({\r",
 									"            url: pm.variables.get(\"url\") + \"/cars/\" + pm.globals.get(\"carIdRemoveNonExistingCar\"),\r",
-									"            method: 'DELETE'\r",
+									"            method: 'DELETE',\r",
+									"            header: {\r",
+									"                'Content-Type': 'application/json',\r",
+									"                'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")\r",
+									"            },\r",
 									"        });\r",
 									"    });"
 								],
@@ -1432,6 +1576,7 @@
 					"response": []
 				}
 			],
+			"description": "Set of integration test where it is checked the CRUD operations about cars",
 			"event": [
 				{
 					"listen": "prerequest",
@@ -1507,7 +1652,8 @@
 									"",
 									"pm.sendRequest({",
 									"    url: pm.variables.get(\"url\") + \"/countries/\" + jsonData.id,",
-									"    method: 'DELETE'",
+									"    method: 'DELETE',",
+									"    header: 'Authorization: Bearer ' + pm.variables.get(\"jwtToken\")",
 									"});"
 								],
 								"type": "text/javascript"
@@ -1596,7 +1742,8 @@
 									"",
 									"pm.sendRequest({",
 									"    url: pm.variables.get(\"url\") + \"/countries/\" + pm.globals.get(\"countryIdCreateExistingCountry\"),",
-									"    method: 'DELETE'",
+									"    method: 'DELETE',",
+									"    header: 'Authorization: Bearer ' + pm.variables.get(\"jwtToken\")",
 									"});"
 								],
 								"type": "text/javascript"
@@ -1610,7 +1757,10 @@
 									"pm.sendRequest({",
 									"    url: pm.variables.get(\"url\") + \"/countries/\",",
 									"    method: 'POST',",
-									"    header: 'Content-Type:application/json',",
+									"    header: {",
+									"        'Content-Type': 'application/json',",
+									"        'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")",
+									"    },",
 									"    body: {",
 									"        mode: 'raw',",
 									"        raw: JSON.stringify(",
@@ -1667,7 +1817,10 @@
 									"pm.sendRequest({",
 									"    url: pm.variables.get(\"url\") + \"/countries/\",",
 									"    method: 'POST',",
-									"    header: 'Content-Type:application/json',",
+									"    header: {",
+									"        'Content-Type': 'application/json',",
+									"        'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")",
+									"    },",
 									"    body: {",
 									"        mode: 'raw',",
 									"        raw: JSON.stringify(",
@@ -1697,7 +1850,11 @@
 									"",
 									"pm.sendRequest({",
 									"    url: pm.variables.get(\"url\") + \"/countries/\" + pm.globals.get(\"countryIdGetExistingCountry\"),",
-									"    method: 'DELETE'",
+									"    method: 'DELETE',",
+									"    header: {",
+									"        'Content-Type': 'application/json',",
+									"        'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")",
+									"    },",
 									"});"
 								],
 								"type": "text/javascript"
@@ -1731,7 +1888,10 @@
 									"pm.sendRequest({",
 									"    url: pm.variables.get(\"url\") + \"/countries/\",",
 									"    method: 'POST',",
-									"    header: 'Content-Type:application/json',",
+									"    header: {",
+									"        'Content-Type': 'application/json',",
+									"        'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")",
+									"    },",
 									"    body: {",
 									"        mode: 'raw',",
 									"        raw: JSON.stringify(",
@@ -1746,7 +1906,11 @@
 									"        ",
 									"        pm.sendRequest({",
 									"            url: pm.variables.get(\"url\") + \"/countries/\" + pm.globals.get(\"countryIdGetNonExistingCountry\"),",
-									"            method: 'DELETE'",
+									"            method: 'DELETE',",
+									"            header: {",
+									"                'Content-Type': 'application/json',",
+									"                'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")",
+									"            },",
 									"        });",
 									"}",
 									"",
@@ -1837,7 +2001,10 @@
 									"pm.sendRequest({",
 									"        url: pm.variables.get(\"url\") + \"/countries/\",",
 									"        method: 'POST',",
-									"        header: 'Content-Type:application/json',",
+									"        header: {",
+									"            'Content-Type': 'application/json',",
+									"            'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")",
+									"        },",
 									"        body: {",
 									"            mode: 'raw',",
 									"            raw: JSON.stringify(",
@@ -1866,7 +2033,11 @@
 									"",
 									"pm.sendRequest({",
 									"    url: pm.variables.get(\"url\") + \"/countries/\" + pm.globals.get(\"countryIdUpdateExistingCountry\"),",
-									"    method: 'DELETE'",
+									"    method: 'DELETE',",
+									"    header: {",
+									"        'Content-Type': 'application/json',",
+									"        'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")",
+									"    },",
 									"});"
 								],
 								"type": "text/javascript"
@@ -1910,7 +2081,10 @@
 									"pm.sendRequest({",
 									"        url: pm.variables.get(\"url\") + \"/countries/\",",
 									"        method: 'POST',",
-									"        header: 'Content-Type:application/json',",
+									"        header: {",
+									"            'Content-Type': 'application/json',",
+									"            'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")",
+									"        },",
 									"        body: {",
 									"            mode: 'raw',",
 									"            raw: JSON.stringify(",
@@ -1925,7 +2099,11 @@
 									"        ",
 									"        pm.sendRequest({",
 									"            url: pm.variables.get(\"url\") + \"/countries/\" + pm.globals.get(\"countryIdUpdateNonExistingCountry\"),",
-									"            method: 'DELETE'",
+									"            method: 'DELETE',",
+									"            header: {",
+									"                'Content-Type': 'application/json',",
+									"                'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")",
+									"            },",
 									"        });",
 									"    }",
 									");"
@@ -1944,7 +2122,11 @@
 									"",
 									"pm.sendRequest({",
 									"    url: pm.variables.get(\"url\") + \"/countries/\" + pm.globals.get(\"countryIdUpdateNonExistingCountry\"),",
-									"    method: 'DELETE'",
+									"    method: 'DELETE',",
+									"    header: {",
+									"        'Content-Type': 'application/json',",
+									"        'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")",
+									"    },",
 									"});"
 								],
 								"type": "text/javascript"
@@ -2040,7 +2222,10 @@
 									"pm.sendRequest({",
 									"        url: pm.variables.get(\"url\") + \"/countries/\",",
 									"        method: 'POST',",
-									"        header: 'Content-Type:application/json',",
+									"        header: {",
+									"            'Content-Type': 'application/json',",
+									"            'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")",
+									"        },",
 									"        body: {",
 									"            mode: 'raw',",
 									"            raw: JSON.stringify(",
@@ -2069,7 +2254,11 @@
 									"",
 									"pm.sendRequest({",
 									"    url: pm.variables.get(\"url\") + \"/countries/\" + pm.globals.get(\"countryIdUpdateNonValidCountry\"),",
-									"    method: 'DELETE'",
+									"    method: 'DELETE',",
+									"    header: {",
+									"        'Content-Type': 'application/json',",
+									"        'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")",
+									"    },",
 									"});"
 								],
 								"type": "text/javascript"
@@ -2116,7 +2305,11 @@
 									"",
 									"pm.sendRequest({",
 									"    url: pm.variables.get(\"url\") + \"/countries/\" + pm.globals.get(\"carIdRemoveExistingCountry\"),",
-									"    method: 'DELETE'",
+									"    method: 'DELETE',",
+									"    header: {",
+									"        'Content-Type': 'application/json',",
+									"        'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")",
+									"    },",
 									"});"
 								],
 								"type": "text/javascript"
@@ -2130,7 +2323,10 @@
 									"pm.sendRequest({",
 									"        url: pm.variables.get(\"url\") + \"/countries/\",",
 									"        method: 'POST',",
-									"        header: 'Content-Type:application/json',",
+									"        header: {",
+									"            'Content-Type': 'application/json',",
+									"            'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")",
+									"        },",
 									"        body: {",
 									"            mode: 'raw',",
 									"            raw: JSON.stringify(",
@@ -2188,7 +2384,10 @@
 									"pm.sendRequest({",
 									"        url: pm.variables.get(\"url\") + \"/countries/\",",
 									"        method: 'POST',",
-									"        header: 'Content-Type:application/json',",
+									"        header: {",
+									"            'Content-Type': 'application/json',",
+									"            'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")",
+									"        },",
 									"        body: {",
 									"            mode: 'raw',",
 									"            raw: JSON.stringify(",
@@ -2203,7 +2402,11 @@
 									"        ",
 									"        pm.sendRequest({",
 									"            url: pm.variables.get(\"url\") + \"/countries/\" + pm.globals.get(\"carIdRemoveNonExistingCountry\"),",
-									"            method: 'DELETE'",
+									"            method: 'DELETE',",
+									"            header: {",
+									"                'Content-Type': 'application/json',",
+									"                'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")",
+									"            },",
 									"        });",
 									"    }",
 									");"
@@ -2271,9 +2474,538 @@
 					"response": []
 				}
 			],
+			"description": "Set of integration test where it is checked the CRUD operations about countries",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "f1a966fb-88f1-4aba-a9f1-7b92bc714242",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "592a0159-b841-4d2c-82f5-92fa82627853",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Get as User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "20775114-365c-4ce9-a245-906049061828",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtTokenUser}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/brands/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"brands",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get as Admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "20775114-365c-4ce9-a245-906049061828",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/brands/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"brands",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post as User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "20775114-365c-4ce9-a245-906049061828",
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtTokenUser}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"brand\": \"brandNameCreateNewBrand\",\r\n    \"company\": \"company\"\r\n}"
+						},
+						"url": {
+							"raw": "{{url}}/brands/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"brands",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post as Admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "20775114-365c-4ce9-a245-906049061828",
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"var jsonData = pm.response.json();",
+									"pm.globals.set(\"authPostAdmin\", jsonData.id);",
+									"",
+									"pm.sendRequest({",
+									"    url: pm.variables.get(\"url\") + \"/brands/\" + pm.globals.get(\"authPostAdmin\"),",
+									"    method: 'DELETE',",
+									"    header: {",
+									"        'Content-Type': 'application/json',",
+									"        'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")",
+									"    },",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"brand\": \"brandNameCreateNewBrand\",\r\n    \"company\": \"company\"\r\n}"
+						},
+						"url": {
+							"raw": "{{url}}/brands/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"brands",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update as User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "20775114-365c-4ce9-a245-906049061828",
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtTokenUser}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"brand\": \"brandNameCreateNewBrand\",\r\n    \"company\": \"company\"\r\n}"
+						},
+						"url": {
+							"raw": "{{url}}/brands/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"brands",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update as Admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "20775114-365c-4ce9-a245-906049061828",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.sendRequest({",
+									"    url: pm.variables.get(\"url\") + \"/brands/\" + pm.globals.get(\"jwtUpdateId\"),",
+									"    method: 'DELETE',",
+									"    header: {",
+									"        'Content-Type': 'application/json',",
+									"        'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")",
+									"    },",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "08a3c0e9-65c4-4e06-be3f-4b85f04a9ebe",
+								"exec": [
+									"pm.sendRequest({\r",
+									"    url: pm.variables.get(\"url\") + \"/brands/\",\r",
+									"    method: 'POST',\r",
+									"    header: {\r",
+									"        'Content-Type': 'application/json',\r",
+									"        'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")\r",
+									"    },\r",
+									"    body: {\r",
+									"        mode: 'raw',\r",
+									"        raw: JSON.stringify({ brand: 'jwtUpdateBrand', company: 'jwtUpdateCompany' })\r",
+									"    }\r",
+									"}, function (err, res) {\r",
+									"    pm.globals.set(\"jwtUpdateId\", res.json().id);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"brand\": \"brandNameCreateNewBrand\",\r\n    \"company\": \"company\"\r\n}"
+						},
+						"url": {
+							"raw": "{{url}}/brands/{{jwtUpdateId}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"brands",
+								"{{jwtUpdateId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete as User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "20775114-365c-4ce9-a245-906049061828",
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtTokenUser}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/brands/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"brands",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete as Admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "20775114-365c-4ce9-a245-906049061828",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.sendRequest({",
+									"    url: pm.variables.get(\"url\") + \"/brands/\" + pm.globals.get(\"jwtRemoveAdminId\"),",
+									"    method: 'DELETE',",
+									"    header: {",
+									"        'Content-Type': 'application/json',",
+									"        'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")",
+									"    },",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "799479ef-4147-4eaf-b5ab-9d675ddec8ff",
+								"exec": [
+									"pm.sendRequest({\r",
+									"    url: pm.variables.get(\"url\") + \"/brands/\",\r",
+									"    method: 'POST',\r",
+									"    header: {\r",
+									"        'Content-Type': 'application/json',\r",
+									"        'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")\r",
+									"    },\r",
+									"    body: {\r",
+									"        mode: 'raw',\r",
+									"        raw: JSON.stringify({ brand: 'jwtRemoveAdminBrand', company: 'jwtRemoveAdminCompany' })\r",
+									"    }\r",
+									"}, function (err, res) {\r",
+									"    pm.globals.set(\"jwtRemoveAdminId\", res.json().id);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/brands/{{jwtRemoveAdminId}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"brands",
+								"{{jwtRemoveAdminId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Set of tests involving the auth and the roles (admin and user) in the system",
+			"auth": {
+				"type": "noauth"
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "528a5db6-fce1-4468-b986-d53f60a8ecfd",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "48cabda3-94de-43f9-845b-f4151e16f314",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
 			"protocolProfileBehavior": {}
 		}
 	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{jwtToken}}",
+				"type": "string"
+			}
+		]
+	},
 	"event": [
 		{
 			"listen": "prerequest",
@@ -2284,7 +3016,10 @@
 					"pm.sendRequest({",
 					"    url: pm.variables.get(\"url\") + \"/brands/\" + \"{{carsBrandId}}\",",
 					"    method: 'GET',",
-					"    header: 'Content-Type:application/json',",
+					"    header: {",
+					"        'Content-Type': 'application/json',",
+					"        'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")",
+					"    },",
 					"}, function (err, res) {",
 					"    if (res.code === 200){",
 					"        pm.globals.set(\"carsBrandId\", res.json().id);",
@@ -2294,7 +3029,10 @@
 					"        pm.sendRequest({",
 					"        url: pm.variables.get(\"url\") + \"/brands/\",",
 					"        method: 'POST',",
-					"        header: 'Content-Type:application/json',",
+					"        header: {",
+					"            'Content-Type': 'application/json',",
+					"            'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")    ",
+					"        },",
 					"        body: {",
 					"            mode: 'raw',",
 					"            raw: JSON.stringify(",
@@ -2319,7 +3057,10 @@
 					"pm.sendRequest({",
 					"    url: pm.variables.get(\"url\") + \"/countries/\" + \"{{carsCountryId}}\",",
 					"    method: 'GET',",
-					"    header: 'Content-Type:application/json',",
+					"    header: {",
+					"        'Content-Type': 'application/json',",
+					"        'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")    ",
+					"    },",
 					"}, function (err, res) {",
 					"    if (res.code === 200){",
 					"        pm.globals.set(\"carsCountryId\", res.json().id);",
@@ -2329,7 +3070,10 @@
 					"        pm.sendRequest({",
 					"        url: pm.variables.get(\"url\") + \"/countries/\",",
 					"        method: 'POST',",
-					"        header: 'Content-Type:application/json',",
+					"        header: {",
+					"        'Content-Type': 'application/json',",
+					"        'Authorization': 'Bearer ' + pm.variables.get(\"jwtToken\")    ",
+					"        },",
 					"        body: {",
 					"            mode: 'raw',",
 					"            raw: JSON.stringify(",
@@ -2362,9 +3106,21 @@
 	],
 	"variable": [
 		{
-			"id": "b6d6ebcf-f0f7-44e6-9bb8-43824359db86",
+			"id": "0f785f1e-9bda-4099-8f51-757a8bc5dd1b",
 			"key": "url",
 			"value": "http://localhost:8080/car/webapi",
+			"type": "string"
+		},
+		{
+			"id": "6600db69-036a-4309-bbbc-3a6429d8a53b",
+			"key": "jwtToken",
+			"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI3ZDExYmUxZS0yNmVhLTQ1NGYtYmU2Mi00ZDhhM2EyZTI4NjYiLCJpYXQiOjE1NzQyNDM2NjUsImlzcyI6IkV2ZXJpcyIsImV4cCI6MTU3NDI1MTY2NSwicm9sZSI6IkFETUlOIn0.XlK8UGm47mZypAH5NydTEDX6p7YEPk466Gl9lB_rv2E",
+			"type": "string"
+		},
+		{
+			"id": "fbc6e1e1-a3ab-4556-8278-d0650c95cfdf",
+			"key": "jwtTokenUser",
+			"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJlOGY2MTY2ZS0wNGNmLTQ5ZmUtOTNmNC0xMmY3ZTJkMmM5MWIiLCJpYXQiOjE1NzQyNDM2NjUsImlzcyI6IkV2ZXJpcyIsImV4cCI6MTU3NDI1MTY2NSwicm9sZSI6IlVTRVIifQ.HP8-tt6KZeYZVDcCc79xa6sL0MEsbFup8jEeVWudrhw",
 			"type": "string"
 		}
 	],
